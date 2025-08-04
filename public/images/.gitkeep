@@ -1,0 +1,17 @@
+# Place your images here for local development
+# These images should also be uploaded to your S3 bucket at:
+# s3://graveyardjokes-cdn/lunarblood/images/
+
+# Required images:
+# - LunarBlood_Landing.webp
+# - og-image.jpg
+# - album-cover.jpg
+# - tshirt.jpg
+# - vinyl.jpg
+# - hoodie.jpg
+# - patches.jpg
+# - cd.jpg
+# - beanie.jpg
+# - venue-underground.jpg
+# - venue-darkmoon.jpg
+# - venue-crimson.jpg
