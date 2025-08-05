@@ -1,9 +1,12 @@
 import React from 'react';
 
-const Footer: React.FC = () => (
-    <footer style={{ padding: '1rem', textAlign: 'center', background: '#222', color: '#fff' }}>
-        <p>&copy; {new Date().getFullYear()} LunarBlood. All rights reserved.</p>
-    </footer>
+const Header: React.FC = () => (
+    <header style={{ padding: '1rem', textAlign: 'center', background: '#222', color: '#fff' }}>
+        <h1>LunarBlood</h1>
+        <nav>
+            {/* Add navigation links here if needed */}
+        </nav>
+    </header>
 );
 
-export default Footer;
+export default Header;
