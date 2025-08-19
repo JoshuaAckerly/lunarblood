@@ -3,9 +3,9 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 const Main: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <div>
+    <div className="flex flex-col min-h-screen bg-[var(--background)]">
         <Header />
-        <main style={{ padding: '1rem' }}>
+        <main className="flex-grow p-4">
             {children}
         </main>
         <Footer />
