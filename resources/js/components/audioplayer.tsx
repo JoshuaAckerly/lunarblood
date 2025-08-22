@@ -6,7 +6,7 @@ interface AudioPlayerProps {
   type?: string; // default: "audio/mpeg"
 }
 
-const audioplayer: React.FC<AudioPlayerProps> = ({ src, type = "audio/mpeg" }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, type = "audio/mpeg" }) => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -36,4 +36,4 @@ const audioplayer: React.FC<AudioPlayerProps> = ({ src, type = "audio/mpeg" }) =
   );
 };
 
-export default audioplayer;
+export default AudioPlayer;

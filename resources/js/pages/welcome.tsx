@@ -1,6 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
-import AudioPlayer from "@/components/audioplayer";
+import AudioPlayer from "@/components/AudioPlayer";
 
 
 const cdn = import.meta.env.VITE_ASSET_URL;
