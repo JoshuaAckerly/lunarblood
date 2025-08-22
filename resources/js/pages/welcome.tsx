@@ -35,10 +35,10 @@ const Welcome: React.FC = () => (
                 <div>
                     <ul className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-4">
                         <li className="flex-1">
-                            <AudioPlayer src={`#${cdn}/audio/featured-track.mp3`} />
+                            <AudioPlayer src={`#`} />
                         </li>
                         <li className="flex-1 hidden md:block">
-                            <AudioPlayer src={`#${cdn}/audio/another-track.mp3`} />
+                            <AudioPlayer src={`#`} />
                         </li>
                     </ul>
                 </div>
