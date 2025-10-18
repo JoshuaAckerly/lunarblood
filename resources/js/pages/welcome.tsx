@@ -9,54 +9,64 @@ const cdn = import.meta.env.VITE_ASSET_URL;
 const Welcome: React.FC = () => (
     <Main>
         <section
-                className="relative z-0 bg-[var(--background)] bg-cover bg-center"
-                style={{
-                    backgroundImage: `url(${cdn}/images/LunarBlood_Landing.webp)`,
-                }}
-            >
-                <div className="flex flex-col items-center bg-black/50 py-24">
-                    <h2 className="text-5xl text-white">Lunar Blood</h2>
-                    <h3 className="text-3xl text-white">Dark. Mood. Heavy</h3>
-                    <div>
-                        <ul className="flex flex-row gap-2 md:gap-10 items-center justify-center text-center text-white">
-                            <li className="flex">LISTEN NOW</li>
-                            <li className="flex">SHOP MERCH</li>
-                            <li className="flex">VIEW TOUR DATES</li>
-                        </ul>
-                    </div>
+            className="hero mb-12 rounded-lg overflow-hidden"
+            style={{
+                backgroundImage: `url(${cdn}/images/LunarBlood_Landing.webp)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+        >
+            <div className="hero-overlay absolute inset-0"></div>
+            <div className="relative z-10 py-28 text-center">
+                <h1 className="text-6xl font-extrabold text-white drop-shadow-lg fade-in">Lunar Blood</h1>
+                <p className="mt-4 text-xl text-white/90 fade-in">Dark. Mood. Heavy — music that reverberates in the bones.</p>
+
+                <div className="mt-8 flex items-center justify-center gap-4">
+                    <a href="#listen" className="btn btn-primary">Listen Now</a>
+                    <a href="#shop" className="btn btn-secondary">Shop Merch</a>
                 </div>
-            </section>
-            <section className="text-black">
-                <h1 className="text-7xl">Band Bio</h1>
-                <p className="mt-4 text-lg">
-                    Lunar Blood is a band that embodies the essence of darkness and moodiness in their music. With heavy riffs and haunting melodies, they create an atmosphere that captivates listeners and takes them on a journey through their emotional landscape.
-                </p>
-                <h3 className="text-3xl">FEATURED MUSIC</h3>
-                <div>
-                    <ul className="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-y-4">
-                        <li className="flex-1">
-                            <AudioPlayer src={`#`} />
-                        </li>
-                        <li className="flex-1 hidden md:block">
-                            <AudioPlayer src={`#`} />
-                        </li>
-                    </ul>
+            </div>
+        </section>
+
+        <section className="grid md:grid-cols-3 gap-6 mb-12">
+            <article className="card">
+                <h2 className="text-2xl font-semibold">Band Bio</h2>
+                <p className="mt-3 text-sm text-[var(--card-foreground)]/90">Lunar Blood is a band that embodies darkness and moodiness—haunting melodies, heavy riffs, and immersive atmospheres that pull listeners into another world.</p>
+            </article>
+
+            <article className="card">
+                <h2 className="text-2xl font-semibold">Featured Music</h2>
+                <div className="mt-4 space-y-4">
+                    <AudioPlayer src={`#`} />
+                    <AudioPlayer src={`#`} />
                 </div>
-            </section>
-            <section className="text-black">
-                <h1 className="text-3xl">Upcoming Tour Dates</h1>
-                <hr className="my-4 border-t border-black" />
+            </article>
+
+            <article className="card">
+                <h2 className="text-2xl font-semibold">Connect</h2>
+                <p className="mt-3 text-sm">Follow us on socials for drops, tour announcements, and exclusive merch.</p>
+                <div className="mt-4 flex gap-2">
+                    <a className="btn btn-secondary" href="#">Instagram</a>
+                    <a className="btn btn-secondary" href="#">Bandcamp</a>
+                </div>
+            </article>
+        </section>
+
+        <section id="tour" className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">Upcoming Tour Dates</h2>
+            <div className="space-y-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="grid grid-cols-4 gap-4 py-2 border-b border-black">
-                        <span>DATE</span>
-                        <span>CITY</span>
-                        <span>VENUE</span>
-                        <span>
-                            <a href="#" className="text-blue-600 underline">Buy Tickets</a>
-                        </span>
+                    <div key={i} className="grid grid-cols-12 gap-4 items-center p-4 glass rounded-lg">
+                        <div className="col-span-2 text-sm font-medium">DATE</div>
+                        <div className="col-span-4">CITY</div>
+                        <div className="col-span-4">VENUE</div>
+                        <div className="col-span-2 text-right">
+                            <a href="#" className="btn btn-primary">Buy Tickets</a>
+                        </div>
                     </div>
                 ))}
-            </section>
+            </div>
+        </section>
     </Main>
 );
 

@@ -139,3 +139,54 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .container {
+        @apply mx-auto max-w-6xl px-4;
+    }
+
+    .hero {
+        @apply relative overflow-hidden rounded-lg;
+    }
+
+    .hero-overlay {
+        background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.75) 100%);
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-transform duration-150;
+    }
+
+    .btn-primary {
+        @apply bg-[var(--primary)] text-[var(--primary-foreground)] shadow-md hover:scale-[1.02] active:scale-[0.99];
+    }
+
+    .btn-secondary {
+        @apply bg-[var(--secondary)] text-[var(--secondary-foreground)]/95 hover:brightness-95;
+    }
+
+    .card {
+        @apply bg-[var(--card)] text-[var(--card-foreground)] rounded-lg p-6 shadow-lg;
+    }
+
+    .nav-link {
+        @apply text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors;
+    }
+}
+
+@layer utilities {
+    .fade-in {
+        animation: fadeIn 600ms ease both;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass {
+        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+        border: 1px solid rgba(255,255,255,0.06);
+        backdrop-filter: blur(6px);
+    }
+}
