@@ -22,10 +22,6 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
-        
-        // Configure rate limiting
-        $middleware->throttleApi();
-        $middleware->throttleRequests();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
