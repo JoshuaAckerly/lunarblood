@@ -154,7 +154,7 @@
     }
 
     .btn {
-        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-transform duration-150;
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-transform duration-150 min-h-[44px] touch-manipulation;
     }
 
     .btn-primary {
@@ -170,7 +170,7 @@
     }
 
     .nav-link {
-        @apply text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors;
+        @apply text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors py-2 px-1 min-h-[44px] flex items-center touch-manipulation;
     }
 }
 

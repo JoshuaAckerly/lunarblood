@@ -17,13 +17,13 @@ const Welcome: React.FC = () => (
             }}
         >
             <div className="hero-overlay absolute inset-0"></div>
-            <div className="relative z-10 py-28 text-center">
-                <h1 className="text-6xl font-extrabold text-white drop-shadow-lg fade-in">Lunar Blood</h1>
-                <p className="mt-4 text-xl text-white/90 fade-in">Dark. Mood. Heavy — music that reverberates in the bones.</p>
+            <div className="relative z-10 py-16 md:py-28 text-center px-4">
+                <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg fade-in">Lunar Blood</h1>
+                <p className="mt-4 text-lg md:text-xl text-white/90 fade-in max-w-2xl mx-auto">Dark. Mood. Heavy — music that reverberates in the bones.</p>
 
-                <div className="mt-8 flex items-center justify-center gap-4">
-                    <a href="#listen" className="btn btn-primary">Listen Now</a>
-                    <a href="#shop" className="btn btn-secondary">Shop Merch</a>
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="/listen" className="btn btn-primary w-full sm:w-auto">Listen Now</a>
+                    <a href="/tour" className="btn btn-secondary w-full sm:w-auto">Tour Dates</a>
                 </div>
             </div>
         </section>
@@ -52,19 +52,32 @@ const Welcome: React.FC = () => (
             </article>
         </section>
 
-        <section id="tour" className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Upcoming Tour Dates</h2>
+        <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">Upcoming Shows</h2>
             <div className="space-y-4">
-                {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="grid grid-cols-12 gap-4 items-center p-4 glass rounded-lg">
-                        <div className="col-span-2 text-sm font-medium">DATE</div>
-                        <div className="col-span-4">CITY</div>
-                        <div className="col-span-4">VENUE</div>
-                        <div className="col-span-2 text-right">
-                            <a href="#" className="btn btn-primary">Buy Tickets</a>
+                <div className="p-4 glass rounded-lg">
+                    <div className="flex flex-col sm:grid sm:grid-cols-12 gap-2 sm:gap-4 sm:items-center">
+                        <div className="sm:col-span-3 text-sm font-medium">Mar 15</div>
+                        <div className="sm:col-span-4 text-sm sm:text-base">Seattle, WA</div>
+                        <div className="sm:col-span-3 text-sm text-[var(--muted-foreground)] sm:text-base sm:text-[var(--foreground)]">The Underground</div>
+                        <div className="sm:col-span-2 sm:text-right">
+                            <a href="/tour" className="btn btn-primary text-sm w-full sm:w-auto">Tickets</a>
                         </div>
                     </div>
-                ))}
+                </div>
+                <div className="p-4 glass rounded-lg">
+                    <div className="flex flex-col sm:grid sm:grid-cols-12 gap-2 sm:gap-4 sm:items-center">
+                        <div className="sm:col-span-3 text-sm font-medium">Apr 2</div>
+                        <div className="sm:col-span-4 text-sm sm:text-base">Portland, OR</div>
+                        <div className="sm:col-span-3 text-sm text-[var(--muted-foreground)] sm:text-base sm:text-[var(--foreground)]">Dark Moon Club</div>
+                        <div className="sm:col-span-2 sm:text-right">
+                            <a href="/tour" className="btn btn-primary text-sm w-full sm:w-auto">Tickets</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="mt-6 text-center">
+                <a href="/tour" className="btn btn-secondary">View All Dates</a>
             </div>
         </section>
     </Main>
