@@ -25,9 +25,9 @@ npm ci --production
 echo "🏗️ Building production assets..."
 npm run build
 
-# Run database migrations
-echo "🗄️ Running database migrations..."
-php artisan migrate --force
+# Wipe and rebuild database with seeding
+echo "🗄️ Wiping and rebuilding database..."
+php artisan migrate:fresh --force --seed
 
 # Clear all caches and optimize
 echo "⚡ Optimizing application for production..."

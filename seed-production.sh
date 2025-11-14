@@ -1,32 +1,12 @@
 #!/bin/bash
 
-# Production Database Seeding Script
-echo "🌱 Seeding production database..."
+# Production Database Reset and Seeding Script
+echo "🗄️ Resetting and seeding production database..."
 
-# Check if data already exists to avoid duplicates
-VENUE_COUNT=$(php artisan tinker --execute="echo App\Models\Venue::count();")
-PRODUCT_COUNT=$(php artisan tinker --execute="echo App\Models\Product::count();")
-ALBUM_COUNT=$(php artisan tinker --execute="echo App\Models\Album::count();")
+# Wipe and rebuild the entire database with fresh migrations and seeding
+echo "⚠️  WARNING: This will completely wipe the database!"
+echo "🔄 Running migrate:fresh with seeding..."
+php artisan migrate:fresh --force --seed
 
-if [ "$VENUE_COUNT" -eq 0 ]; then
-    echo "📍 Seeding venues..."
-    php artisan db:seed --force --class=VenueSeeder
-else
-    echo "📍 Venues already exist, skipping..."
-fi
-
-if [ "$PRODUCT_COUNT" -eq 0 ]; then
-    echo "🛍️ Seeding products..."
-    php artisan db:seed --force --class=ProductSeeder
-else
-    echo "🛍️ Products already exist, skipping..."
-fi
-
-if [ "$ALBUM_COUNT" -eq 0 ]; then
-    echo "🎵 Seeding albums..."
-    php artisan db:seed --force --class=AlbumSeeder
-else
-    echo "🎵 Albums already exist, skipping..."
-fi
-
-echo "✅ Production seeding completed!"
+echo "✅ Production database reset and seeding completed!"
+echo "📊 Database has been completely rebuilt with fresh data."
