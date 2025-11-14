@@ -1,5 +1,5 @@
 #!/bin/bash
-# Simple Forge deployment script for Lunar Blood with SSR support
+# Safe Forge deployment script for Lunar Blood - handles existing database
 # Copy this entire script to your Forge deployment script
 
 cd /home/forge/lunarblood.graveyardjokes.com
@@ -32,17 +32,18 @@ php artisan config:clear
 npm run build
 npm run build:ssr
 
-# Laravel optimizations
+# Safe database migration (no fresh)
 php artisan migrate --force
-# Only run seeders if database is empty
-USER_COUNT=$(php artisan tinker --execute="echo App\Models\User::count();" 2>/dev/null | grep -o '[0-9]*' | head -n1)
-if [ "$USER_COUNT" = "0" ] || [ -z "$USER_COUNT" ]; then
+
+# Only seed if database is truly empty
+if [ "$(php artisan tinker --execute="echo \App\Models\User::count();" 2>/dev/null)" = "0" ]; then
     php artisan db:seed --force
 fi
+
+# Laravel optimizations
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan event:cache
 
 # Set permissions
 chmod -R 755 storage bootstrap/cache

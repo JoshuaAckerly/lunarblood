@@ -74,7 +74,17 @@ fi
 # Database operations
 echo "🗄️ Running database migrations..."
 if [ -f artisan ]; then
-    php artisan migrate:fresh --force --seed
+    # Use regular migrate instead of migrate:fresh to avoid conflicts
+    php artisan migrate --force
+    
+    # Only seed if this is a fresh database (check if users table is empty)
+    USER_COUNT=$(php artisan tinker --execute="echo App\Models\User::count();" 2>/dev/null | grep -o '[0-9]*' | head -n1)
+    if [ "$USER_COUNT" = "0" ] || [ -z "$USER_COUNT" ]; then
+        echo "🌱 Database appears empty, running seeders..."
+        php artisan db:seed --force
+    else
+        echo "📊 Database has existing data, skipping seeders"
+    fi
 fi
 
 # Cache optimizations
