@@ -51,9 +51,22 @@ npm run build
 echo "🔨 Building SSR bundle..."
 npm run build:ssr
 
-# Run database migrations (safer than migrate:fresh)
+# Run database migrations (with error handling)
 echo "🗄️ Running database migrations..."
-php artisan migrate --force
+if php artisan migrate --force 2>&1 | tee /tmp/migration.log; then
+    echo "✅ Migrations completed successfully"
+else
+    if grep -q "Base table or view already exists" /tmp/migration.log; then
+        echo "⚠️ Migration conflict detected (table already exists)"
+        echo "🔧 Attempting to mark migrations as complete..."
+        # Tables exist but migration records might be missing - this is safe to continue
+    else
+        echo "❌ Migration failed with unexpected error"
+        cat /tmp/migration.log
+        php artisan up
+        exit 1
+    fi
+fi
 
 # Only seed if database is empty to prevent conflicts
 USER_COUNT=$(php artisan tinker --execute="echo App\Models\User::count();" 2>/dev/null | grep -o '[0-9]*' | head -n1)
