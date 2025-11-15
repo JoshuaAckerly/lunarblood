@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>404 - Page Not Found</title>
+        <title>503 - Service Unavailable</title>
         <style>
             body {
                 font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -47,9 +47,9 @@
     </head>
     <body>
         <div class="container">
-            <h1>404</h1>
-            <h2>Page Not Found</h2>
-            <p>The page you're looking for has vanished into the darkness.</p>
+            <h1>503</h1>
+            <h2>Service Unavailable</h2>
+            <p>We're currently performing maintenance. We'll be back shortly.</p>
             <a href="/">Go Home</a>
         </div>
     </body>
