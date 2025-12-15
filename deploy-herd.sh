@@ -19,13 +19,9 @@ npm ci
 echo "🏗️ Building frontend assets..."
 npm run build
 
-# Run database migrations
-echo "🗄️ Running database migrations..."
-php artisan migrate --force
-
-# Seed database (only for development)
-echo "🌱 Seeding database with development data..."
-php artisan db:seed --force
+# Wipe and rebuild database with seeding  
+echo "🗄️ Wiping and rebuilding database..."
+php artisan migrate:fresh --force --seed
 
 # Clear and cache config
 echo "⚡ Optimizing application..."
