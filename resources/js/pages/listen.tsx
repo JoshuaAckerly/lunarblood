@@ -1,8 +1,23 @@
 import React from "react";
 import Main from "@/layouts/main";
 import AudioPlayer from "@/components/AudioPlayer";
+import Seo from "@/components/Seo";
 
-const Listen: React.FC = () => (
+const Listen: React.FC = () => {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "MusicAlbum",
+        "name": "Shadows & Echoes",
+        "byArtist": {
+            "@type": "MusicGroup",
+            "name": "Lunar Blood"
+        },
+        "genre": "Heavy Metal",
+        "datePublished": "2024",
+        "description": "Our latest EP explores the depths of human emotion through haunting melodies and crushing riffs."
+    };
+
+    return (
     <Main>
         <section className="mb-12">
             <h1 className="text-4xl font-bold mb-2">Listen</h1>
@@ -69,6 +84,7 @@ const Listen: React.FC = () => (
             </div>
         </section>
     </Main>
-);
+    );
+};
 
 export default Listen;

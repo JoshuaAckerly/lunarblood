@@ -99,6 +99,9 @@ Route::get('/test-403', function () {
     return Inertia::render('errors/403');
 });
 
+// Dynamic sitemap
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');

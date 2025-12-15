@@ -1,5 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
+import Seo from "@/components/Seo";
 import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
 
 const tourDates = [
@@ -66,8 +67,36 @@ const getStatusText = (status: string) => {
     }
 };
 
-const Tour: React.FC = () => (
+const Tour: React.FC = () => {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "MusicEvent",
+        "name": "Lunar Blood Tour 2024",
+        "performer": {
+            "@type": "MusicGroup",
+            "name": "Lunar Blood"
+        },
+        "location": {
+            "@type": "Place",
+            "address": "Multiple venues across US"
+        },
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "url": "https://lunarblood.graveyardjokes.com/tour"
+        }
+    };
+
+    return (
     <Main>
+        <Seo
+            title="Tour Dates - Live Shows"
+            description="Catch Lunar Blood live! View upcoming tour dates and get tickets to experience our dark, atmospheric metal performances at venues near you."
+            keywords="Lunar Blood tour, metal concerts, heavy metal shows, live music, tour dates, concert tickets"
+            ogType="website"
+            canonical="https://lunarblood.graveyardjokes.com/tour"
+            structuredData={structuredData}
+        />
         <section className="mb-12">
             <h1 className="text-4xl font-bold mb-2">Tour Dates</h1>
             <p className="text-[var(--muted-foreground)] mb-8">
@@ -198,6 +227,7 @@ const Tour: React.FC = () => (
             </div>
         </section>
     </Main>
-);
+    );
+};
 
 export default Tour;

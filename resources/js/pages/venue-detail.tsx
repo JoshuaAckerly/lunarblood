@@ -1,5 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
+import Seo from "@/components/Seo";
 import { MapPin, Calendar, Users, ExternalLink, ArrowLeft } from "lucide-react";
 
 interface VenueDetailProps {
@@ -20,8 +21,33 @@ interface VenueDetailProps {
     };
 }
 
-const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => (
+const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "MusicVenue",
+        "name": venue.name,
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": venue.address,
+            "addressLocality": venue.city.split(',')[0],
+            "addressRegion": venue.city.split(',')[1]?.trim()
+        },
+        "maximumAttendeeCapacity": venue.capacity,
+        "description": venue.description,
+        "url": venue.website,
+        "telephone": venue.phone
+    };
+
+    return (
     <Main>
+        <Seo
+            title={`${venue.name} - Venue`}
+            description={`${venue.description} Located in ${venue.city} with capacity of ${venue.capacity}.`}
+            keywords={`${venue.name}, music venue, concert venue, ${venue.city}, live music`}
+            ogType="website"
+            canonical={`https://lunarblood.graveyardjokes.com/venues/${venue.id}`}
+            structuredData={structuredData}
+        />
         <section className="mb-8">
             <a href="/venues" className="inline-flex items-center gap-2 nav-link mb-4">
                 <ArrowLeft size={16} />
@@ -102,6 +128,7 @@ const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => (
             </div>
         </section>
     </Main>
-);
+    );
+};
 
 export default VenueDetail;

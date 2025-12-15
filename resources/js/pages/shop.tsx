@@ -1,5 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
+import Seo from "@/components/Seo";
 import { ShoppingCart } from "lucide-react";
 
 const products = [
@@ -55,6 +56,13 @@ const products = [
 
 const Shop: React.FC = () => (
     <Main>
+        <Seo
+            title="Shop - Official Merch & Music"
+            description="Buy official Lunar Blood merchandise including band t-shirts, hoodies, vinyl records, CDs, patches, and accessories. Support the band with authentic merch."
+            keywords="Lunar Blood merch, band merchandise, metal t-shirts, vinyl records, band hoodie, music merchandise, metal accessories"
+            ogType="website"
+            canonical="https://lunarblood.graveyardjokes.com/shop"
+        />
         <section className="mb-12">
             <h1 className="text-4xl font-bold mb-2">Shop</h1>
             <p className="text-[var(--muted-foreground)] mb-8">

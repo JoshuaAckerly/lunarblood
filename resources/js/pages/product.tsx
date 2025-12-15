@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Main from "@/layouts/main";
+import Seo from "@/components/Seo";
 import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
 
 interface ProductProps {
@@ -33,8 +34,35 @@ const Product: React.FC<ProductProps> = ({ product }) => {
         window.location.href = `/checkout?${params}`;
     };
 
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "description": product.details,
+        "category": product.category,
+        "brand": {
+            "@type": "Brand",
+            "name": "Lunar Blood"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": product.price,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `https://lunarblood.graveyardjokes.com/shop/${product.id}`
+        }
+    };
+
     return (
         <Main>
+            <Seo
+                title={`${product.name} - Shop`}
+                description={`Buy ${product.name} for $${product.price.toFixed(2)}. ${product.details}`}
+                keywords={`${product.name}, ${product.category}, Lunar Blood merchandise, band merch`}
+                ogType="product"
+                canonical={`https://lunarblood.graveyardjokes.com/shop/${product.id}`}
+                structuredData={structuredData}
+            />
             <section className="mb-8">
                 <a href="/shop" className="inline-flex items-center gap-2 nav-link mb-6">
                     <ArrowLeft size={16} />

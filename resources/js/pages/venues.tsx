@@ -1,5 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
+import Seo from "@/components/Seo";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
 
 const venues = [
@@ -34,6 +35,13 @@ const venues = [
 
 const Venues: React.FC = () => (
     <Main>
+        <Seo
+            title="Venues - Live Performance Locations"
+            description="Explore the intimate venues where Lunar Blood performs. Find information about upcoming shows, venue capacity, and locations across the US."
+            keywords="Lunar Blood venues, concert venues, metal venues, live music locations, venue booking"
+            ogType="website"
+            canonical="https://lunarblood.graveyardjokes.com/venues"
+        />
         <section className="mb-12">
             <h1 className="text-4xl font-bold mb-2">Venues</h1>
             <p className="text-[var(--muted-foreground)] mb-8">
