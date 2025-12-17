@@ -7,7 +7,6 @@ A modern web application built with Laravel 12 and React 19, using Inertia.js fo
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Frontend**: React 19 with TypeScript
 - **Styling**: Tailwind CSS 4.0
-- **UI Components**: Radix UI + Headless UI
 - **Build Tool**: Vite 7
 - **Database**: SQLite (default)
 - **Testing**: PHPUnit + Jest
@@ -128,11 +127,9 @@ npm run build:ssr
 
 ## 🎨 UI Components
 
-This project uses a modern component library built on:
-- **Radix UI** - Accessible, unstyled components
+This project uses:
 - **Tailwind CSS** - Utility-first styling
 - **Lucide React** - Beautiful icons
-- **Class Variance Authority** - Component variants
 
 ## 🔧 Configuration
 
