@@ -3,6 +3,10 @@ import Main from "@/layouts/main";
 import AudioPlayer from "@/components/AudioPlayer";
 import Seo from "@/components/Seo";
 
+// Use CDN in production, local images in development
+const cdn = import.meta.env.VITE_ASSET_URL || '';
+const getImageUrl = (path: string) => cdn ? `${cdn}${path}` : path;
+
 const Listen: React.FC = () => {
     const structuredData = {
         "@context": "https://schema.org",
@@ -32,7 +36,7 @@ const Listen: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-6 items-center">
                     <div>
                         <img 
-                            src="/images/album-cover.jpg" 
+                            src={getImageUrl('/images/album-cover.jpg')} 
                             alt="Latest Album" 
                             className="w-full rounded-lg shadow-lg"
                         />

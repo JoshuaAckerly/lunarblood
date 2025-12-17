@@ -3,13 +3,17 @@ import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
 
+// Use CDN in production, local images in development
+const cdn = import.meta.env.VITE_ASSET_URL || '';
+const getImageUrl = (path: string) => cdn ? `${cdn}${path}` : path;
+
 const venues = [
     {
         id: 1,
         name: "The Underground",
         city: "Seattle, WA",
         capacity: 500,
-        image: "/images/venue-underground.jpg",
+        image: getImageUrl('/images/venue-underground.jpg'),
         website: "https://theunderground.com",
         upcoming: "March 15, 2024"
     },
@@ -18,7 +22,7 @@ const venues = [
         name: "Dark Moon Club",
         city: "Portland, OR",
         capacity: 300,
-        image: "/images/venue-darkmoon.jpg",
+        image: getImageUrl('/images/venue-darkmoon.jpg'),
         website: "https://darkmoonclub.com",
         upcoming: "April 2, 2024"
     },
@@ -27,7 +31,7 @@ const venues = [
         name: "Crimson Hall",
         city: "San Francisco, CA",
         capacity: 800,
-        image: "/images/venue-crimson.jpg",
+        image: getImageUrl('/images/venue-crimson.jpg'),
         website: "https://crimsonhall.com",
         upcoming: "April 20, 2024"
     }

@@ -3,13 +3,17 @@ import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ShoppingCart } from "lucide-react";
 
+// Use CDN in production, local images in development
+const cdn = import.meta.env.VITE_ASSET_URL || '';
+const getImageUrl = (path: string) => cdn ? `${cdn}${path}` : path;
+
 const products = [
     {
         id: 1,
         name: "Lunar Blood T-Shirt",
         price: 25.00,
         category: "Apparel",
-        image: "/images/tshirt.jpg",
+        image: getImageUrl('/images/tshirt.jpg'),
         description: "Black cotton tee with band logo"
     },
     {
@@ -17,7 +21,7 @@ const products = [
         name: "Blood Moon Vinyl",
         price: 35.00,
         category: "Music",
-        image: "/images/vinyl.jpg",
+        image: getImageUrl('/images/vinyl.jpg'),
         description: "Limited edition red vinyl LP"
     },
     {
@@ -25,7 +29,7 @@ const products = [
         name: "Dark Horizons Hoodie",
         price: 45.00,
         category: "Apparel",
-        image: "/images/hoodie.jpg",
+        image: getImageUrl('/images/hoodie.jpg'),
         description: "Premium black hoodie with album art"
     },
     {
@@ -33,7 +37,7 @@ const products = [
         name: "Band Patch Set",
         price: 15.00,
         category: "Accessories",
-        image: "/images/patches.jpg",
+        image: getImageUrl('/images/patches.jpg'),
         description: "Set of 3 embroidered patches"
     },
     {
@@ -41,7 +45,7 @@ const products = [
         name: "Shadows & Echoes CD",
         price: 20.00,
         category: "Music",
-        image: "/images/cd.jpg",
+        image: getImageUrl('/images/cd.jpg'),
         description: "Latest EP in jewel case"
     },
     {
@@ -49,7 +53,7 @@ const products = [
         name: "Logo Beanie",
         price: 18.00,
         category: "Accessories",
-        image: "/images/beanie.jpg",
+        image: getImageUrl('/images/beanie.jpg'),
         description: "Embroidered logo beanie"
     }
 ];

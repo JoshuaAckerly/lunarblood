@@ -3,7 +3,7 @@ import Main from "@/layouts/main";
 import AudioPlayer from "@/components/AudioPlayer";
 import Seo from "@/components/Seo";
 
-const cdn = import.meta.env.VITE_ASSET_URL;
+const cdn = import.meta.env.VITE_ASSET_URL || 'https://d3fjkusrpksks7.cloudfront.net/lunarblood';
 
 const Welcome: React.FC = () => {
     const structuredData = {
