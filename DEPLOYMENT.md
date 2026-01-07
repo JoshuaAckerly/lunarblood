@@ -1,180 +1,131 @@
 # Deployment Guide - Lunar Blood
 
-## 🏠 Local Development (Laravel Herd)
+## 🧪 Test Server Deployment
 
-### Prerequisites
-- Laravel Herd installed
-- Node.js 18+ and npm
-- Git configured
+For deploying to the polyrepo test server, see the main [TEST_DEPLOYMENT.md](../TEST_DEPLOYMENT.md) guide.
 
-### Quick Deploy
+### Quick Deploy to Test Server
+
 ```bash
-chmod +x deploy-herd.sh
-./deploy-herd.sh
+# On test server
+cd /var/www/lunarblood
+./deploy-test.sh
 ```
 
-### Manual Steps
-1. **Pull latest changes**
-   ```bash
-   git pull origin main
-   ```
+## ⚙️ Server Requirements
 
-2. **Install dependencies**
-   ```bash
-   composer install
-   npm ci
-   ```
+- PHP 8.3+
+- MySQL 8.0+
+- Node.js 22+
+- Nginx
+- Redis
+- Supervisor
 
-3. **Build assets**
-   ```bash
-   npm run build
-   ```
-
-4. **Setup database**
-   ```bash
-   php artisan migrate
-   php artisan db:seed
-   ```
-
-5. **Access application**
-   - URL: `http://lunarblood.test`
-
----
-
-## 🌐 Production (Laravel Forge)
-
-### Prerequisites
-- Laravel Forge server configured
-- Domain pointed to server
-- SSL certificate installed
-- Database created
-
-### Forge Setup
-1. **Create new site in Forge**
-   - Repository: `https://github.com/JoshuaAckerly/lunarblood.git`
-   - Branch: `main`
-   - Web Directory: `/public`
-
-2. **Environment Variables**
-   - Copy `.env.production` template
-   - Update database credentials
-   - Set `APP_KEY` (run `php artisan key:generate`)
-   - Configure mail settings
-   - Set proper `APP_URL`
-
-3. **Deploy Script**
-   - Use `deploy-forge.sh` as Forge deploy script
-   - Enable "Quick Deploy" for automatic deployments
-
-### Manual Production Deploy
-```bash
-chmod +x deploy-forge.sh
-./deploy-forge.sh
-```
-
-### Post-Deploy Checklist
-- [ ] SSL certificate active
-- [ ] Database migrations completed
-- [ ] Assets built and cached
-- [ ] Queue workers running
-- [ ] Cron jobs configured
-- [ ] Error monitoring setup
-
----
-
-## 🔧 Configuration
+## 🔧 Environment Configuration
 
 ### Required Environment Variables
+
 ```env
 APP_NAME="Lunar Blood"
-APP_ENV=production
+APP_ENV=staging
 APP_KEY=base64:...
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
+APP_DEBUG=true
+APP_URL=https://test-lunarblood.yourdomain.com
+
 DB_CONNECTION=mysql
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=lunarblood
+DB_USERNAME=lunarblood
+DB_PASSWORD=test123password
+
+INERTIA_SSR_ENABLED=true
+INERTIA_SSR_URL=http://127.0.0.1:13715
+INERTIA_SSR_PORT=13715
 ```
 
-### Forge Daemon (Queue Worker)
-```bash
-Command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
-Directory: /home/forge/yourdomain.com
-User: forge
-```
+## 📝 Manual Deployment Steps
 
-### Forge Scheduler
-```bash
-Command: php artisan schedule:run
-User: forge
-Frequency: Every Minute
-```
+1. **Push code to GitHub**
+   ```bash
+   git add .
+   git commit -m "Update"
+   git push origin main
+   ```
 
----
+2. **SSH to test server and deploy**
+   ```bash
+   ssh user@YOUR_VM_IP
+   cd /var/www/lunarblood
+   ./deploy-test.sh
+   ```
 
 ## 🚨 Troubleshooting
 
-### Common Issues
-
-**Assets not loading**
+### Check Application Logs
 ```bash
-npm run build
+tail -f storage/logs/laravel.log
+tail -f storage/logs/ssr.log
+```
+
+### Verify SSR Server
+```bash
+lsof -i :13715  # Should show node process
+ps aux | grep ssr.mjs
+```
+
+### Database Connection Issues
+```bash
+# Test database connection
+php artisan tinker
+>>> DB::connection()->getPdo();
+```
+
+### Clear All Caches
+```bash
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
 php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
-**Database connection errors**
-- Check `.env` database credentials
-- Verify database exists in Forge
-- Test connection: `php artisan tinker` → `DB::connection()->getPdo()`
-
-**Permission errors**
+### Fix Permissions
 ```bash
-chmod -R 755 storage bootstrap/cache
-chown -R forge:forge storage bootstrap/cache
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
 ```
 
-**Queue not processing**
+### Restart Services
 ```bash
-php artisan queue:restart
-# Check Forge daemon is running
-```
+# Restart PHP-FPM
+sudo systemctl restart php8.3-fpm
 
-### Rollback Procedure
-```bash
-git log --oneline -5  # Find previous commit
-git reset --hard COMMIT_HASH
-./deploy-forge.sh
-```
+# Restart Nginx
+sudo systemctl restart nginx
 
----
+# Restart queue workers
+sudo supervisorctl restart lunarblood-worker:*
+```
 
 ## 📊 Monitoring
 
-### Health Checks
-- Application: `/up`
-- API Status: `/api/health`
+### Check Service Status
+```bash
+# Check all services
+sudo systemctl status nginx
+sudo systemctl status php8.3-fpm
+sudo systemctl status mysql
+sudo systemctl status redis-server
 
-### Log Locations
-- Laravel: `storage/logs/laravel.log`
-- Nginx: `/var/log/nginx/`
-- PHP: `/var/log/php8.2-fpm.log`
+# Check queue workers
+sudo supervisorctl status
+```
 
-### Performance Monitoring
-- Enable OPcache in production
-- Monitor database query performance
-- Set up application monitoring (Sentry, Bugsnag)
-
----
-
-## 🔐 Security
-
-### Production Security Checklist
-- [ ] `APP_DEBUG=false`
-- [ ] Strong `APP_KEY` generated
-- [ ] Database credentials secure
-- [ ] HTTPS enforced
-- [ ] Rate limiting configured
-- [ ] CSRF protection enabled
-- [ ] Input validation implemented
-- [ ] Error pages don't expose sensitive info
+### View Nginx Logs
+```bash
+sudo tail -f /var/log/nginx/error.log
+sudo tail -f /var/log/nginx/access.log
+```
