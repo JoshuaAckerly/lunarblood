@@ -21,16 +21,16 @@ const Product: React.FC<ProductProps> = ({ product }) => {
 
     const handlePurchase = () => {
         // Redirect to checkout with product data
-        const purchaseData = {
-            productId: product.id,
+        const purchaseData: Record<string, string> = {
+            productId: product.id.toString(),
             name: product.name,
-            price: product.price,
-            quantity,
+            price: product.price.toString(),
+            quantity: quantity.toString(),
             size: selectedSize,
-            total: product.price * quantity
+            total: (product.price * quantity).toString()
         };
         
-        const params = new URLSearchParams(purchaseData as any).toString();
+        const params = new URLSearchParams(purchaseData).toString();
         window.location.href = `/checkout?${params}`;
     };
 

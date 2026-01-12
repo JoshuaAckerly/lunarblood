@@ -1,26 +1,12 @@
 import React from "react";
 import Main from "@/layouts/main";
 import AudioPlayer from "@/components/AudioPlayer";
-import Seo from "@/components/Seo";
 
 // Use CDN in production, local images in development
 const cdn = import.meta.env.VITE_ASSET_URL || '';
 const getImageUrl = (path: string) => cdn ? `${cdn}${path}` : path;
 
 const Listen: React.FC = () => {
-    const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "MusicAlbum",
-        "name": "Shadows & Echoes",
-        "byArtist": {
-            "@type": "MusicGroup",
-            "name": "Lunar Blood"
-        },
-        "genre": "Heavy Metal",
-        "datePublished": "2024",
-        "description": "Our latest EP explores the depths of human emotion through haunting melodies and crushing riffs."
-    };
-
     return (
     <Main>
         <section className="mb-12">

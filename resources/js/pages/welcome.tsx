@@ -1,26 +1,10 @@
 import React from "react";
 import Main from "@/layouts/main";
 import AudioPlayer from "@/components/AudioPlayer";
-import Seo from "@/components/Seo";
 
 const cdn = import.meta.env.VITE_ASSET_URL || 'https://d3fjkusrpksks7.cloudfront.net/lunarblood';
 
 const Welcome: React.FC = () => {
-    const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "MusicGroup",
-        "name": "Lunar Blood",
-        "genre": ["Heavy Metal", "Doom Metal", "Dark Rock", "Atmospheric Metal"],
-        "description": "Dark. Mood. Heavy — music that reverberates in the bones. Lunar Blood embodies darkness and moodiness with haunting melodies, heavy riffs, and immersive atmospheres.",
-        "url": "https://lunarblood.graveyardjokes.com",
-        "image": "https://lunarblood.graveyardjokes.com/images/og-image.jpg",
-        "sameAs": [
-            "https://open.spotify.com/artist/lunarblood",
-            "https://lunarblood.bandcamp.com",
-            "https://www.instagram.com/lunarbloodband"
-        ]
-    };
-
     return (
     <Main>
         <section

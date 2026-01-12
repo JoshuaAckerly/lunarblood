@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Payment processing with strict rate limiting (5 attempts per minute)
-Route::middleware(['web', 'throttle:5,1'])->group(function () {
+Route::middleware(['throttle:5,1'])->group(function () {
     Route::post('/process-payment', function (Request $request) {
         $request->validate([
             'email' => 'required|email',

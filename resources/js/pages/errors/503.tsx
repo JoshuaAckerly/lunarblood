@@ -1,6 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
-import { Home, ArrowLeft } from "lucide-react";
+import { Home } from "lucide-react";
 
 const ServiceUnavailable: React.FC = () => (
     <Main>

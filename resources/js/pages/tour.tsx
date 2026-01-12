@@ -1,7 +1,7 @@
 import React from "react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
-import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 
 const tourDates = [
     {
