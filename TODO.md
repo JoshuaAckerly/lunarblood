@@ -115,6 +115,7 @@
 - [ ] Database schema documentation
 - [ ] Deployment guide
 - [ ] Troubleshooting guide
+- [x] Update documentation to reflect Linux backend setup
 
 ### User Documentation
 - [ ] User manual/guide
