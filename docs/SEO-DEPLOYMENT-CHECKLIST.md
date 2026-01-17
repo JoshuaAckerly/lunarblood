@@ -35,11 +35,11 @@ git push origin main
 
 ### 2. Deploy to Production
 ```bash
-# If using Forge (as per deploy-forge.sh)
-./deploy-forge.sh
+# Using Hypervisor deployment scripts
+./deploy-production.sh
 
 # Or SSH into server and run:
-cd /path/to/lunarblood
+cd /var/www/lunarblood
 git pull origin main
 composer install --no-dev --optimize-autoloader
 php artisan config:cache

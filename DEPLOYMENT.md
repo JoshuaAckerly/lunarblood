@@ -1,5 +1,52 @@
 # Deployment Guide - Lunar Blood
 
+## 🚀 Production Deployment
+
+### Hypervisor Production Deployment
+
+Lunar Blood uses Hypervisor for production deployment to AWS EC2.
+
+### Quick Deploy to Production
+
+```bash
+# On production server
+cd /var/www/lunarblood
+./deploy-production.sh
+```
+
+### Production Server Requirements
+- PHP 8.3+
+- MySQL 8.0+
+- Node.js 22+
+- Nginx
+- Redis
+- Supervisor
+- PM2 (for SSR management)
+
+### Production Environment Variables
+
+Copy `.env.example` to `.env` and update:
+
+```bash
+APP_NAME="Lunar Blood"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://lunarblood.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=lunarblood_prod
+DB_USERNAME=lunarblood_prod
+DB_PASSWORD=secure_password_here
+
+INERTIA_SSR_ENABLED=true
+INERTIA_SSR_URL=http://127.0.0.1:13715
+INERTIA_SSR_PORT=13715
+
+MAIL_FROM_ADDRESS=noreply@lunarblood.com
+```
+
 ## 🧪 Test Server Deployment
 
 For deploying to the polyrepo test server, see the main [TEST_DEPLOYMENT.md](../TEST_DEPLOYMENT.md) guide.
