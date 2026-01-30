@@ -1,5 +1,6 @@
 import React from "react";
 import Main from "@/layouts/main";
+import { getProjectUrl } from '../env';
 import AudioPlayer from "@/components/AudioPlayer";
 
 const cdn = import.meta.env.VITE_ASSET_URL || 'https://d3fjkusrpksks7.cloudfront.net/lunarblood';
@@ -21,7 +22,7 @@ const Welcome: React.FC = () => {
                 <p className="mt-4 text-lg md:text-xl text-white/90 fade-in max-w-2xl mx-auto">Dark. Mood. Heavy — music that reverberates in the bones.</p>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="/listen" className="btn btn-primary w-full sm:w-auto">Listen Now</a>
+                    <a href={getProjectUrl('lunarblood')} className="btn btn-primary w-full sm:w-auto">Listen Now</a>
                     <a href="/tour" className="btn btn-secondary w-full sm:w-auto">Tour Dates</a>
                 </div>
             </div>

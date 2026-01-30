@@ -45,7 +45,10 @@ const Seo: React.FC<SeoProps> = ({
             {/* Robots */}
             {noindex && <meta name="robots" content="noindex, nofollow" />}
             
-            {/* Open Graph / Facebook */}
+                // Use env utility for dynamic URLs
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                const { getProjectUrl } = require('../env');
+                const siteUrl = getProjectUrl('lunarblood');
             <meta property="og:type" content={ogType} />
             <meta property="og:url" content={currentUrl} />
             <meta property="og:title" content={fullTitle} />

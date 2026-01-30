@@ -1,12 +1,12 @@
 // Redirect /login and related auth routes to auth-system login page
 Route::get('/login', function () {
-    return redirect()->away('http://domain.test/login');
+    return redirect()->away('http://auth-system.test/login?return_url=http://lunarblood.test');
 });
 Route::get('/register', function () {
-    return redirect()->away('http://domain.test/register');
+    return redirect()->away('http://auth-system.test/register?return_url=http://lunarblood.test');
 });
 Route::get('/forgot-password', function () {
-    return redirect()->away('http://domain.test/forgot-password');
+    return redirect()->away('http://auth-system.test/forgot-password?return_url=http://lunarblood.test');
 });
 <?php
 

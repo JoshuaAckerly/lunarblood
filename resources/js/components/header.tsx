@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { getLoginUrl } from '../env';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,7 +21,7 @@ const Header: React.FC = () => {
                     <a className="nav-link" href="/tour">Tour</a>
                     <a className="nav-link" href="/shop">Shop</a>
                     <a className="btn btn-primary" href="/listen">Listen Now</a>
-                    <a className="nav-link" href="http://localhost:8007/login">Login</a>
+                    <a className="nav-link" href={getLoginUrl('lunarblood')}>Login</a>
                 </nav>
 
                 {/* Mobile Menu Button */}
@@ -39,7 +40,7 @@ const Header: React.FC = () => {
                         <a className="nav-link" href="/" onClick={() => setIsMenuOpen(false)}>Home</a>
                         <a className="nav-link" href="/listen" onClick={() => setIsMenuOpen(false)}>Listen</a>
                         <a className="nav-link" href="/venues" onClick={() => setIsMenuOpen(false)}>Venues</a>
-                        <a className="nav-link" href="http://localhost:8007/login" onClick={() => setIsMenuOpen(false)}>Login</a>
+                        <a className="nav-link" href={getLoginUrl('lunarblood')} onClick={() => setIsMenuOpen(false)}>Login</a>
                         <a className="nav-link" href="/tour" onClick={() => setIsMenuOpen(false)}>Tour</a>
                         <a className="nav-link" href="/shop" onClick={() => setIsMenuOpen(false)}>Shop</a>
                         <a className="btn btn-primary w-full justify-center" href="/listen" onClick={() => setIsMenuOpen(false)}>Listen Now</a>
