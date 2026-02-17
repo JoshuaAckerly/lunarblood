@@ -7,6 +7,8 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+Route::redirect('/welcome', '/', 301);
+
 Route::get('/listen', function () {
     return Inertia::render('listen');
 })->name('listen');
