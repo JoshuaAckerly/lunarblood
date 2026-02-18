@@ -64,7 +64,7 @@ const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => {
                 </div>
                 
                 <div>
-                    <h1 className="text-4xl font-bold mb-4">{venue.name}</h1>
+                    <h1 className="page-title !mb-4">{venue.name}</h1>
                     
                     <div className="space-y-3 mb-6">
                         <div className="flex items-center gap-3">
@@ -107,7 +107,7 @@ const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => {
         </section>
 
         <section className="card">
-            <h2 className="text-2xl font-semibold mb-6">Upcoming Shows</h2>
+            <h2 className="section-title">Upcoming Shows</h2>
             <div className="space-y-4">
                 {venue.shows.map((show, i) => (
                     <div key={i} className="flex items-center justify-between p-4 bg-[var(--muted)] rounded-lg">

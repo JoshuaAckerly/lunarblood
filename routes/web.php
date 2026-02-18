@@ -18,24 +18,58 @@ Route::get('/venues', function () {
 })->name('venues');
 
 Route::get('/venues/{id}', function ($id) {
-    // Mock venue data - replace with database query
-    $venue = [
-        'id' => $id,
-        'name' => 'The Underground',
-        'city' => 'Seattle, WA',
-        'address' => '123 Dark Street, Seattle, WA 98101',
-        'capacity' => 500,
-        'description' => 'An intimate underground venue known for its incredible acoustics and dark atmosphere. Perfect for heavy, atmospheric music.',
-        'website' => 'https://theunderground.com',
-        'phone' => '(206) 555-0123',
-        'shows' => [
-            ['date' => 'March 15, 2024', 'status' => 'On Sale', 'ticketUrl' => '#'],
-            ['date' => 'June 8, 2024', 'status' => 'Coming Soon'],
-        ]
+    $venues = [
+        1 => [
+            'id' => 1,
+            'name' => 'The Underground',
+            'city' => 'Seattle, WA',
+            'address' => '123 Dark Street, Seattle, WA 98101',
+            'capacity' => 500,
+            'description' => 'An intimate underground venue known for its incredible acoustics and dark atmosphere. Perfect for heavy, atmospheric music.',
+            'website' => 'https://theunderground.com',
+            'phone' => '(206) 555-0123',
+            'shows' => [
+                ['date' => 'March 15, 2024', 'status' => 'On Sale', 'ticketUrl' => '#'],
+                ['date' => 'June 8, 2024', 'status' => 'Coming Soon'],
+            ],
+        ],
+        2 => [
+            'id' => 2,
+            'name' => 'Dark Moon Club',
+            'city' => 'Portland, OR',
+            'address' => '456 Nocturne Ave, Portland, OR 97205',
+            'capacity' => 300,
+            'description' => 'A compact club space known for immersive lighting and intimate heavy sets.',
+            'website' => 'https://darkmoonclub.com',
+            'phone' => '(503) 555-0188',
+            'shows' => [
+                ['date' => 'April 2, 2024', 'status' => 'On Sale', 'ticketUrl' => '#'],
+            ],
+        ],
+        3 => [
+            'id' => 3,
+            'name' => 'Crimson Hall',
+            'city' => 'San Francisco, CA',
+            'address' => '789 Redline Blvd, San Francisco, CA 94103',
+            'capacity' => 800,
+            'description' => 'Large-format venue with strong low-end acoustics and premium production support.',
+            'website' => 'https://crimsonhall.com',
+            'phone' => '(415) 555-0107',
+            'shows' => [
+                ['date' => 'April 20, 2024', 'status' => 'Sold Out'],
+            ],
+        ],
     ];
+
+    $venueId = (int) $id;
+    $venue = $venues[$venueId] ?? null;
+
+    if (! $venue) {
+        abort(404);
+    }
     
     return Inertia::render('venue-detail', ['venue' => $venue]);
-})->name('venue.show');
+})->whereNumber('id')->name('venue.show');
 
 Route::get('/tour', function () {
     return Inertia::render('tour');
@@ -67,9 +101,15 @@ Route::get('/shop/{id}', function ($id) {
         ]
     ];
     
-    $product = $products[$id] ?? $products[1];
+    $productId = (int) $id;
+    $product = $products[$productId] ?? null;
+
+    if (! $product) {
+        abort(404);
+    }
+
     return Inertia::render('product', ['product' => $product]);
-})->name('product.show');
+})->whereNumber('id')->name('product.show');
 
 Route::get('/checkout', function () {
     $orderData = [

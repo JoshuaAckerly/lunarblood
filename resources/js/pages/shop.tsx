@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ShoppingCart } from "lucide-react";
@@ -58,7 +58,10 @@ const products = [
     }
 ];
 
-const Shop: React.FC = () => (
+const Shop: React.FC = () => {
+    const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
+
+    return (
     <Main>
         <Seo
             title="Shop - Official Merch & Music"
@@ -67,9 +70,9 @@ const Shop: React.FC = () => (
             ogType="website"
             canonical="https://lunarblood.graveyardjokes.com/shop"
         />
-        <section className="mb-12">
-            <h1 className="text-4xl font-bold mb-2">Shop</h1>
-            <p className="text-[var(--muted-foreground)] mb-8">
+        <section className="page-header">
+            <h1 className="page-title">Shop</h1>
+            <p className="page-subtitle">
                 Official Lunar Blood merchandise and music
             </p>
         </section>
@@ -96,10 +99,12 @@ const Shop: React.FC = () => (
                         <span className="text-xl font-bold">${product.price.toFixed(2)}</span>
                         <a 
                             href={`/shop/${product.id}`}
+                            onClick={() => setLoadingProductId(product.id)}
                             className="btn btn-primary flex items-center gap-2"
+                            aria-busy={loadingProductId === product.id}
                         >
                             <ShoppingCart size={16} />
-                            Buy Now
+                            {loadingProductId === product.id ? 'Loading...' : 'Buy Now'}
                         </a>
                     </div>
                 </div>
@@ -107,7 +112,7 @@ const Shop: React.FC = () => (
         </section>
 
         <section className="mt-12 card">
-            <h2 className="text-2xl font-semibold mb-4">Shipping Info</h2>
+            <h2 className="section-title !mb-4">Shipping Info</h2>
             <div className="grid md:grid-cols-2 gap-6">
                 <div>
                     <h3 className="font-medium mb-2">Domestic Shipping</h3>
@@ -125,5 +130,6 @@ const Shop: React.FC = () => (
         </section>
     </Main>
 );
+};
 
 export default Shop;

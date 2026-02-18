@@ -30,12 +30,12 @@ const Welcome: React.FC = () => {
 
         <section className="grid md:grid-cols-3 gap-6 mb-12">
             <article className="card">
-                <h2 className="text-2xl font-semibold">Band Bio</h2>
+                <h2 className="section-title !mb-0">Band Bio</h2>
                 <p className="mt-3 text-sm text-[var(--card-foreground)]/90">Lunar Blood is a band that embodies darkness and moodiness—haunting melodies, heavy riffs, and immersive atmospheres that pull listeners into another world.</p>
             </article>
 
             <article className="card">
-                <h2 className="text-2xl font-semibold">Featured Music</h2>
+                <h2 className="section-title !mb-0">Featured Music</h2>
                 <div className="mt-4 space-y-4">
                     <AudioPlayer src={`#`} />
                     <AudioPlayer src={`#`} />
@@ -43,7 +43,7 @@ const Welcome: React.FC = () => {
             </article>
 
             <article className="card">
-                <h2 className="text-2xl font-semibold">Connect</h2>
+                <h2 className="section-title !mb-0">Connect</h2>
                 <p className="mt-3 text-sm">Follow us on socials for drops, tour announcements, and exclusive merch.</p>
                 <div className="mt-4 flex gap-2">
                     <a className="btn btn-secondary" href="#">Instagram</a>
@@ -53,7 +53,7 @@ const Welcome: React.FC = () => {
         </section>
 
         <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Upcoming Shows</h2>
+            <h2 className="section-title !mb-4">Upcoming Shows</h2>
             <div className="space-y-4">
                 <div className="p-4 glass rounded-lg">
                     <div className="flex flex-col sm:grid sm:grid-cols-12 gap-2 sm:gap-4 sm:items-center">

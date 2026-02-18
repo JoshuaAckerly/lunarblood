@@ -6,9 +6,9 @@ const OrderSuccess: React.FC = () => (
     <Main>
         <section className="max-w-2xl mx-auto text-center py-12">
             <div className="mb-8">
-                <CheckCircle size={64} className="mx-auto text-green-500 mb-4" />
-                <h1 className="text-3xl font-bold mb-2">Order Confirmed!</h1>
-                <p className="text-[var(--muted-foreground)]">
+                <CheckCircle size={64} className="mx-auto text-[var(--accent)] mb-4" />
+                <h1 className="page-title !text-3xl md:!text-3xl">Order Confirmed!</h1>
+                <p className="page-subtitle mx-auto">
                     Thank you for your purchase. Your order has been successfully processed.
                 </p>
             </div>

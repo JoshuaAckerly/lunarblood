@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
@@ -37,7 +37,10 @@ const venues = [
     }
 ];
 
-const Venues: React.FC = () => (
+const Venues: React.FC = () => {
+    const [loadingVenueId, setLoadingVenueId] = useState<number | null>(null);
+
+    return (
     <Main>
         <Seo
             title="Venues - Live Performance Locations"
@@ -46,9 +49,9 @@ const Venues: React.FC = () => (
             ogType="website"
             canonical="https://lunarblood.graveyardjokes.com/venues"
         />
-        <section className="mb-12">
-            <h1 className="text-4xl font-bold mb-2">Venues</h1>
-            <p className="text-[var(--muted-foreground)] mb-8">
+        <section className="page-header">
+            <h1 className="page-title">Venues</h1>
+            <p className="page-subtitle">
                 Discover the intimate spaces where we bring our dark soundscapes to life
             </p>
         </section>
@@ -82,9 +85,11 @@ const Venues: React.FC = () => (
                         <div className="flex gap-2">
                             <a 
                                 href={`/venues/${venue.id}`}
+                                onClick={() => setLoadingVenueId(venue.id)}
                                 className="btn btn-primary text-sm"
+                                aria-busy={loadingVenueId === venue.id}
                             >
-                                Details
+                                {loadingVenueId === venue.id ? 'Loading...' : 'Details'}
                             </a>
                             <a 
                                 href={venue.website}
@@ -101,7 +106,7 @@ const Venues: React.FC = () => (
         </section>
 
         <section className="mt-12 card">
-            <h2 className="text-2xl font-semibold mb-4">Venue Booking</h2>
+            <h2 className="section-title !mb-4">Venue Booking</h2>
             <p className="text-[var(--muted-foreground)] mb-4">
                 Interested in booking Lunar Blood for your venue? We're always looking for new spaces to share our music.
             </p>
@@ -111,5 +116,6 @@ const Venues: React.FC = () => (
         </section>
     </Main>
 );
+};
 
 export default Venues;

@@ -28,10 +28,12 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsProcessing(true);
+        setErrorMessage('');
 
         // Get CSRF token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -42,6 +44,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Accept: 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
                 body: JSON.stringify({
@@ -55,7 +58,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                     window.location.href = '/order-success';
                 }, 1000);
             } else if (response.status === 429) {
-                alert('Too many payment attempts. Please wait a moment and try again.');
+                setErrorMessage('Too many payment attempts. Please wait a moment and try again.');
                 setIsProcessing(false);
                 return;
             } else {
@@ -63,10 +66,8 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
             }
         } catch (error) {
             console.error('Payment error:', error);
-            // For demo purposes, still redirect to success
-            setTimeout(() => {
-                window.location.href = '/order-success';
-            }, 2000);
+            setErrorMessage('Payment failed. Please check your details and try again.');
+            setIsProcessing(false);
         }
     };
 
@@ -80,11 +81,17 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     return (
         <Main>
             <section className="max-w-4xl mx-auto px-4">
-                <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Checkout</h1>
+                <h1 className="page-title !text-2xl md:!text-3xl !mb-6 md:!mb-8">Checkout</h1>
                 
                 <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
                     <div>
                         <form onSubmit={handleSubmit} className="space-y-6">
+                            {errorMessage && (
+                                <div className="rounded-md border border-[var(--destructive)]/40 bg-[var(--destructive)]/10 p-3 text-sm text-[var(--foreground)]">
+                                    {errorMessage}
+                                </div>
+                            )}
+
                             <div className="card">
                                 <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
                                 <div className="space-y-4">
@@ -94,7 +101,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                         placeholder="Email address"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                        className="input-field"
                                         required
                                     />
                                 </div>
@@ -110,7 +117,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="First name"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                         <input
@@ -119,7 +126,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="Last name"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                     </div>
@@ -129,7 +136,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                         placeholder="Address"
                                         value={formData.address}
                                         onChange={handleInputChange}
-                                        className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                        className="input-field"
                                         required
                                     />
                                     <div className="grid grid-cols-3 gap-4">
@@ -139,7 +146,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="City"
                                             value={formData.city}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                         <input
@@ -148,7 +155,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="State"
                                             value={formData.state}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                         <input
@@ -157,7 +164,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="ZIP"
                                             value={formData.zip}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                     </div>
@@ -176,7 +183,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                         placeholder="Card number (4242 4242 4242 4242)"
                                         value={formData.cardNumber}
                                         onChange={handleInputChange}
-                                        className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                        className="input-field"
                                         required
                                     />
                                     <div className="grid grid-cols-2 gap-4">
@@ -186,7 +193,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="MM/YY"
                                             value={formData.expiry}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                         <input
@@ -195,7 +202,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                             placeholder="CVV"
                                             value={formData.cvv}
                                             onChange={handleInputChange}
-                                            className="w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)]"
+                                            className="input-field"
                                             required
                                         />
                                     </div>

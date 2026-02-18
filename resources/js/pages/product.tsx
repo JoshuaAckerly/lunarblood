@@ -4,7 +4,7 @@ import Seo from "@/components/Seo";
 import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
 
 interface ProductProps {
-    product: {
+    product?: {
         id: number;
         name: string;
         price: number;
@@ -16,22 +16,45 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ product }) => {
+    if (!product) {
+        return (
+            <Main>
+                <section className="max-w-2xl mx-auto py-10">
+                    <div className="card">
+                        <h1 className="page-title !text-2xl md:!text-2xl">Product Not Found</h1>
+                        <p className="page-subtitle mb-6">The item you requested is unavailable.</p>
+                        <a href="/shop" className="btn btn-primary">Back to Shop</a>
+                    </div>
+                </section>
+            </Main>
+        );
+    }
+
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '');
+    const [isRedirecting, setIsRedirecting] = useState(false);
+    const [checkoutError, setCheckoutError] = useState('');
 
     const handlePurchase = () => {
-        // Redirect to checkout with product data
-        const purchaseData: Record<string, string> = {
-            productId: product.id.toString(),
-            name: product.name,
-            price: product.price.toString(),
-            quantity: quantity.toString(),
-            size: selectedSize,
-            total: (product.price * quantity).toString()
-        };
-        
-        const params = new URLSearchParams(purchaseData).toString();
-        window.location.href = `/checkout?${params}`;
+        setCheckoutError('');
+        setIsRedirecting(true);
+
+        try {
+            const purchaseData: Record<string, string> = {
+                productId: product.id.toString(),
+                name: product.name,
+                price: product.price.toString(),
+                quantity: quantity.toString(),
+                size: selectedSize,
+                total: (product.price * quantity).toString(),
+            };
+
+            const params = new URLSearchParams(purchaseData).toString();
+            window.location.assign(`/checkout?${params}`);
+        } catch {
+            setCheckoutError('Unable to continue to checkout. Please try again.');
+            setIsRedirecting(false);
+        }
     };
 
     const structuredData = {
@@ -85,7 +108,7 @@ const Product: React.FC<ProductProps> = ({ product }) => {
                             </span>
                         </div>
                         
-                        <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+                        <h1 className="page-title !text-3xl md:!text-3xl !mb-4">{product.name}</h1>
                         <p className="text-2xl font-bold mb-6">${product.price.toFixed(2)}</p>
                         
                         <p className="text-[var(--muted-foreground)] mb-6">{product.details}</p>
@@ -98,10 +121,10 @@ const Product: React.FC<ProductProps> = ({ product }) => {
                                         <button
                                             key={size}
                                             onClick={() => setSelectedSize(size)}
-                                            className={`px-4 py-2 border rounded-md ${
+                                            className={`btn ${
                                                 selectedSize === size 
-                                                    ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' 
-                                                    : 'border-[var(--border)]'
+                                                    ? 'btn-primary' 
+                                                    : 'btn-secondary border border-[var(--border)]'
                                             }`}
                                         >
                                             {size}
@@ -116,14 +139,14 @@ const Product: React.FC<ProductProps> = ({ product }) => {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    className="w-10 h-10 rounded-md border border-[var(--border)] flex items-center justify-center"
+                                    className="btn btn-secondary border border-[var(--border)] !p-0 w-10 h-10"
                                 >
                                     <Minus size={16} />
                                 </button>
                                 <span className="w-12 text-center">{quantity}</span>
                                 <button
                                     onClick={() => setQuantity(quantity + 1)}
-                                    className="w-10 h-10 rounded-md border border-[var(--border)] flex items-center justify-center"
+                                    className="btn btn-secondary border border-[var(--border)] !p-0 w-10 h-10"
                                 >
                                     <Plus size={16} />
                                 </button>
@@ -136,12 +159,19 @@ const Product: React.FC<ProductProps> = ({ product }) => {
                             </div>
                         </div>
 
+                        {checkoutError && (
+                            <div className="mb-4 rounded-md border border-[var(--destructive)]/40 bg-[var(--destructive)]/10 p-3 text-sm text-[var(--foreground)]">
+                                {checkoutError}
+                            </div>
+                        )}
+
                         <button
                             onClick={handlePurchase}
+                            disabled={isRedirecting}
                             className="btn btn-primary w-full flex items-center justify-center gap-2"
                         >
                             <ShoppingCart size={20} />
-                            Add to Cart & Checkout
+                            {isRedirecting ? 'Loading checkout...' : 'Add to Cart & Checkout'}
                         </button>
                     </div>
                 </div>

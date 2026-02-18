@@ -143,6 +143,22 @@
         @apply mx-auto max-w-6xl px-4;
     }
 
+    .page-header {
+        @apply mb-12;
+    }
+
+    .page-title {
+        @apply text-3xl md:text-4xl font-bold mb-2;
+    }
+
+    .page-subtitle {
+        @apply text-[var(--muted-foreground)] max-w-2xl;
+    }
+
+    .section-title {
+        @apply text-2xl font-semibold mb-6;
+    }
+
     .hero {
         @apply relative overflow-hidden rounded-lg;
     }
@@ -167,8 +183,24 @@
         @apply bg-[var(--card)] text-[var(--card-foreground)] rounded-lg p-6 shadow-lg;
     }
 
+    .input-field {
+        @apply w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--ring)];
+    }
+
     .nav-link {
         @apply text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors py-2 px-1 min-h-[44px] flex items-center touch-manipulation;
+    }
+
+    .status-on-sale {
+        @apply text-[var(--accent)];
+    }
+
+    .status-sold-out {
+        @apply text-[var(--destructive)];
+    }
+
+    .status-coming-soon {
+        @apply text-[var(--muted-foreground)];
     }
 }
 

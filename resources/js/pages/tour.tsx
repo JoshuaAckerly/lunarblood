@@ -51,9 +51,9 @@ const formatDate = (dateString: string) => {
 
 const getStatusColor = (status: string) => {
     switch (status) {
-        case 'on-sale': return 'text-green-400';
-        case 'sold-out': return 'text-red-400';
-        case 'coming-soon': return 'text-yellow-400';
+        case 'on-sale': return 'status-on-sale';
+        case 'sold-out': return 'status-sold-out';
+        case 'coming-soon': return 'status-coming-soon';
         default: return 'text-[var(--muted-foreground)]';
     }
 };
@@ -97,9 +97,9 @@ const Tour: React.FC = () => {
             canonical="https://lunarblood.graveyardjokes.com/tour"
             structuredData={structuredData}
         />
-        <section className="mb-12">
-            <h1 className="text-4xl font-bold mb-2">Tour Dates</h1>
-            <p className="text-[var(--muted-foreground)] mb-8">
+        <section className="page-header">
+            <h1 className="page-title">Tour Dates</h1>
+            <p className="page-subtitle">
                 Experience Lunar Blood live - dark atmospheres and crushing riffs in intimate venues
             </p>
         </section>
@@ -206,7 +206,7 @@ const Tour: React.FC = () => {
 
         <section className="grid md:grid-cols-2 gap-8">
             <div className="card">
-                <h2 className="text-2xl font-semibold mb-4">VIP Packages</h2>
+                <h2 className="section-title !mb-4">VIP Packages</h2>
                 <p className="text-[var(--muted-foreground)] mb-4">
                     Get exclusive access with our VIP experience packages including meet & greet, 
                     signed merchandise, and early venue entry.
@@ -217,7 +217,7 @@ const Tour: React.FC = () => {
             </div>
             
             <div className="card">
-                <h2 className="text-2xl font-semibold mb-4">Tour Updates</h2>
+                <h2 className="section-title !mb-4">Tour Updates</h2>
                 <p className="text-[var(--muted-foreground)] mb-4">
                     Stay updated on new tour dates, venue changes, and exclusive presale opportunities.
                 </p>

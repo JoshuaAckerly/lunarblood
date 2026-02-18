@@ -10,14 +10,14 @@ const Listen: React.FC = () => {
     return (
     <Main>
         <section className="mb-12">
-            <h1 className="text-4xl font-bold mb-2">Listen</h1>
-            <p className="text-[var(--muted-foreground)] mb-8">
+            <h1 className="page-title">Listen</h1>
+            <p className="page-subtitle">
                 Immerse yourself in our dark, atmospheric soundscapes
             </p>
         </section>
 
         <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6">Latest Release</h2>
+            <h2 className="section-title">Latest Release</h2>
             <div className="card">
                 <div className="grid md:grid-cols-2 gap-6 items-center">
                     <div>
@@ -43,7 +43,7 @@ const Listen: React.FC = () => {
         </section>
 
         <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6">Discography</h2>
+            <h2 className="section-title">Discography</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                     { title: "Shadows & Echoes", year: "2024", type: "EP" },
@@ -64,7 +64,7 @@ const Listen: React.FC = () => {
         </section>
 
         <section>
-            <h2 className="text-2xl font-semibold mb-6">Streaming Platforms</h2>
+            <h2 className="section-title">Streaming Platforms</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {["Spotify", "Apple Music", "Bandcamp", "YouTube"].map((platform) => (
                     <a key={platform} href="#" className="btn btn-secondary">
