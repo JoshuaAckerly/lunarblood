@@ -18,7 +18,23 @@ cd "$DEPLOY_PATH"
 
 # Pull latest code from Git
 echo "📦 Pulling latest code from Git..."
-git pull origin testing
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+TARGET_BRANCH="${DEPLOY_BRANCH:-testing}"
+
+if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null 2>&1; then
+    echo "Using deploy branch: $TARGET_BRANCH"
+elif git ls-remote --exit-code --heads origin "$CURRENT_BRANCH" >/dev/null 2>&1; then
+    TARGET_BRANCH="$CURRENT_BRANCH"
+    echo "Deploy branch not found, falling back to current branch: $TARGET_BRANCH"
+else
+    echo "⚠️ No matching remote branch found (requested: ${DEPLOY_BRANCH:-testing}, current: $CURRENT_BRANCH). Skipping git pull."
+    TARGET_BRANCH=""
+fi
+
+if [ -n "$TARGET_BRANCH" ]; then
+    git fetch origin "$TARGET_BRANCH"
+    git reset --hard "origin/$TARGET_BRANCH"
+fi
 
 # Install/Update PHP dependencies
 echo "🐘 Installing PHP dependencies..."
