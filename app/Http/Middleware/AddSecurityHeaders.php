@@ -24,10 +24,21 @@ class AddSecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
-        $response->headers->set(
-            'Content-Security-Policy',
-            "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net; font-src 'self' https://fonts.bunny.net; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
-        );
+        $csp = "default-src 'self'";
+        if (app()->environment('local')) {
+            $csp .= " http:";
+        }
+        $csp .= "; style-src 'self' 'unsafe-inline'";
+        if (app()->environment('local')) {
+            $csp .= " http:";
+        }
+        $csp .= " https://fonts.bunny.net; font-src 'self'";
+        if (app()->environment('local')) {
+            $csp .= " http:";
+        }
+        $csp .= " https://fonts.bunny.net; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';";
+
+        $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
     }
