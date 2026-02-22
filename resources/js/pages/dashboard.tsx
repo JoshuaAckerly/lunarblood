@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
-import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert } from 'lucide-react';
+import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert, Plus, MapPin } from 'lucide-react';
 
 interface DashboardStats {
     venues: number;
@@ -173,6 +173,53 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                     </div>
                     <p className="text-3xl font-bold">{data.stats.products_low_stock}</p>
                 </article>
+            </section>
+
+            <section className="card mb-8">
+                <h2 className="section-title !mb-4">Quick Actions</h2>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <a
+                        href="/tour"
+                        className="btn btn-primary flex items-center justify-center gap-2"
+                        aria-label="Add a new show"
+                    >
+                        <Plus size={16} />
+                        Add New Show
+                    </a>
+                    <a
+                        href="/venues"
+                        className="btn btn-primary flex items-center justify-center gap-2"
+                        aria-label="Manage venues"
+                    >
+                        <MapPin size={16} />
+                        Manage Venues
+                    </a>
+                    <a
+                        href="/shop"
+                        className="btn btn-primary flex items-center justify-center gap-2"
+                        aria-label="View all products"
+                    >
+                        <ShoppingBag size={16} />
+                        View All Products
+                    </a>
+                    <button
+                        type="button"
+                        className="btn btn-primary flex items-center justify-center gap-2"
+                        aria-label="View low stock alerts"
+                        onClick={() => {
+                            const lowStockHeaders = document.querySelectorAll('h2.section-title');
+                            for (const header of lowStockHeaders) {
+                                if (header.textContent?.includes('Low Stock Products')) {
+                                    header.scrollIntoView({ behavior: 'smooth' });
+                                    break;
+                                }
+                            }
+                        }}
+                    >
+                        <TriangleAlert size={16} />
+                        Low Stock Alerts
+                    </button>
+                </div>
             </section>
 
             <section className="grid gap-6 lg:grid-cols-2">
