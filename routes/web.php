@@ -150,7 +150,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
 });
 
-Route::redirect('/login', '/', 301);
+Route::redirect('/login', '/', 301)->name('login');
 Route::redirect('/register', '/', 301);
 Route::redirect('/reset-password', '/', 301);
 Route::redirect('/forgot-password', '/', 301);

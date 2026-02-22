@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Models\Venue;
 use App\Models\Show;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\TestCase;
+use Tests\TestCase;
 
 class VenueTest extends TestCase
 {
