@@ -4,14 +4,14 @@ Use this checklist to promote verified changes from test/staging to production s
 
 ## Change Meta
 
-- Date (UTC): __________
-- Release Owner: __________
-- Approver: __________
-- Source Branch: __________
+- Date (UTC): 2026-02-22
+- Release Owner: Joshua
+- Approver: Joshua
+- Source Branch: main
 - Target Branch: `main`
-- Commit SHA: __________
-- Deployment Window: __________
-- Rollback Owner: __________
+- Commit SHA: df4e51039d5c2d352d166649e33bde82087410cc
+- Deployment Window: 2026-02-22 14:00-16:00 UTC
+- Rollback Owner: Joshua
 
 ## 1) Pre-Flight Gate (Must Pass Before Deploy)
 
