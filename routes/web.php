@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ShowController;
 use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +23,14 @@ Route::get('/venues/{venue}', [VenueController::class, 'show'])->name('venues.sh
 Route::get('/venues/{venue}/edit', [VenueController::class, 'edit'])->name('venues.edit');
 Route::put('/venues/{venue}', [VenueController::class, 'update'])->name('venues.update');
 Route::delete('/venues/{venue}', [VenueController::class, 'destroy'])->name('venues.destroy');
+
+Route::get('/shows', [ShowController::class, 'index'])->name('shows.index');
+Route::get('/shows/create', [ShowController::class, 'create'])->name('shows.create');
+Route::post('/shows', [ShowController::class, 'store'])->name('shows.store');
+Route::get('/shows/{show}', [ShowController::class, 'show'])->name('shows.show');
+Route::get('/shows/{show}/edit', [ShowController::class, 'edit'])->name('shows.edit');
+Route::put('/shows/{show}', [ShowController::class, 'update'])->name('shows.update');
+Route::delete('/shows/{show}', [ShowController::class, 'destroy'])->name('shows.destroy');
 
 Route::get('/tour', function () {
     return Inertia::render('tour');
