@@ -138,7 +138,26 @@ This project uses:
 - **Prettier**: Code formatting with Tailwind plugin
 - **Tailwind**: Custom configuration with animations
 
-## 📝 Scripts
+## � Documentation
+
+Additional documentation is available in the `docs/` directory:
+
+- [API Documentation Outline](docs/API_DOCUMENTATION_OUTLINE.md)
+- [Monitoring and Error Review Cadence](docs/MONITORING_AND_ERROR_REVIEW.md)
+- [OG Images Guide](docs/OG-IMAGES.md)
+- [Production Promotion Checklist](docs/PRODUCTION-PROMOTION-CHECKLIST.md)
+- [SEO Deployment Checklist](docs/SEO-DEPLOYMENT-CHECKLIST.md)
+- [SEO Quick Reference](docs/SEO-QUICK-REFERENCE.md)
+
+### Health Monitoring
+
+Run the health check script to verify system status:
+
+```bash
+./health-check.sh [verbose]
+```
+
+## �📝 Scripts
 
 | Command | Description |
 |---------|-------------|

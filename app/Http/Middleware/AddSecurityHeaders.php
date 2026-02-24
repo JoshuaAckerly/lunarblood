@@ -28,6 +28,10 @@ class AddSecurityHeaders
         if (app()->environment('local')) {
             $csp .= " http:";
         }
+        $csp .= "; script-src 'self'";
+        if (app()->environment('local')) {
+            $csp .= " 'unsafe-inline' http:";
+        }
         $csp .= "; style-src 'self' 'unsafe-inline'";
         if (app()->environment('local')) {
             $csp .= " http:";
@@ -36,7 +40,11 @@ class AddSecurityHeaders
         if (app()->environment('local')) {
             $csp .= " http:";
         }
-        $csp .= " https://fonts.bunny.net; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';";
+        $csp .= " https://fonts.bunny.net; connect-src 'self'";
+        if (app()->environment('local')) {
+            $csp .= " http: ws: wss:";
+        }
+        $csp .= "; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';";
 
         $response->headers->set('Content-Security-Policy', $csp);
 

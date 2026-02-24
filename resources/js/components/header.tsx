@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, User, ChevronDown } from 'lucide-react';
 import { getLoginUrl } from '../env';
 import { usePage } from '@inertiajs/react';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const userMenuRef = useRef<HTMLDivElement>(null);
     const { auth } = usePage().props as any;
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+                setIsUserMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <header className="py-4">
@@ -24,7 +37,36 @@ const Header: React.FC = () => {
                     <a className="nav-link" href="/shop">Shop</a>
                     <a className="btn btn-primary" href="/listen">Listen Now</a>
                     {auth?.user ? (
-                        <a className="nav-link" href="/dashboard">Dashboard</a>
+                        <div className="relative" ref={userMenuRef}>
+                            <button
+                                className="flex items-center gap-2 nav-link"
+                                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                aria-expanded={isUserMenuOpen}
+                                aria-haspopup="true"
+                            >
+                                <User size={16} />
+                                <span>{auth.user.name}</span>
+                                <ChevronDown size={14} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                            {isUserMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-[var(--background)] border border-[var(--border)] rounded-md shadow-lg z-50">
+                                    <a
+                                        href="/dashboard"
+                                        className="block px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                        onClick={() => setIsUserMenuOpen(false)}
+                                    >
+                                        Dashboard
+                                    </a>
+                                    <a
+                                        href="/settings/profile"
+                                        className="block px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                        onClick={() => setIsUserMenuOpen(false)}
+                                    >
+                                        Profile Settings
+                                    </a>
+                                </div>
+                            )}
+                        </div>
                     ) : (
                         <a className="nav-link" href={getLoginUrl('lunarblood')}>Login</a>
                     )}
@@ -47,7 +89,10 @@ const Header: React.FC = () => {
                         <a className="nav-link" href="/listen" onClick={() => setIsMenuOpen(false)}>Listen</a>
                         <a className="nav-link" href="/venues" onClick={() => setIsMenuOpen(false)}>Venues</a>
                         {auth?.user ? (
-                            <a className="nav-link" href="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</a>
+                            <>
+                                <a className="nav-link" href="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</a>
+                                <a className="nav-link" href="/settings/profile" onClick={() => setIsMenuOpen(false)}>Profile Settings</a>
+                            </>
                         ) : (
                             <a className="nav-link" href={getLoginUrl('lunarblood')} onClick={() => setIsMenuOpen(false)}>Login</a>
                         )}
