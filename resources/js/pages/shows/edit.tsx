@@ -70,7 +70,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
         put(`/shows/${show.id}`);
     };
 
-    const selectedVenue = venues.find(v => v.id === parseInt(data.venue_id));
+    const selectedVenue = venues.find(v => v.id === data.venue_id);
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -84,7 +84,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                             <select
                                 id="venue_id"
                                 value={data.venue_id}
-                                onChange={(e) => setData('venue_id', e.target.value)}
+                                onChange={(e) => setData('venue_id', parseInt(e.target.value))}
                                 className="input w-full"
                                 required
                             >
@@ -143,7 +143,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                             <select
                                 id="status"
                                 value={data.status}
-                                onChange={(e) => setData('status', e.target.value)}
+                                onChange={(e) => setData('status', e.target.value as 'coming-soon' | 'on-sale' | 'sold-out' | 'cancelled')}
                                 className="input w-full"
                                 required
                             >
