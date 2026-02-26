@@ -6,6 +6,28 @@ use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', function () {
+        return Inertia::render('auth/login');
+    })->name('login');
+
+    Route::get('/register', function () {
+        return Inertia::render('auth/register');
+    })->name('register');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', function () {
+        auth()->logout();
+        return redirect('/');
+    })->name('logout');
+
+    Route::get('/dashboard', function () {
+        return Inertia::render('dashboard');
+    })->name('dashboard');
+});
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');

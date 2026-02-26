@@ -64,11 +64,20 @@ const Header: React.FC = () => {
                                     >
                                         Profile Settings
                                     </a>
+                                    <hr className="border-[var(--border)] my-1" />
+                                    <form method="POST" action="/logout" className="block">
+                                        <button
+                                            type="submit"
+                                            className="w-full text-left px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                        >
+                                            Log out
+                                        </button>
+                                    </form>
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <a className="nav-link" href={getLoginUrl('lunarblood')}>Login</a>
+                        <a className="nav-link" href="/login">Login</a>
                     )}
                 </nav>
 
@@ -92,9 +101,18 @@ const Header: React.FC = () => {
                             <>
                                 <a className="nav-link" href="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</a>
                                 <a className="nav-link" href="/settings/profile" onClick={() => setIsMenuOpen(false)}>Profile Settings</a>
+                                <form method="POST" action="/logout" className="inline">
+                                    <button
+                                        type="submit"
+                                        className="nav-link w-full text-left"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Log out
+                                    </button>
+                                </form>
                             </>
                         ) : (
-                            <a className="nav-link" href={getLoginUrl('lunarblood')} onClick={() => setIsMenuOpen(false)}>Login</a>
+                            <a className="nav-link" href="/login" onClick={() => setIsMenuOpen(false)}>Login</a>
                         )}
                         <a className="nav-link" href="/tour" onClick={() => setIsMenuOpen(false)}>Tour</a>
                         <a className="nav-link" href="/shop" onClick={() => setIsMenuOpen(false)}>Shop</a>
