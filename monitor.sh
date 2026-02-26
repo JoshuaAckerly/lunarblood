@@ -5,7 +5,7 @@
 # Usage: ./monitor.sh [daily|weekly|alert-test]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_DIR="/var/log/lunarblood"
+LOG_DIR="./logs/monitoring"
 MONITOR_LOG="$LOG_DIR/monitor.log"
 ALERT_LOG="$LOG_DIR/alerts.log"
 
@@ -140,7 +140,7 @@ check_security() {
     log "Checking security status..."
 
     # Check for suspicious patterns in logs
-    local suspicious=$(grep -c -E "(sql injection|suspicious|attack|hacking)" storage/logs/laravel.log 2>/dev/null || echo "0")
+    local suspicious=$(grep -c -E "(sql injection|suspicious|attack|hacking)" storage/logs/laravel.log 2>/dev/null | tr -d ' ' || echo "0")
     if [ "$suspicious" -gt 0 ]; then
         alert "Potential security incidents detected: $suspicious occurrences" "CRITICAL"
     fi
@@ -216,5 +216,4 @@ case "$MODE" in
         ;;
 esac
 
-log "${GREEN}Monitoring completed${NC}"</content>
-<parameter name="filePath">/home/joshua/Documents/lunarblood/monitor.sh
+log "${GREEN}Monitoring completed${NC}"

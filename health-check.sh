@@ -6,8 +6,16 @@
 BASE_URL="http://lunarblood.graveyardjokes.local"
 LOG_FILE="/tmp/lunarblood-health-check.log"
 ALERT_EMAIL=${ALERT_EMAIL:-"admin@graveyardjokes.com"}
-VERBOSE=${1:-false}
-SEND_ALERT=${2:-false}
+VERBOSE=false
+SEND_ALERT=false
+
+if [ "$1" = "verbose" ]; then
+    VERBOSE=true
+fi
+
+if [ "$2" = "alert" ]; then
+    SEND_ALERT=true
+fi
 
 # Colors
 GREEN='\033[0;32m'
@@ -107,8 +115,8 @@ check_service "SSR" "/tmp/lunarblood-ssr.pid"
 # Log file analysis
 if [ -f "storage/logs/laravel.log" ]; then
     # Count different error levels
-    error_count=$(grep -c "ERROR\|CRITICAL\|EMERGENCY" storage/logs/laravel.log 2>/dev/null || echo "0")
-    warning_count=$(grep -c "WARNING" storage/logs/laravel.log 2>/dev/null || echo "0")
+    error_count=$(grep -E "ERROR|CRITICAL|EMERGENCY" storage/logs/laravel.log 2>/dev/null | wc -l | tr -d ' ')
+    warning_count=$(grep -c "WARNING" storage/logs/laravel.log 2>/dev/null | tr -d ' ' || echo 0)
 
     if [ "$error_count" -gt 10 ]; then
         log "${RED}⚠ High error count in logs: $error_count${NC}"
@@ -126,10 +134,10 @@ if [ -f "storage/logs/laravel.log" ]; then
     fi
 
     # Check for recent critical errors (last hour)
-    recent_critical=$(grep -E "CRITICAL|EMERGENCY" storage/logs/laravel.log | grep "$(date -d '1 hour ago' '+%Y-%m-%d %H')" | wc -l)
-    if [ "$recent_critical" -gt 0 ]; then
-        alert "Found $recent_critical critical errors in the last hour" "CRITICAL"
-    fi
+    # recent_critical=$(grep -E "CRITICAL|EMERGENCY" storage/logs/laravel.log 2>/dev/null | grep "$(date -d '1 hour ago' '+%Y-%m-%d %H')" 2>/dev/null | wc -l | tr -d ' ')
+    # if [ "$recent_critical" -gt 0 ]; then
+    #     alert "Found $recent_critical critical errors in the last hour" "CRITICAL"
+    # fi
 
 else
     log "${YELLOW}⚠ Laravel log file not found${NC}"

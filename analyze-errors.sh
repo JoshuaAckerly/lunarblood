@@ -58,12 +58,12 @@ case "$FORMAT" in
 
         # Summary statistics
         echo "=== ERROR SUMMARY ==="
-        total_errors=$(grep -E "ERROR|CRITICAL|EMERGENCY" "$LOG_FILE" | grep -c "$START_DATE" || echo 0)
+        total_errors=$(grep -E "ERROR|CRITICAL|EMERGENCY" "$LOG_FILE" | grep -c "$START_DATE" 2>/dev/null | tr -d ' ' || echo 0)
         echo "Total Errors: $total_errors"
 
         # Error levels
         for level in "EMERGENCY" "CRITICAL" "ERROR" "WARNING"; do
-            count=$(grep "$level" "$LOG_FILE" | grep -c "$START_DATE" 2>/dev/null || echo 0)
+            count=$(grep "$level" "$LOG_FILE" | grep -c "$START_DATE" 2>/dev/null | tr -d ' ' || echo 0)
             if [ "$count" -gt 0 ]; then
                 echo "$level: $count"
             fi
@@ -107,12 +107,12 @@ case "$FORMAT" in
         fi
 
         # Check for patterns
-        auth_errors=$(grep -c "Unauthenticated\|Invalid credentials" "$LOG_FILE" 2>/dev/null || echo 0)
+        auth_errors=$(grep -c "Unauthenticated\|Invalid credentials" "$LOG_FILE" 2>/dev/null | tr -d ' ' || echo 0)
         if [ "$auth_errors" -gt 10 ]; then
             echo "⚠️  HIGH AUTHENTICATION FAILURES: Check for brute force attempts"
         fi
 
-        db_errors=$(grep -c "SQLSTATE\|PDOException" "$LOG_FILE" 2>/dev/null || echo 0)
+        db_errors=$(grep -c "SQLSTATE\|PDOException" "$LOG_FILE" 2>/dev/null | tr -d ' ' || echo 0)
         if [ "$db_errors" -gt 5 ]; then
             echo "⚠️  DATABASE ERRORS DETECTED: Check database connectivity"
         fi
