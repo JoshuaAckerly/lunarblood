@@ -6,28 +6,6 @@ use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Authentication Routes
-Route::middleware('guest')->group(function () {
-    Route::get('/login', function () {
-        return Inertia::render('auth/login');
-    })->name('login');
-
-    Route::get('/register', function () {
-        return Inertia::render('auth/register');
-    })->name('register');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::post('/logout', function () {
-        auth()->logout();
-        return redirect('/');
-    })->name('logout');
-
-    Route::get('/dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
-
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -53,10 +31,6 @@ Route::get('/shows/{show}', [ShowController::class, 'show'])->name('shows.show')
 Route::get('/shows/{show}/edit', [ShowController::class, 'edit'])->name('shows.edit');
 Route::put('/shows/{show}', [ShowController::class, 'update'])->name('shows.update');
 Route::delete('/shows/{show}', [ShowController::class, 'destroy'])->name('shows.destroy');
-
-Route::get('/tour', function () {
-    return Inertia::render('tour');
-})->name('tour');
 
 Route::get('/tour', function () {
     return Inertia::render('tour');
@@ -135,14 +109,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
 });
-
-Route::redirect('/login', '/', 301)->name('login');
-Route::redirect('/register', '/', 301);
-Route::redirect('/reset-password', '/', 301);
-Route::redirect('/forgot-password', '/', 301);
-Route::redirect('/reset-password/{token}', '/', 301);
-Route::redirect('/verify-email', '/', 301);
-Route::redirect('/confirm-password', '/', 301);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
