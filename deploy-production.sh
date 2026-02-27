@@ -26,7 +26,7 @@ composer install --no-interaction --prefer-dist --no-progress --optimize-autoloa
 
 # Install/Update Node dependencies
 echo "📦 Installing Node dependencies..."
-npm ci --production=false
+npm ci --production=false --legacy-peer-deps
 
 # Build frontend assets with SSR
 echo "🎨 Building frontend assets and SSR bundle..."
