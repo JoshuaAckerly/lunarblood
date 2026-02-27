@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm, usePage } from "@inertiajs/react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useForm } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ArrowLeft, ArrowRight, Save, Eye, Calendar, MapPin, Clock, DollarSign } from "lucide-react";
@@ -22,9 +22,10 @@ interface CreateShowProps {
 const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draftData }) => {
     const [currentStep, setCurrentStep] = useState(initialStep);
     const [isPreview, setIsPreview] = useState(false);
-    const { flash } = usePage().props as any;
+    const [autosaveState, setAutosaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+    const [manualSaveState, setManualSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         venue_id: draftData.venue_id || '',
         date: draftData.date || '',
         time: draftData.time || '',
@@ -36,33 +37,108 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
         action: 'next',
     });
 
+    const csrfToken = useMemo(() => {
+        return document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
+    }, []);
+
+    useEffect(() => {
+        setCurrentStep(initialStep);
+        setData('step', initialStep);
+    }, [initialStep, setData]);
+
     const steps = [
         { id: 1, title: 'Basic Info', description: 'Venue and date/time' },
         { id: 2, title: 'Details', description: 'Status and description' },
         { id: 3, title: 'Tickets & Publish', description: 'Pricing and final review' },
     ];
 
+    const saveDraft = async (isManual = false) => {
+        if (!csrfToken) {
+            if (isManual) {
+                setManualSaveState('error');
+            } else {
+                setAutosaveState('error');
+            }
+            return;
+        }
+
+        if (isManual) {
+            setManualSaveState('saving');
+        } else {
+            setAutosaveState('saving');
+        }
+
+        try {
+            const response = await fetch('/shows', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    ...data,
+                    step: currentStep,
+                    action: 'save_draft',
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Draft save failed');
+            }
+
+            if (isManual) {
+                setManualSaveState('saved');
+                window.setTimeout(() => setManualSaveState('idle'), 2000);
+            } else {
+                setAutosaveState('saved');
+                window.setTimeout(() => setAutosaveState('idle'), 1500);
+            }
+        } catch {
+            if (isManual) {
+                setManualSaveState('error');
+            } else {
+                setAutosaveState('error');
+            }
+        }
+    };
+
+    useEffect(() => {
+        const timeoutId = window.setTimeout(() => {
+            void saveDraft(false);
+        }, 1500);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
+    }, [
+        data.venue_id,
+        data.date,
+        data.time,
+        data.status,
+        data.price,
+        data.description,
+        data.ticket_url,
+        currentStep,
+    ]);
+
     const handleNext = () => {
         if (currentStep < 3) {
-            setCurrentStep(currentStep + 1);
-            setData('step', currentStep + 1);
+            setData('action', 'next');
+            setData('step', currentStep);
+            post('/shows', { preserveScroll: true });
         }
     };
 
     const handlePrevious = () => {
         if (currentStep > 1) {
-            setCurrentStep(currentStep - 1);
-            setData('step', currentStep - 1);
+            window.location.href = `/shows/create?step=${currentStep - 1}`;
         }
     };
 
     const handleSaveDraft = () => {
-        setData('action', 'save_draft');
-        post('/shows', {
-            onSuccess: () => {
-                // Show success message
-            }
-        });
+        void saveDraft(true);
     };
 
     const handlePublish = () => {
@@ -215,47 +291,53 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                             {errors.ticket_url && <p className="text-red-500 text-sm mt-1">{errors.ticket_url}</p>}
                         </div>
 
-                        <div className="card bg-[var(--muted)]">
-                            <h3 className="text-lg font-semibold mb-4">Preview</h3>
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3">
-                                    <MapPin size={20} />
-                                    <span className="font-medium">{selectedVenue?.name}</span>
-                                    <span className="text-[var(--muted-foreground)]">
-                                        {selectedVenue?.city}, {selectedVenue?.state} {selectedVenue?.country}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Calendar size={20} />
-                                    <span>{data.date ? new Date(data.date).toLocaleDateString() : 'Date not set'}</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Clock size={20} />
-                                    <span>{data.time || 'Time not set'}</span>
-                                </div>
-                                {data.price && (
+                        {isPreview ? (
+                            <div className="card bg-[var(--muted)]">
+                                <h3 className="text-lg font-semibold mb-4">Preview</h3>
+                                <div className="space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <DollarSign size={20} />
-                                        <span>${data.price}</span>
+                                        <MapPin size={20} />
+                                        <span className="font-medium">{selectedVenue?.name || 'Venue not set'}</span>
+                                        <span className="text-[var(--muted-foreground)]">
+                                            {selectedVenue ? `${selectedVenue.city}, ${selectedVenue.state || ''} ${selectedVenue.country}` : ''}
+                                        </span>
                                     </div>
-                                )}
-                                <div className="mt-4">
-                                    <span className={`px-2 py-1 rounded text-sm ${
-                                        data.status === 'on-sale' ? 'bg-green-100 text-green-800' :
-                                        data.status === 'sold-out' ? 'bg-red-100 text-red-800' :
-                                        data.status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
-                                        'bg-blue-100 text-blue-800'
-                                    }`}>
-                                        {data.status.replace('-', ' ').toUpperCase()}
-                                    </span>
-                                </div>
-                                {data.description && (
+                                    <div className="flex items-center gap-3">
+                                        <Calendar size={20} />
+                                        <span>{data.date ? new Date(data.date).toLocaleDateString() : 'Date not set'}</span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Clock size={20} />
+                                        <span>{data.time || 'Time not set'}</span>
+                                    </div>
+                                    {data.price && (
+                                        <div className="flex items-center gap-3">
+                                            <DollarSign size={20} />
+                                            <span>${data.price}</span>
+                                        </div>
+                                    )}
                                     <div className="mt-4">
-                                        <p className="text-[var(--muted-foreground)]">{data.description}</p>
+                                        <span className={`px-2 py-1 rounded text-sm ${
+                                            data.status === 'on-sale' ? 'bg-green-100 text-green-800' :
+                                            data.status === 'sold-out' ? 'bg-red-100 text-red-800' :
+                                            data.status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                            'bg-blue-100 text-blue-800'
+                                        }`}>
+                                            {data.status.replace('-', ' ').toUpperCase()}
+                                        </span>
                                     </div>
-                                )}
+                                    {data.description && (
+                                        <div className="mt-4">
+                                            <p className="text-[var(--muted-foreground)]">{data.description}</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <p className="text-sm text-[var(--muted-foreground)]">
+                                Use Preview Mode to review event details before publishing.
+                            </p>
+                        )}
                     </div>
                 );
 
@@ -315,6 +397,12 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                         </div>
                     </div>
 
+                    <div className="mb-4 text-sm text-[var(--muted-foreground)]">
+                        {autosaveState === 'saving' && 'Auto-saving draft...'}
+                        {autosaveState === 'saved' && 'Draft auto-saved'}
+                        {autosaveState === 'error' && 'Auto-save failed. You can still use Save Draft.'}
+                    </div>
+
                     <form onSubmit={handleSubmit}>
                         {renderStepContent()}
 
@@ -327,7 +415,7 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                     className="btn btn-secondary"
                                 >
                                     <Save size={16} className="mr-2" />
-                                    Save Draft
+                                    {manualSaveState === 'saving' ? 'Saving...' : 'Save Draft'}
                                 </button>
                                 {currentStep === 3 && (
                                     <button
@@ -338,6 +426,13 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                         <Eye size={16} className="mr-2" />
                                         {isPreview ? 'Hide' : 'Show'} Preview
                                     </button>
+                                )}
+
+                                {manualSaveState === 'saved' && (
+                                    <span className="text-sm text-[var(--muted-foreground)] self-center">Saved</span>
+                                )}
+                                {manualSaveState === 'error' && (
+                                    <span className="text-sm text-red-500 self-center">Save failed</span>
                                 )}
                             </div>
 
@@ -357,6 +452,7 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                     <button
                                         type="button"
                                         onClick={handleNext}
+                                        disabled={processing}
                                         className="btn btn-primary"
                                     >
                                         Next
@@ -366,7 +462,7 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                     <button
                                         type="button"
                                         onClick={handlePublish}
-                                        disabled={processing}
+                                        disabled={processing || !isPreview}
                                         className="btn btn-primary"
                                     >
                                         <Save size={16} className="mr-2" />

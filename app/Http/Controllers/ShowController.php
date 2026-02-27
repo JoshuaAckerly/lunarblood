@@ -27,7 +27,8 @@ class ShowController extends Controller
      */
     public function create(Request $request)
     {
-        $step = $request->get('step', 1);
+        $draftStep = (int) data_get(Session::get('show_draft', []), 'step', 1);
+        $step = (int) $request->get('step', $draftStep);
         $venues = Venue::orderBy('name')->get();
 
         // Get draft data from session if exists
@@ -48,6 +49,26 @@ class ShowController extends Controller
         $step = $request->get('step', 1);
         $action = $request->get('action', 'next');
 
+        if ($action === 'save_draft') {
+            $draftFields = [
+                'venue_id',
+                'date',
+                'time',
+                'status',
+                'price',
+                'description',
+                'ticket_url',
+            ];
+
+            $incomingDraft = $request->only($draftFields);
+            $incomingDraft['step'] = (int) $step;
+
+            $draftData = Session::get('show_draft', []);
+            Session::put('show_draft', array_merge($draftData, $incomingDraft));
+
+            return response()->json(['message' => 'Draft saved successfully']);
+        }
+
         // Validate current step
         $rules = $this->getValidationRules($step);
         $validated = $request->validate($rules);
@@ -55,11 +76,10 @@ class ShowController extends Controller
         // Store draft data in session
         $draftData = Session::get('show_draft', []);
         $draftData = array_merge($draftData, $validated);
+        $draftData['step'] = $action === 'next' && $step < 3
+            ? $step + 1
+            : $step;
         Session::put('show_draft', $draftData);
-
-        if ($action === 'save_draft') {
-            return response()->json(['message' => 'Draft saved successfully']);
-        }
 
         if ($action === 'publish' || $step >= 3) {
             // Validate all required fields before creating
@@ -73,7 +93,8 @@ class ShowController extends Controller
                 'ticket_url' => 'nullable|url',
             ];
 
-            $request->validate($allRules);
+            $allValidated = $request->validate($allRules);
+            $draftData = array_merge($draftData, $allValidated);
 
             // Create the show
             $show = Show::create($draftData);

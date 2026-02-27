@@ -68,14 +68,13 @@ class ShowControllerTest extends TestCase
             'action' => 'next',
         ]);
 
-        $response->assertRedirect();
-        $this->assertEquals(2, session('show_draft.step'));
+        $response->assertRedirect('/shows/create?step=2');
     }
 
     public function test_show_creation_with_draft_saving()
     {
         // Save draft at step 1
-        $response = $this->actingAs($this->user)->post('/shows', [
+        $response = $this->actingAs($this->user)->postJson('/shows', [
             'venue_id' => $this->venue->id,
             'date' => now()->addDays(7)->format('Y-m-d'),
             'time' => '20:00',
@@ -83,8 +82,8 @@ class ShowControllerTest extends TestCase
             'action' => 'save_draft',
         ]);
 
-        $response->assertRedirect('/shows');
-        $response->assertSessionHas('success');
+        $response->assertOk();
+        $response->assertJson(['message' => 'Draft saved successfully']);
 
         // Check draft was saved in session
         $this->assertEquals($this->venue->id, session('show_draft.venue_id'));
