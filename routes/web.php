@@ -108,6 +108,7 @@ Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'ind
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
+    Route::get('dashboard/search', [DashboardController::class, 'search'])->name('dashboard.search');
 });
 
 require __DIR__.'/settings.php';
