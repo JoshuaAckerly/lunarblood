@@ -14,6 +14,26 @@ cd /var/www/lunarblood
 ./deploy-production.sh
 ```
 
+### Portfolio Batched Deploy (All Sites)
+
+If you're releasing all portfolio sites from the Ubuntu server, run the shared batched script from `/var/www`:
+
+```bash
+cd /var/www
+bash scripts/deploy-all-batched.sh
+```
+
+By default this includes a post-deploy verification hook (`bash scripts/manage-all-projects.sh update`).
+
+Emergency-only bypass:
+
+```bash
+cd /var/www
+bash scripts/deploy-all-batched.sh --skip-verify
+```
+
+Use `--skip-verify` only when necessary and run health checks immediately after deploy.
+
 ### Production Server Requirements
 - PHP 8.3+
 - MySQL 8.0+
