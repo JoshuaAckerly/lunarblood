@@ -149,6 +149,33 @@ const normalizeDashboardPayload = (input: unknown): DashboardPayload => {
     };
 };
 
+const normalizeSearchResults = (input: unknown): DashboardSearchResults => {
+    const source = typeof input === 'object' && input !== null ? (input as Partial<DashboardSearchResults>) : {};
+    const showsSource = Array.isArray(source.shows) ? source.shows : [];
+    const venuesSource = Array.isArray(source.venues) ? source.venues : [];
+
+    return {
+        shows: showsSource
+            .filter((show): show is DashboardSearchShowResult => typeof show === 'object' && show !== null && 'id' in show)
+            .map((show) => ({
+                id: toFiniteNumber(show.id),
+                date: toNullableString(show.date),
+                status: toNullableString(show.status),
+                venue_name: toNullableString(show.venue_name),
+                venue_location: toNullableString(show.venue_location),
+            }))
+            .filter((show) => show.id > 0),
+        venues: venuesSource
+            .filter((venue): venue is DashboardSearchVenueResult => typeof venue === 'object' && venue !== null && 'id' in venue)
+            .map((venue) => ({
+                id: toFiniteNumber(venue.id),
+                name: toStringWithFallback(venue.name, 'Unnamed venue'),
+                location: toNullableString(venue.location),
+            }))
+            .filter((venue) => venue.id > 0),
+    };
+};
+
 const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null }) => {
     const [data, setData] = useState<DashboardPayload>(() => normalizeDashboardPayload(dashboard));
     const [isLoading, setIsLoading] = useState(false);
@@ -171,6 +198,21 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
             timeStyle: 'short',
         }).format(date);
     }, [data.generated_at]);
+
+    const hasStatsData =
+        data.stats.venues > 0 ||
+        data.stats.shows_total > 0 ||
+        data.stats.shows_upcoming > 0 ||
+        data.stats.products_active > 0 ||
+        data.stats.products_low_stock > 0;
+
+    const statsStatusText = isLoading
+        ? 'Refreshing data...'
+        : errorMessage
+          ? 'Showing last known data'
+          : hasStatsData
+            ? 'Live data'
+            : 'No dashboard metrics yet';
 
     const refreshDashboard = async () => {
         setIsLoading(true);
@@ -247,13 +289,8 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                 throw new Error('Search request failed');
             }
 
-            const payload = (await response.json()) as { results?: DashboardSearchResults };
-            const results = payload.results;
-
-            setSearchResults({
-                shows: Array.isArray(results?.shows) ? results.shows : [],
-                venues: Array.isArray(results?.venues) ? results.venues : [],
-            });
+            const payload = (await response.json()) as { results?: unknown };
+            setSearchResults(normalizeSearchResults(payload.results));
         } catch {
             setSearchResults(EMPTY_SEARCH_RESULTS);
             setSearchErrorMessage('Unable to search right now. Please try again.');
@@ -310,7 +347,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <Store size={16} />
                     </div>
                     <p className="text-3xl font-bold">{data.stats.venues}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{isLoading ? 'Refreshing data...' : errorMessage ? 'Showing last known data' : 'Live data'}</p>
+                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
                 </article>
 
                 <article className="card">
@@ -319,7 +356,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <Music2 size={16} />
                     </div>
                     <p className="text-3xl font-bold">{data.stats.shows_total}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{isLoading ? 'Refreshing data...' : errorMessage ? 'Showing last known data' : 'Live data'}</p>
+                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
                 </article>
 
                 <article className="card">
@@ -328,7 +365,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <CalendarDays size={16} />
                     </div>
                     <p className="text-3xl font-bold">{data.stats.shows_upcoming}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{isLoading ? 'Refreshing data...' : errorMessage ? 'Showing last known data' : 'Live data'}</p>
+                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
                 </article>
 
                 <article className="card">
@@ -337,7 +374,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <ShoppingBag size={16} />
                     </div>
                     <p className="text-3xl font-bold">{data.stats.products_active}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{isLoading ? 'Refreshing data...' : errorMessage ? 'Showing last known data' : 'Live data'}</p>
+                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
                 </article>
 
                 <article className="card">
@@ -346,7 +383,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <TriangleAlert size={16} className="text-[var(--destructive)]" />
                     </div>
                     <p className="text-3xl font-bold">{data.stats.products_low_stock}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{isLoading ? 'Refreshing data...' : errorMessage ? 'Showing last known data' : 'Live data'}</p>
+                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
                 </article>
             </section>
 
@@ -354,9 +391,9 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                 <h2 className="section-title !mb-4">Quick Actions</h2>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <a
-                        href="/tour"
+                        href="/shows/create"
                         className="btn btn-primary flex items-center justify-center gap-2"
-                        aria-label="Add a new show"
+                        aria-label="Create a new show"
                     >
                         <Plus size={16} />
                         Add New Show
@@ -403,10 +440,10 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                             onChange={(event) => setSearchQuery(event.target.value)}
                             placeholder="Search venues, cities, show status, or descriptions"
                             className="w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm"
-                            maxLength={120}
+                            maxLength={100}
                         />
                         <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-                            Try terms like {SEARCH_HINTS.join(', ')}.
+                            Scope: shows and venues. Try terms like {SEARCH_HINTS.join(', ')}.
                         </p>
                     </div>
                     <button type="submit" className="btn btn-secondary" disabled={isSearching} aria-busy={isSearching}>
