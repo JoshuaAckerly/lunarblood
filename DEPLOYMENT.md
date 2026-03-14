@@ -45,13 +45,15 @@ Use `--skip-verify` only when necessary and run health checks immediately after 
 
 ### Production Environment Variables
 
+The current production hostname for Lunarblood is `https://lunarblood.graveyardjokes.com`.
+
 Copy `.env.example` to `.env` and update:
 
 ```bash
 APP_NAME="Lunar Blood"
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://lunarblood.com
+APP_URL=https://lunarblood.graveyardjokes.com
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1

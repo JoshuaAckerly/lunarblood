@@ -9,6 +9,7 @@ SSR_PORT=13715
 PROJECT_NAME="lunarblood"
 DEPLOY_PATH="/var/www/lunarblood"
 PHP_VERSION="8.3"
+SITE_URL="https://lunarblood.graveyardjokes.com"
 
 echo "🚀 Starting production deployment for $PROJECT_NAME"
 echo "===================================================="
@@ -69,5 +70,5 @@ fi
 
 echo ""
 echo "✅ Production deployment completed successfully!"
-echo "🌐 Site: https://lunarblood.com"
+echo "🌐 Site: ${SITE_URL}"
 echo "🔧 SSR running on port: $SSR_PORT"
