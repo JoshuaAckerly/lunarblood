@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
 import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert, Plus, MapPin } from 'lucide-react';
@@ -81,6 +81,8 @@ const EMPTY_SEARCH_RESULTS: DashboardSearchResults = {
 };
 
 const SEARCH_HINTS = ['show', 'gig', 'concert', 'venue', 'city'];
+const RECENT_SEARCHES_STORAGE_KEY = 'lunarblood-dashboard-recent-searches';
+const RECENT_SEARCHES_LIMIT = 5;
 
 const toFiniteNumber = (value: unknown): number => {
     if (typeof value === 'number') {
@@ -176,6 +178,18 @@ const normalizeSearchResults = (input: unknown): DashboardSearchResults => {
     };
 };
 
+const normalizeRecentSearches = (input: unknown): string[] => {
+    if (!Array.isArray(input)) {
+        return [];
+    }
+
+    return input
+        .filter((value): value is string => typeof value === 'string')
+        .map((value) => value.trim())
+        .filter((value, index, array) => value.length > 0 && array.findIndex((item) => item.toLowerCase() === value.toLowerCase()) === index)
+        .slice(0, RECENT_SEARCHES_LIMIT);
+};
+
 const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null }) => {
     const [data, setData] = useState<DashboardPayload>(() => normalizeDashboardPayload(dashboard));
     const [isLoading, setIsLoading] = useState(false);
@@ -185,6 +199,58 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
     const [isSearching, setIsSearching] = useState(false);
     const [searchErrorMessage, setSearchErrorMessage] = useState<string | null>(null);
     const [hasSearched, setHasSearched] = useState(false);
+    const [recentSearches, setRecentSearches] = useState<string[]>([]);
+    const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        try {
+            const storedValue = window.localStorage.getItem(RECENT_SEARCHES_STORAGE_KEY);
+
+            if (!storedValue) {
+                return;
+            }
+
+            const parsed = JSON.parse(storedValue) as unknown;
+            setRecentSearches(normalizeRecentSearches(parsed));
+        } catch {
+            setRecentSearches([]);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const handleKeydown = (event: KeyboardEvent) => {
+            if (event.key !== '/') {
+                return;
+            }
+
+            const target = event.target as HTMLElement | null;
+            const isTypingContext =
+                target instanceof HTMLInputElement ||
+                target instanceof HTMLTextAreaElement ||
+                target?.isContentEditable === true;
+
+            if (isTypingContext) {
+                return;
+            }
+
+            event.preventDefault();
+            searchInputRef.current?.focus();
+        };
+
+        window.addEventListener('keydown', handleKeydown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        };
+    }, []);
 
     const generatedAt = useMemo(() => {
         const date = new Date(data.generated_at);
@@ -247,17 +313,47 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
 
     const totalSearchResults = searchResults.shows.length + searchResults.venues.length;
 
+    const persistRecentSearches = (nextRecentSearches: string[]) => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(RECENT_SEARCHES_STORAGE_KEY, JSON.stringify(nextRecentSearches));
+        } catch {
+            // Ignore storage write failures in private mode or constrained environments.
+        }
+    };
+
+    const rememberSearchQuery = (rawQuery: string) => {
+        const normalizedQuery = rawQuery.trim();
+
+        if (normalizedQuery === '') {
+            return;
+        }
+
+        setRecentSearches((previousQueries) => {
+            const deduped = previousQueries.filter((query) => query.toLowerCase() !== normalizedQuery.toLowerCase());
+            const nextRecentSearches = [normalizedQuery, ...deduped].slice(0, RECENT_SEARCHES_LIMIT);
+
+            persistRecentSearches(nextRecentSearches);
+
+            return nextRecentSearches;
+        });
+    };
+
     const clearSearch = () => {
         setSearchQuery('');
         setHasSearched(false);
         setSearchErrorMessage(null);
         setSearchResults(EMPTY_SEARCH_RESULTS);
+        searchInputRef.current?.focus();
     };
 
-    const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const performSearch = async (rawQuery: string) => {
+        const normalizedQuery = rawQuery.trim();
 
-        const normalizedQuery = searchQuery.trim();
+        setSearchQuery(rawQuery);
 
         if (normalizedQuery === '') {
             setHasSearched(false);
@@ -291,12 +387,22 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
 
             const payload = (await response.json()) as { results?: unknown };
             setSearchResults(normalizeSearchResults(payload.results));
+            rememberSearchQuery(normalizedQuery);
         } catch {
             setSearchResults(EMPTY_SEARCH_RESULTS);
             setSearchErrorMessage('Unable to search right now. Please try again.');
         } finally {
             setIsSearching(false);
         }
+    };
+
+    const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        void performSearch(searchQuery);
+    };
+
+    const runRecentSearch = (query: string) => {
+        void performSearch(query);
     };
 
     return (
@@ -434,6 +540,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                             Search query
                         </label>
                         <input
+                            ref={searchInputRef}
                             id="dashboard-search"
                             type="text"
                             value={searchQuery}
@@ -445,6 +552,27 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                         <p className="mt-2 text-xs text-[var(--muted-foreground)]">
                             Scope: shows and venues. Try terms like {SEARCH_HINTS.join(', ')}.
                         </p>
+                        <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                            Shortcut: press <kbd className="rounded border border-[var(--border)] px-1">/</kbd> to focus search.
+                        </p>
+
+                        {recentSearches.length > 0 && (
+                            <div className="mt-3">
+                                <p className="text-xs text-[var(--muted-foreground)]">Recent queries</p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {recentSearches.map((recentQuery) => (
+                                        <button
+                                            key={recentQuery}
+                                            type="button"
+                                            className="rounded-full border border-[var(--border)] px-2 py-1 text-xs hover:bg-[var(--accent)]/10"
+                                            onClick={() => runRecentSearch(recentQuery)}
+                                        >
+                                            {recentQuery}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <button type="submit" className="btn btn-secondary" disabled={isSearching} aria-busy={isSearching}>
                         {isSearching ? 'Searching...' : 'Search'}

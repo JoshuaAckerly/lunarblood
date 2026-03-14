@@ -103,13 +103,15 @@ class DashboardController extends Controller
                     CASE WHEN LOWER(venues.city) = ? THEN 140 ELSE 0 END +
                     CASE WHEN LOWER(venues.city) LIKE ? THEN 90 ELSE 0 END +
                     CASE WHEN LOWER(venues.state) = ? THEN 120 ELSE 0 END +
-                    CASE WHEN LOWER(shows.status) = ? THEN 80 ELSE 0 END +
+                    CASE WHEN LOWER(shows.status) = ? THEN 110 ELSE 0 END +
+                    CASE WHEN LOWER(shows.status) LIKE ? THEN 70 ELSE 0 END +
                     CASE WHEN LOWER(shows.description) LIKE ? THEN 40 ELSE 0 END
                 ) as search_score",
-                [$exact, $prefix, $contains, $exact, $contains, $exact, $exact, $contains]
+                [$exact, $prefix, $contains, $exact, $contains, $exact, $exact, $contains, $contains]
             )
             ->orderByDesc('search_score')
-            ->orderByDesc('date')
+            ->orderByRaw('CASE WHEN shows.date >= CURRENT_DATE THEN 0 ELSE 1 END')
+            ->orderBy('shows.date')
             ->take(5)
             ->get()
             ->map(function ($show): array {
@@ -188,8 +190,20 @@ class DashboardController extends Controller
             'shows' => ['gigs', 'concerts', 'live'],
             'tickets' => ['on-sale', 'presale', 'sold-out'],
             'ticket' => ['on-sale', 'presale', 'sold-out'],
+            'on sale' => ['on-sale', 'presale'],
+            'onsale' => ['on-sale', 'presale'],
+            'presale' => ['pre-sale', 'on-sale'],
+            'sold out' => ['sold-out'],
+            'soldout' => ['sold-out'],
+            'sold-out' => ['sold out'],
             'nyc' => ['new york', 'new york city'],
+            'ny' => ['new york', 'new york city', 'nyc'],
             'la' => ['los angeles'],
+            'sf' => ['san francisco'],
+            'vegas' => ['las vegas'],
+            'atx' => ['austin'],
+            'phx' => ['phoenix'],
+            'nola' => ['new orleans'],
         ];
 
         $terms = [$normalizedQuery];

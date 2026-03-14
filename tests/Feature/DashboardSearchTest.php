@@ -163,4 +163,56 @@ class DashboardSearchTest extends TestCase
         $response->assertJsonPath('results.shows.0.venue_name', 'Moonlight Hall');
         $response->assertJsonPath('results.venues.0.name', 'Moonlight Hall');
     }
+
+    public function test_dashboard_search_handles_sold_out_phrase_without_hyphen(): void
+    {
+        $venue = Venue::factory()->create([
+            'name' => 'Signal Room',
+            'city' => 'Austin',
+            'state' => 'TX',
+        ]);
+
+        Show::factory()->create([
+            'venue_id' => $venue->id,
+            'status' => 'sold-out',
+            'description' => 'Sold out headline set',
+            'date' => now()->addDays(3)->format('Y-m-d'),
+        ]);
+
+        $response = $this->actingAs($this->user)->getJson('/dashboard/search?query=sold out');
+
+        $response->assertOk();
+        $response->assertJsonCount(1, 'results.shows');
+        $response->assertJsonPath('results.shows.0.status', 'sold-out');
+    }
+
+    public function test_dashboard_search_prioritizes_upcoming_matches_over_past_matches(): void
+    {
+        $venue = Venue::factory()->create([
+            'name' => 'Orbit Hall',
+            'city' => 'Austin',
+            'state' => 'TX',
+        ]);
+
+        $pastShow = Show::factory()->create([
+            'venue_id' => $venue->id,
+            'status' => 'on-sale',
+            'description' => 'Orbit throwback event',
+            'date' => now()->subDays(1)->format('Y-m-d'),
+        ]);
+
+        $upcomingShow = Show::factory()->create([
+            'venue_id' => $venue->id,
+            'status' => 'on-sale',
+            'description' => 'Orbit future event',
+            'date' => now()->addDays(5)->format('Y-m-d'),
+        ]);
+
+        $response = $this->actingAs($this->user)->getJson('/dashboard/search?query=orbit');
+
+        $response->assertOk();
+        $response->assertJsonCount(2, 'results.shows');
+        $response->assertJsonPath('results.shows.0.id', $upcomingShow->id);
+        $response->assertJsonPath('results.shows.1.id', $pastShow->id);
+    }
 }
