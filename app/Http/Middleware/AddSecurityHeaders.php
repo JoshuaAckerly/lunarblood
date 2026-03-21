@@ -43,7 +43,7 @@ class AddSecurityHeaders
         if (app()->environment('local')) {
             $csp .= " http:";
         }
-        $csp .= " https://fonts.bunny.net; img-src 'self' https://d3fjkusrpksks7.cloudfront.net; connect-src 'self'";
+        $csp .= " https://fonts.bunny.net; img-src 'self' https://d3fjkusrpksks7.cloudfront.net; connect-src 'self' https://graveyardjokes.com";
         if (app()->environment('local')) {
             $csp .= " http: ws: wss:";
         }
