@@ -112,8 +112,7 @@
             "@/*": ["./resources/js/*"],
             "ziggy-js": ["./vendor/tightenco/ziggy"]
         },
-        "jsx": "react-jsx",
-        "types": ["vite/client"]
+        "jsx": "react-jsx"
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.tsx", "src", "vite-env.d.ts"]
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.tsx", "vite-env.d.ts"]
 }
