@@ -8,7 +8,7 @@
         <meta name="format-detection" content="telephone=no">
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
 
@@ -36,8 +36,8 @@
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         @if(config('services.google_analytics.tracking_id'))
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.tracking_id') }}"></script>
-        <script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.tracking_id') }}" nonce="{{ Vite::cspNonce() }}"></script>
+        <script nonce="{{ Vite::cspNonce() }}">
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -48,7 +48,7 @@
         </script>
         @endif
 
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             (function() {
                 const host = window.location.hostname;
                 const isMainLocal = host === 'localhost' || host === '127.0.0.1' || host === 'graveyardjokes.local';
@@ -133,13 +133,12 @@
 
         {{-- Favicons and icons --}}
         <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-        @routes
+        @routes(nonce: Vite::cspNonce())
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @inertiaHead

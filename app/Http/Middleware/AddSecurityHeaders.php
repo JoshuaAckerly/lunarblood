@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Vite;
 use Symfony\Component\HttpFoundation\Response;
 
 class AddSecurityHeaders
@@ -13,6 +14,8 @@ class AddSecurityHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $nonce = Vite::useCspNonce();
+
         $response = $next($request);
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
@@ -28,7 +31,7 @@ class AddSecurityHeaders
         if (app()->environment('local')) {
             $csp .= " http:";
         }
-        $csp .= "; script-src 'self'";
+        $csp .= "; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com";
         if (app()->environment('local')) {
             $csp .= " 'unsafe-inline' http:";
         }
@@ -40,7 +43,7 @@ class AddSecurityHeaders
         if (app()->environment('local')) {
             $csp .= " http:";
         }
-        $csp .= " https://fonts.bunny.net; connect-src 'self'";
+        $csp .= " https://fonts.bunny.net; img-src 'self' https://d3fjkusrpksks7.cloudfront.net; connect-src 'self'";
         if (app()->environment('local')) {
             $csp .= " http: ws: wss:";
         }
