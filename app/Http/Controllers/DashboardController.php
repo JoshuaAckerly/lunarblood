@@ -14,12 +14,15 @@ use Throwable;
 
 class DashboardController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $recentSearches = $this->getRecentSearches($request);
+
         try {
             return Inertia::render('dashboard', [
                 'dashboard' => $this->getDashboardData(),
                 'initialError' => null,
+                'recentSearches' => $recentSearches,
             ]);
         } catch (Throwable $exception) {
             Log::error('Dashboard data failed to load.', [
@@ -29,6 +32,7 @@ class DashboardController extends Controller
             return Inertia::render('dashboard', [
                 'dashboard' => $this->emptyDashboardData(),
                 'initialError' => 'Dashboard data is temporarily unavailable. Please refresh in a moment.',
+                'recentSearches' => $recentSearches,
             ]);
         }
     }
@@ -110,7 +114,7 @@ class DashboardController extends Controller
                 [$exact, $prefix, $contains, $exact, $contains, $exact, $exact, $contains, $contains]
             )
             ->orderByDesc('search_score')
-            ->orderByRaw('CASE WHEN shows.date >= CURRENT_DATE THEN 0 ELSE 1 END')
+            ->orderByRaw('CASE WHEN shows.date >= ? THEN 0 ELSE 1 END', [now()->toDateString()])
             ->orderBy('shows.date')
             ->take(5)
             ->get()
@@ -166,6 +170,8 @@ class DashboardController extends Controller
             })
             ->values()
             ->all();
+
+        $this->rememberSearch($request, $query);
 
         return response()->json([
             'query' => $query,
@@ -224,6 +230,41 @@ class DashboardController extends Controller
         $uniqueTerms = array_values(array_unique(array_filter(array_map('trim', $terms), static fn (string $term): bool => $term !== '')));
 
         return array_map(static fn (string $term): string => '%'.$term.'%', $uniqueTerms);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getRecentSearches(Request $request): array
+    {
+        $stored = $request->session()->get('dashboard_recent_searches', []);
+
+        if (! is_array($stored)) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            array_slice($stored, 0, 5),
+            static fn ($item): bool => is_string($item) && trim($item) !== ''
+        ));
+    }
+
+    private function rememberSearch(Request $request, string $query): void
+    {
+        $trimmed = trim($query);
+
+        if ($trimmed === '') {
+            return;
+        }
+
+        $recent = $this->getRecentSearches($request);
+        $recent = array_values(array_filter(
+            $recent,
+            static fn (string $item): bool => mb_strtolower($item) !== mb_strtolower($trimmed)
+        ));
+
+        array_unshift($recent, $trimmed);
+        $request->session()->put('dashboard_recent_searches', array_slice($recent, 0, 5));
     }
 
     private function getDashboardData(): array

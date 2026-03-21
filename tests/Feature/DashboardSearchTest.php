@@ -215,4 +215,33 @@ class DashboardSearchTest extends TestCase
         $response->assertJsonPath('results.shows.0.id', $upcomingShow->id);
         $response->assertJsonPath('results.shows.1.id', $pastShow->id);
     }
+
+    public function test_dashboard_search_preserves_recent_queries_in_session(): void
+    {
+        Venue::factory()->create([
+            'name' => 'Echo Hall',
+            'city' => 'Austin',
+            'state' => 'TX',
+        ]);
+
+        $response = $this->actingAs($this->user)->getJson('/dashboard/search?query=echo');
+
+        $response->assertOk();
+        $response->assertSessionHas('dashboard_recent_searches', ['echo']);
+    }
+
+    public function test_dashboard_search_deduplicates_recent_queries_case_insensitively(): void
+    {
+        Venue::factory()->create([
+            'name' => 'Echo Hall',
+            'city' => 'Austin',
+            'state' => 'TX',
+        ]);
+
+        $this->actingAs($this->user)->getJson('/dashboard/search?query=Echo');
+        $response = $this->actingAs($this->user)->getJson('/dashboard/search?query=echo');
+
+        $response->assertOk();
+        $response->assertSessionHas('dashboard_recent_searches', ['echo']);
+    }
 }

@@ -3,6 +3,7 @@ import { usePage, Link } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ArrowLeft, Calendar, MapPin, Clock, DollarSign, Edit, ExternalLink } from "lucide-react";
+import StatusBadge from "@/components/StatusBadge";
 
 interface Show {
     id: number;
@@ -28,19 +29,6 @@ interface ShowShowProps {
 
 const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
     const { flash } = usePage().props as any;
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'on-sale':
-                return 'bg-green-100 text-green-800';
-            case 'sold-out':
-                return 'bg-red-100 text-red-800';
-            case 'cancelled':
-                return 'bg-gray-100 text-gray-800';
-            default:
-                return 'bg-blue-100 text-blue-800';
-        }
-    };
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -80,13 +68,11 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
                 </div>
 
                 <div className="card">
-                    <div className="flex items-start justify-between mb-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
                         <div>
-                            <h1 className="text-3xl font-bold mb-2">{show.venue.name}</h1>
-                            <div className="flex items-center gap-3">
-                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(show.status)}`}>
-                                    {show.status.replace('-', ' ').toUpperCase()}
-                                </span>
+                            <h1 className="text-2xl sm:text-3xl font-bold mb-2">{show.venue.name}</h1>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <StatusBadge status={show.status} />
                                 {isUpcoming && (
                                     <span className="text-sm text-[var(--muted-foreground)]">
                                         {Math.ceil((new Date(`${show.date}T${show.time}`).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days away
@@ -97,14 +83,14 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
 
                         <Link
                             href={`/shows/${show.id}/edit`}
-                            className="btn btn-secondary"
+                            className="btn btn-secondary self-start"
                         >
                             <Edit size={16} className="mr-2" />
                             Edit Show
                         </Link>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-8 mb-8">
+                    <div className="grid gap-6 sm:gap-8 md:grid-cols-2 mb-8">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
                                 <MapPin size={20} className="text-[var(--muted-foreground)]" />
@@ -161,10 +147,10 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
                         </div>
                     </div>
 
-                    <div className="border-t pt-6">
-                        <div className="text-sm text-[var(--muted-foreground)]">
-                            <div>Created: {new Date(show.created_at).toLocaleDateString()}</div>
-                            <div>Last updated: {new Date(show.updated_at).toLocaleDateString()}</div>
+                    <div className="border-t border-[var(--border)] pt-6">
+                        <div className="flex flex-col gap-1 text-sm text-[var(--muted-foreground)] sm:flex-row sm:gap-4">
+                            <span>Created: {new Date(show.created_at).toLocaleDateString()}</span>
+                            <span>Last updated: {new Date(show.updated_at).toLocaleDateString()}</span>
                         </div>
                     </div>
                 </div>

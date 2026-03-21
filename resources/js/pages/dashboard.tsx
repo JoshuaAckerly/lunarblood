@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
 import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert, Plus, MapPin } from 'lucide-react';
+import StatusBadge from '@/components/StatusBadge';
 
 interface DashboardStats {
     venues: number;
@@ -60,6 +61,7 @@ interface DashboardSearchResults {
 interface DashboardProps {
     dashboard: DashboardPayload;
     initialError?: string | null;
+    recentSearches?: string[];
 }
 
 const EMPTY_DASHBOARD_DATA: DashboardPayload = {
@@ -190,7 +192,7 @@ const normalizeRecentSearches = (input: unknown): string[] => {
         .slice(0, RECENT_SEARCHES_LIMIT);
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null }) => {
+const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, recentSearches: serverRecentSearches }) => {
     const [data, setData] = useState<DashboardPayload>(() => normalizeDashboardPayload(dashboard));
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
@@ -201,25 +203,35 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
     const [hasSearched, setHasSearched] = useState(false);
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const searchInputRef = useRef<HTMLInputElement | null>(null);
+    const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
 
     useEffect(() => {
+        const serverQueries = normalizeRecentSearches(serverRecentSearches ?? []);
+
         if (typeof window === 'undefined') {
+            setRecentSearches(serverQueries);
             return;
         }
 
         try {
             const storedValue = window.localStorage.getItem(RECENT_SEARCHES_STORAGE_KEY);
+            const localQueries = storedValue ? normalizeRecentSearches(JSON.parse(storedValue) as unknown) : [];
 
-            if (!storedValue) {
-                return;
+            const merged = [...serverQueries];
+
+            for (const local of localQueries) {
+                if (!merged.some((s) => s.toLowerCase() === local.toLowerCase())) {
+                    merged.push(local);
+                }
             }
 
-            const parsed = JSON.parse(storedValue) as unknown;
-            setRecentSearches(normalizeRecentSearches(parsed));
+            const nextRecentSearches = merged.slice(0, RECENT_SEARCHES_LIMIT);
+            setRecentSearches(nextRecentSearches);
+            window.localStorage.setItem(RECENT_SEARCHES_STORAGE_KEY, JSON.stringify(nextRecentSearches));
         } catch {
-            setRecentSearches([]);
+            setRecentSearches(serverQueries);
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -313,6 +325,32 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
 
     const totalSearchResults = searchResults.shows.length + searchResults.venues.length;
 
+    const navigableResults = useMemo(() => {
+        const items: Array<{ type: 'show' | 'venue'; id: number; href: string }> = [];
+
+        for (const show of searchResults.shows) {
+            items.push({ type: 'show', id: show.id, href: `/shows/${show.id}` });
+        }
+
+        for (const venue of searchResults.venues) {
+            items.push({ type: 'venue', id: venue.id, href: `/venues/${venue.id}` });
+        }
+
+        return items;
+    }, [searchResults]);
+
+    useEffect(() => {
+        setSelectedResultIndex(-1);
+    }, [searchResults]);
+
+    useEffect(() => {
+        if (selectedResultIndex < 0) {
+            return;
+        }
+
+        document.getElementById(`search-result-${selectedResultIndex}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }, [selectedResultIndex]);
+
     const persistRecentSearches = (nextRecentSearches: string[]) => {
         if (typeof window === 'undefined') {
             return;
@@ -347,7 +385,39 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
         setHasSearched(false);
         setSearchErrorMessage(null);
         setSearchResults(EMPTY_SEARCH_RESULTS);
+        setSelectedResultIndex(-1);
         searchInputRef.current?.focus();
+    };
+
+    const handleSearchKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+
+            if (selectedResultIndex >= 0) {
+                setSelectedResultIndex(-1);
+            } else if (hasSearched) {
+                clearSearch();
+            } else {
+                searchInputRef.current?.blur();
+            }
+
+            return;
+        }
+
+        if (navigableResults.length === 0) {
+            return;
+        }
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            setSelectedResultIndex((prev) => (prev < navigableResults.length - 1 ? prev + 1 : 0));
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            setSelectedResultIndex((prev) => (prev > 0 ? prev - 1 : navigableResults.length - 1));
+        } else if (event.key === 'Enter' && selectedResultIndex >= 0) {
+            event.preventDefault();
+            window.location.href = navigableResults[selectedResultIndex].href;
+        }
     };
 
     const performSearch = async (rawQuery: string) => {
@@ -544,7 +614,11 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                             id="dashboard-search"
                             type="text"
                             value={searchQuery}
-                            onChange={(event) => setSearchQuery(event.target.value)}
+                            onChange={(event) => {
+                                setSearchQuery(event.target.value);
+                                setSelectedResultIndex(-1);
+                            }}
+                            onKeyDown={handleSearchKeydown}
                             placeholder="Search venues, cities, show status, or descriptions"
                             className="w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm"
                             maxLength={100}
@@ -553,7 +627,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                             Scope: shows and venues. Try terms like {SEARCH_HINTS.join(', ')}.
                         </p>
                         <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                            Shortcut: press <kbd className="rounded border border-[var(--border)] px-1">/</kbd> to focus search.
+                            Shortcuts: <kbd className="rounded border border-[var(--border)] px-1">/</kbd> focus, <kbd className="rounded border border-[var(--border)] px-1">↑↓</kbd> navigate results, <kbd className="rounded border border-[var(--border)] px-1">Enter</kbd> open, <kbd className="rounded border border-[var(--border)] px-1">Esc</kbd> clear.
                         </p>
 
                         {recentSearches.length > 0 && (
@@ -607,17 +681,18 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                                 <p className="text-sm text-[var(--muted-foreground)]">No matching shows.</p>
                             ) : (
                                 <ul className="space-y-2">
-                                    {searchResults.shows.map((show) => (
-                                        <li key={show.id} className="rounded-md border border-[var(--border)] p-3">
+                                    {searchResults.shows.map((show, showIndex) => (
+                                        <li key={show.id} id={`search-result-${showIndex}`} className={`rounded-md border p-3 ${selectedResultIndex === showIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}>
                                             <a href={`/shows/${show.id}`} className="font-medium hover:underline">
                                                 {show.venue_name ?? 'Show'}
                                             </a>
                                             <p className="text-sm text-[var(--muted-foreground)] mt-1">
                                                 {show.venue_location ?? 'Location TBD'}
                                             </p>
-                                            <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                                                {show.date ?? 'Date TBD'} • {show.status ?? 'Scheduled'}
-                                            </p>
+                                            <div className="mt-1 flex flex-wrap items-center gap-2">
+                                                <span className="text-sm text-[var(--muted-foreground)]">{show.date ?? 'Date TBD'}</span>
+                                                <StatusBadge status={show.status} size="sm" />
+                                            </div>
                                             <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                                                 <a href={`/shows/${show.id}`} className="font-medium hover:underline">
                                                     Open show
@@ -638,8 +713,8 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                                 <p className="text-sm text-[var(--muted-foreground)]">No matching venues.</p>
                             ) : (
                                 <ul className="space-y-2">
-                                    {searchResults.venues.map((venue) => (
-                                        <li key={venue.id} className="rounded-md border border-[var(--border)] p-3">
+                                    {searchResults.venues.map((venue, venueIndex) => (
+                                        <li key={venue.id} id={`search-result-${searchResults.shows.length + venueIndex}`} className={`rounded-md border p-3 ${selectedResultIndex === searchResults.shows.length + venueIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}>
                                             <a href={`/venues/${venue.id}`} className="font-medium hover:underline">
                                                 {venue.name}
                                             </a>
@@ -691,7 +766,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null })
                                             <Clock3 size={14} />
                                             {show.time ?? 'Time TBD'}
                                         </span>
-                                        <span className="text-[var(--accent)]">{show.status ?? 'Scheduled'}</span>
+                                        <StatusBadge status={show.status} size="sm" />
                                     </div>
                                 </li>
                             ))}

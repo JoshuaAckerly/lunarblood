@@ -3,6 +3,7 @@ import { usePage, Link } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { Plus, Calendar, MapPin, Clock, DollarSign, Edit, Eye, Trash2 } from "lucide-react";
+import StatusBadge from "@/components/StatusBadge";
 
 interface Show {
     id: number;
@@ -28,19 +29,6 @@ interface ShowsIndexProps {
 
 const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
     const { flash } = usePage().props as any;
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'on-sale':
-                return 'bg-green-100 text-green-800';
-            case 'sold-out':
-                return 'bg-red-100 text-red-800';
-            case 'cancelled':
-                return 'bg-gray-100 text-gray-800';
-            default:
-                return 'bg-blue-100 text-blue-800';
-        }
-    };
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -105,13 +93,11 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                             <div key={show.id} className="card">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-3 mb-3">
+                                        <div className="flex flex-wrap items-center gap-3 mb-3">
                                             <h3 className="text-lg font-semibold">
                                                 {show.venue.name}
                                             </h3>
-                                            <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(show.status)}`}>
-                                                {show.status.replace('-', ' ').toUpperCase()}
-                                            </span>
+                                            <StatusBadge status={show.status} size="sm" />
                                         </div>
 
                                         <div className="grid md:grid-cols-3 gap-4 mb-4">
