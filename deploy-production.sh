@@ -59,8 +59,8 @@ if pm2 list | grep -q "$PROJECT_NAME-ssr"; then
     pm2 restart $PROJECT_NAME-ssr
 else
     pm2 start bootstrap/ssr/ssr.js --name "$PROJECT_NAME-ssr" -- --port=$SSR_PORT
-    pm2 save
 fi
+pm2 save
 
 # Restart queue workers if configured
 if grep -q "QUEUE_CONNECTION=redis\|QUEUE_CONNECTION=database" .env; then
