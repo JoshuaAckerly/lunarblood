@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, User, ChevronDown } from 'lucide-react';
+import NotificationBell from '@/components/NotificationBell';
 import { getLoginUrl } from '../env';
 import { usePage } from '@inertiajs/react';
 
@@ -36,6 +37,7 @@ const Header: React.FC = () => {
                     <a className="nav-link" href="/tour">Tour</a>
                     <a className="nav-link" href="/shop">Shop</a>
                     <a className="btn btn-primary" href="/listen">Listen Now</a>
+                    <NotificationBell />
                     {auth?.user ? (
                         <div className="relative" ref={userMenuRef}>
                             <button

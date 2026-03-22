@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Api\MessageProxyController;
+
+Route::get('/messages', [MessageProxyController::class, 'index']);
+Route::patch('/messages/read-all', [MessageProxyController::class, 'markAllRead']);
+Route::patch('/messages/{id}/read', [MessageProxyController::class, 'markRead']);
 
 // Payment processing with strict rate limiting (5 attempts per minute)
 Route::middleware(['throttle:5,1'])->group(function () {
