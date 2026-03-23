@@ -1,5 +1,5 @@
 import React from "react";
-import { usePage, Link } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ArrowLeft, Calendar, MapPin, Clock, DollarSign, Edit, ExternalLink } from "lucide-react";
@@ -28,8 +28,6 @@ interface ShowShowProps {
 }
 
 const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
-    const { flash } = usePage().props as any;
-
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             weekday: 'long',

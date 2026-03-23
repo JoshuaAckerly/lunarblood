@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { ArrowLeft, ArrowRight, Save, Eye, Calendar, MapPin, Clock, DollarSign } from "lucide-react";
-import { Link } from "@inertiajs/react";
 
 interface Venue {
     id: number;
@@ -32,8 +32,6 @@ interface EditShowProps {
 const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [isPreview, setIsPreview] = useState(false);
-    const { flash } = usePage().props as any;
-
     const { data, setData, put, processing, errors, reset } = useForm({
         venue_id: show.venue_id,
         date: show.date,

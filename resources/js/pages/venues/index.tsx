@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { MapPin, Calendar, ExternalLink, Plus, Edit, Trash2 } from "lucide-react";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
+import { VenueCardSkeleton } from "@/components/Skeleton";
 
 // Use CDN in production, local images in development
 const cdn = import.meta.env.VITE_ASSET_URL || '';
@@ -29,6 +30,16 @@ interface VenuesProps {
 
 const Venues: React.FC<VenuesProps> = ({ venues }) => {
     const [loadingVenueId, setLoadingVenueId] = useState<number | null>(null);
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    useEffect(() => {
+        const removeStart = router.on('start', () => setIsNavigating(true));
+        const removeFinish = router.on('finish', () => setIsNavigating(false));
+        return () => {
+            removeStart();
+            removeFinish();
+        };
+    }, []);
 
     return (
     <Main>
@@ -55,7 +66,9 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
         </section>
 
         <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {venues.map((venue) => (
+            {isNavigating ? (
+                Array.from({ length: 6 }).map((_, i) => <VenueCardSkeleton key={i} />)
+            ) : venues.map((venue) => (
                 <div key={venue.id} className="card group hover:shadow-xl transition-shadow">
                     <div className="aspect-video bg-[var(--muted)] rounded-lg mb-4 overflow-hidden">
                         {venue.image ? (

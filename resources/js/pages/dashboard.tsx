@@ -3,6 +3,7 @@ import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
 import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert, Plus, MapPin } from 'lucide-react';
 import StatusBadge from '@/components/StatusBadge';
+import { DashboardStatCardSkeleton, UpcomingShowItemSkeleton, LowStockItemSkeleton } from '@/components/Skeleton';
 
 interface DashboardStats {
     venues: number;
@@ -517,50 +518,56 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
             )}
 
             <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5 mb-8">
-                <article className="card">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-[var(--muted-foreground)]">Venues</span>
-                        <Store size={16} />
-                    </div>
-                    <p className="text-3xl font-bold">{data.stats.venues}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
-                </article>
+                {isLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => <DashboardStatCardSkeleton key={i} />)
+                ) : (
+                    <>
+                        <article className="card">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-[var(--muted-foreground)]">Venues</span>
+                                <Store size={16} />
+                            </div>
+                            <p className="text-3xl font-bold">{data.stats.venues}</p>
+                            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
+                        </article>
 
-                <article className="card">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-[var(--muted-foreground)]">Total Shows</span>
-                        <Music2 size={16} />
-                    </div>
-                    <p className="text-3xl font-bold">{data.stats.shows_total}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
-                </article>
+                        <article className="card">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-[var(--muted-foreground)]">Total Shows</span>
+                                <Music2 size={16} />
+                            </div>
+                            <p className="text-3xl font-bold">{data.stats.shows_total}</p>
+                            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
+                        </article>
 
-                <article className="card">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-[var(--muted-foreground)]">Upcoming Shows</span>
-                        <CalendarDays size={16} />
-                    </div>
-                    <p className="text-3xl font-bold">{data.stats.shows_upcoming}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
-                </article>
+                        <article className="card">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-[var(--muted-foreground)]">Upcoming Shows</span>
+                                <CalendarDays size={16} />
+                            </div>
+                            <p className="text-3xl font-bold">{data.stats.shows_upcoming}</p>
+                            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
+                        </article>
 
-                <article className="card">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-[var(--muted-foreground)]">Active Products</span>
-                        <ShoppingBag size={16} />
-                    </div>
-                    <p className="text-3xl font-bold">{data.stats.products_active}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
-                </article>
+                        <article className="card">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-[var(--muted-foreground)]">Active Products</span>
+                                <ShoppingBag size={16} />
+                            </div>
+                            <p className="text-3xl font-bold">{data.stats.products_active}</p>
+                            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
+                        </article>
 
-                <article className="card">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-[var(--muted-foreground)]">Low Stock</span>
-                        <TriangleAlert size={16} className="text-[var(--destructive)]" />
-                    </div>
-                    <p className="text-3xl font-bold">{data.stats.products_low_stock}</p>
-                    <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
-                </article>
+                        <article className="card">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm text-[var(--muted-foreground)]">Low Stock</span>
+                                <TriangleAlert size={16} className="text-[var(--destructive)]" />
+                            </div>
+                            <p className="text-3xl font-bold">{data.stats.products_low_stock}</p>
+                            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{statsStatusText}</p>
+                        </article>
+                    </>
+                )}
             </section>
 
             <section className="card mb-8">
@@ -742,7 +749,11 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                 <article className="card">
                     <h2 className="section-title !mb-4">Upcoming Shows</h2>
                     {isLoading && data.upcoming_shows.length === 0 ? (
-                        <p className="text-sm text-[var(--muted-foreground)]">Refreshing upcoming shows...</p>
+                        <ul className="space-y-3" aria-label="Loading upcoming shows">
+                            <UpcomingShowItemSkeleton />
+                            <UpcomingShowItemSkeleton />
+                            <UpcomingShowItemSkeleton />
+                        </ul>
                     ) : errorMessage && data.upcoming_shows.length === 0 ? (
                         <p className="text-sm text-[var(--muted-foreground)]">Unable to load upcoming shows right now.</p>
                     ) : data.upcoming_shows.length === 0 ? (
@@ -777,7 +788,11 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                 <article className="card" id="low-stock-products">
                     <h2 className="section-title !mb-4">Low Stock Products</h2>
                     {isLoading && data.low_stock_products.length === 0 ? (
-                        <p className="text-sm text-[var(--muted-foreground)]">Refreshing low-stock products...</p>
+                        <ul className="space-y-3" aria-label="Loading low stock products">
+                            <LowStockItemSkeleton />
+                            <LowStockItemSkeleton />
+                            <LowStockItemSkeleton />
+                        </ul>
                     ) : errorMessage && data.low_stock_products.length === 0 ? (
                         <p className="text-sm text-[var(--muted-foreground)]">Unable to load low-stock products right now.</p>
                     ) : data.low_stock_products.length === 0 ? (

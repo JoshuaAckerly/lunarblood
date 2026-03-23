@@ -1,9 +1,10 @@
-import React from "react";
-import { usePage, Link } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { Link, router } from "@inertiajs/react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
 import { Plus, Calendar, MapPin, Clock, DollarSign, Edit, Eye, Trash2 } from "lucide-react";
 import StatusBadge from "@/components/StatusBadge";
+import { ShowCardSkeleton } from "@/components/Skeleton";
 
 interface Show {
     id: number;
@@ -28,7 +29,16 @@ interface ShowsIndexProps {
 }
 
 const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
-    const { flash } = usePage().props as any;
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    useEffect(() => {
+        const removeStart = router.on('start', () => setIsNavigating(true));
+        const removeFinish = router.on('finish', () => setIsNavigating(false));
+        return () => {
+            removeStart();
+            removeFinish();
+        };
+    }, []);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -66,13 +76,13 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                     </Link>
                 </div>
 
-                {flash?.success && (
-                    <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                        {flash.success}
+                {isNavigating ? (
+                    <div className="grid gap-6" aria-label="Loading shows" aria-busy="true">
+                        <ShowCardSkeleton />
+                        <ShowCardSkeleton />
+                        <ShowCardSkeleton />
                     </div>
-                )}
-
-                {shows.length === 0 ? (
+                ) : shows.length === 0 ? (
                     <div className="card text-center py-12">
                         <Calendar size={48} className="mx-auto text-[var(--muted-foreground)] mb-4" />
                         <h3 className="text-lg font-medium mb-2">No shows yet</h3>
