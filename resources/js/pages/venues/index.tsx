@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Main from "@/layouts/main";
 import Seo from "@/components/Seo";
-import { MapPin, Calendar, ExternalLink, Plus, Edit, Trash2 } from "lucide-react";
+import { MapPin, ExternalLink, Plus, Edit } from "lucide-react";
 import { Link, router } from "@inertiajs/react";
 import { VenueCardSkeleton } from "@/components/Skeleton";
 
-// Use CDN in production, local images in development
-const cdn = import.meta.env.VITE_ASSET_URL || '';
-const getImageUrl = (path: string) => cdn ? `${cdn}${path}` : path;
 
 interface Venue {
     id: number;
@@ -29,7 +26,6 @@ interface VenuesProps {
 }
 
 const Venues: React.FC<VenuesProps> = ({ venues }) => {
-    const [loadingVenueId, setLoadingVenueId] = useState<number | null>(null);
     const [isNavigating, setIsNavigating] = useState(false);
 
     useEffect(() => {

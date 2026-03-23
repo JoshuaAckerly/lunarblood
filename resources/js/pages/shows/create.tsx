@@ -16,7 +16,7 @@ interface Venue {
 interface CreateShowProps {
     step: number;
     venues: Venue[];
-    draftData: any;
+    draftData: Record<string, string | number | null | undefined>;
 }
 
 const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draftData }) => {

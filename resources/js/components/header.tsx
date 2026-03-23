@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, User, ChevronDown } from 'lucide-react';
 import NotificationBell from '@/components/NotificationBell';
-import { getLoginUrl } from '../env';
 import { usePage } from '@inertiajs/react';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement>(null);
-    const { auth } = usePage().props as any;
+    const { auth } = usePage().props as { auth?: { user?: { name: string } | null } };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

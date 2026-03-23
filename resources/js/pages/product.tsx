@@ -16,6 +16,11 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ product }) => {
+    const [quantity, setQuantity] = useState(1);
+    const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || '');
+    const [isRedirecting, setIsRedirecting] = useState(false);
+    const [checkoutError, setCheckoutError] = useState('');
+
     if (!product) {
         return (
             <Main>
@@ -29,11 +34,6 @@ const Product: React.FC<ProductProps> = ({ product }) => {
             </Main>
         );
     }
-
-    const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '');
-    const [isRedirecting, setIsRedirecting] = useState(false);
-    const [checkoutError, setCheckoutError] = useState('');
 
     const handlePurchase = () => {
         setCheckoutError('');

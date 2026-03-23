@@ -162,7 +162,7 @@ class ShowControllerTest extends TestCase
 
         $response = $this->actingAs($this->user)->put("/shows/{$show->id}", $updateData);
 
-        $response->assertRedirect('/shows');
+        $response->assertRedirect("/shows/{$show->id}");
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('shows', array_merge($updateData, ['id' => $show->id]));

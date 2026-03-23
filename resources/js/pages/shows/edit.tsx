@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { Link } from "@inertiajs/react";
 import Main from "@/layouts/main";
@@ -32,7 +32,7 @@ interface EditShowProps {
 const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [isPreview, setIsPreview] = useState(false);
-    const { data, setData, put, processing, errors, reset } = useForm({
+    const { data, setData, put, processing, errors } = useForm({
         venue_id: show.venue_id,
         date: show.date,
         time: show.time,
