@@ -142,6 +142,9 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @inertiaHead
+        @if(config('services.google_adsense.client_id'))
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ config('services.google_adsense.client_id') }}" crossorigin="anonymous"></script>
+        @endif
     </head>
     <body class="font-sans antialiased">
         @inertia
