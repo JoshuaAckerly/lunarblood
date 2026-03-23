@@ -1,7 +1,7 @@
-import React, { FormEvent, useEffect } from 'react';
-import { useForm, Head } from '@inertiajs/react';
-import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
+import Main from '@/layouts/main';
+import { Head, useForm } from '@inertiajs/react';
+import React, { FormEvent, useEffect } from 'react';
 
 const Register: React.FC = () => {
     const form = useForm({
@@ -36,13 +36,13 @@ const Register: React.FC = () => {
                 canonical="https://lunarblood.graveyardjokes.com/register"
             />
 
-            <section className="max-w-md mx-auto px-4">
-                <h1 className="page-title !text-2xl md:!text-3xl !mb-2">Create Account</h1>
-                <p className="text-[var(--muted-foreground)] mb-6">Join the Lunarblood community.</p>
+            <section className="mx-auto max-w-md px-4">
+                <h1 className="page-title !mb-2 !text-2xl md:!text-3xl">Create Account</h1>
+                <p className="mb-6 text-[var(--muted-foreground)]">Join the Lunarblood community.</p>
 
                 <form onSubmit={handleSubmit} className="card space-y-4">
                     <div>
-                        <label htmlFor="name" className="block text-sm font-medium mb-2">
+                        <label htmlFor="name" className="mb-2 block text-sm font-medium">
                             Name
                         </label>
                         <input
@@ -55,13 +55,11 @@ const Register: React.FC = () => {
                             autoComplete="name"
                             autoFocus
                         />
-                        {form.errors.name && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.name}</p>
-                        )}
+                        {form.errors.name && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.name}</p>}
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-2">
+                        <label htmlFor="email" className="mb-2 block text-sm font-medium">
                             Email
                         </label>
                         <input
@@ -73,13 +71,11 @@ const Register: React.FC = () => {
                             required
                             autoComplete="email"
                         />
-                        {form.errors.email && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.email}</p>
-                        )}
+                        {form.errors.email && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.email}</p>}
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium mb-2">
+                        <label htmlFor="password" className="mb-2 block text-sm font-medium">
                             Password
                         </label>
                         <input
@@ -91,13 +87,11 @@ const Register: React.FC = () => {
                             required
                             autoComplete="new-password"
                         />
-                        {form.errors.password && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.password}</p>
-                        )}
+                        {form.errors.password && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password}</p>}
                     </div>
 
                     <div>
-                        <label htmlFor="password_confirmation" className="block text-sm font-medium mb-2">
+                        <label htmlFor="password_confirmation" className="mb-2 block text-sm font-medium">
                             Confirm Password
                         </label>
                         <input
@@ -110,23 +104,19 @@ const Register: React.FC = () => {
                             autoComplete="new-password"
                         />
                         {form.errors.password_confirmation && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.password_confirmation}</p>
+                            <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password_confirmation}</p>
                         )}
                     </div>
 
                     <div className="flex items-center justify-between pt-2">
                         <p className="text-sm text-[var(--muted-foreground)]">Already have an account?</p>
-                        <button
-                            type="submit"
-                            disabled={form.processing}
-                            className="btn btn-primary"
-                        >
+                        <button type="submit" disabled={form.processing} className="btn btn-primary">
                             {form.processing ? 'Creating...' : 'Create Account'}
                         </button>
                     </div>
                 </form>
 
-                <p className="text-center mt-6 text-sm text-[var(--muted-foreground)]">
+                <p className="mt-6 text-center text-sm text-[var(--muted-foreground)]">
                     By creating an account, you agree to our{' '}
                     <a href="/terms" className="text-[var(--primary)] hover:underline">
                         Terms of Service

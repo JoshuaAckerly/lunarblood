@@ -45,8 +45,8 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'flash' => [
                 'success' => $request->session()->get('success'),
-                'error'   => $request->session()->get('error'),
-                'info'    => $request->session()->get('info'),
+                'error' => $request->session()->get('error'),
+                'info' => $request->session()->get('info'),
             ],
             'auth' => [
                 'user' => $request->user(),

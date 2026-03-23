@@ -45,8 +45,8 @@ class Handler extends ExceptionHandler
                 return Inertia::render("errors/{$status}", [
                     'status' => $status,
                 ])
-                ->toResponse($request)
-                ->setStatusCode($status);
+                    ->toResponse($request)
+                    ->setStatusCode($status);
             }
         }
 

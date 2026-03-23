@@ -10,7 +10,7 @@ interface StatusBadgeProps {
 const statusStyles: Record<ShowStatus, string> = {
     'on-sale': 'bg-[var(--accent)]/15 text-[var(--accent)]',
     'sold-out': 'bg-[var(--destructive)]/15 text-[var(--destructive-foreground)]',
-    'cancelled': 'bg-[var(--muted)]/50 text-[var(--muted-foreground)]',
+    cancelled: 'bg-[var(--muted)]/50 text-[var(--muted-foreground)]',
     'coming-soon': 'bg-[var(--chart-1)]/15 text-[var(--chart-1)]',
 };
 
@@ -24,11 +24,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' }) => {
     const colorClass = statusStyles[normalizedStatus as ShowStatus] ?? statusStyles['coming-soon'];
     const label = normalizedStatus.replace(/-/g, ' ').toUpperCase();
 
-    return (
-        <span className={`inline-flex items-center rounded-full font-medium ${sizeStyles[size]} ${colorClass}`}>
-            {label}
-        </span>
-    );
+    return <span className={`inline-flex items-center rounded-full font-medium ${sizeStyles[size]} ${colorClass}`}>{label}</span>;
 };
 
 export default StatusBadge;

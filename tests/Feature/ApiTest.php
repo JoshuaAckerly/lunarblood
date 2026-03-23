@@ -14,7 +14,7 @@ class ApiTest extends TestCase
         $response = $this->get('/api/health');
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'ok']);
+            ->assertJson(['status' => 'ok']);
     }
 
     public function test_payment_processing_requires_validation(): void
@@ -35,7 +35,7 @@ class ApiTest extends TestCase
         $response = $this->postJson('/api/process-payment', $paymentData);
 
         $response->assertStatus(200)
-                 ->assertJson(['success' => true]);
+            ->assertJson(['success' => true]);
     }
 
     public function test_payment_processing_with_valid_data(): void
@@ -56,7 +56,7 @@ class ApiTest extends TestCase
         $response = $this->postJson('/api/process-payment', $paymentData);
 
         $response->assertStatus(200)
-                 ->assertJson(['success' => true]);
+            ->assertJson(['success' => true]);
     }
 
     public function test_contact_form_rate_limiting(): void
@@ -70,7 +70,7 @@ class ApiTest extends TestCase
         // Make 4 requests (limit is 3 per minute)
         for ($i = 0; $i < 4; $i++) {
             $response = $this->postJson('/api/contact', $contactData);
-            
+
             if ($i < 3) {
                 $response->assertStatus(200);
             } else {
@@ -89,6 +89,6 @@ class ApiTest extends TestCase
         $response = $this->postJson('/api/process-payment', $invalidData);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email', 'firstName']);
+            ->assertJsonValidationErrors(['email', 'firstName']);
     }
 }

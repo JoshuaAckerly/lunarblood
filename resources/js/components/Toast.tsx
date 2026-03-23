@@ -1,5 +1,5 @@
+import { CheckCircle, Info, X, XCircle } from 'lucide-react';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { CheckCircle, XCircle, Info, X } from 'lucide-react';
 
 export type ToastVariant = 'success' | 'error' | 'info';
 
@@ -26,15 +26,15 @@ const AUTO_DISMISS_MS = 4500;
 const VARIANT_STYLES: Record<ToastVariant, { container: string; icon: React.ReactNode }> = {
     success: {
         container: 'border-green-500/40 bg-[var(--background)] text-[var(--foreground)]',
-        icon: <CheckCircle size={16} className="shrink-0 text-green-500 mt-0.5" />,
+        icon: <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-500" />,
     },
     error: {
         container: 'border-[var(--destructive)]/40 bg-[var(--background)] text-[var(--foreground)]',
-        icon: <XCircle size={16} className="shrink-0 text-[var(--destructive)] mt-0.5" />,
+        icon: <XCircle size={16} className="mt-0.5 shrink-0 text-[var(--destructive)]" />,
     },
     info: {
         container: 'border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]',
-        icon: <Info size={16} className="shrink-0 text-[var(--muted-foreground)] mt-0.5" />,
+        icon: <Info size={16} className="mt-0.5 shrink-0 text-[var(--muted-foreground)]" />,
     },
 };
 
@@ -56,16 +56,13 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
     const { container, icon } = VARIANT_STYLES[toast.variant];
 
     return (
-        <div
-            role="alert"
-            className={`flex items-start gap-2.5 rounded-md border px-3.5 py-3 shadow-lg text-sm ${container}`}
-        >
+        <div role="alert" className={`flex items-start gap-2.5 rounded-md border px-3.5 py-3 text-sm shadow-lg ${container}`}>
             {icon}
             <span className="flex-1 leading-snug">{toast.message}</span>
             <button
                 type="button"
                 onClick={() => onDismiss(toast.id)}
-                className="shrink-0 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                className="shrink-0 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
                 aria-label="Dismiss notification"
             >
                 <X size={14} />
@@ -93,7 +90,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren> = ({ children }) =
                 role="region"
                 aria-label="Notifications"
                 aria-live="polite"
-                className="fixed top-4 right-4 z-50 flex flex-col gap-2 w-80 max-w-[calc(100vw-2rem)]"
+                className="fixed top-4 right-4 z-50 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2"
             >
                 {toasts.map((toast) => (
                     <ToastItem key={toast.id} toast={toast} onDismiss={dismiss} />

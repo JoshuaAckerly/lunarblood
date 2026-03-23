@@ -1,5 +1,5 @@
+import { RefreshCw, TriangleAlert } from 'lucide-react';
 import React from 'react';
-import { TriangleAlert, RefreshCw } from 'lucide-react';
 
 interface ErrorBoundaryProps {
     children: React.ReactNode;
@@ -25,11 +25,7 @@ const DefaultFallback: React.FC<DefaultFallbackProps> = ({ onReset }) => (
                 An unexpected error occurred. Your data is safe — try refreshing this section.
             </p>
         </div>
-        <button
-            type="button"
-            onClick={onReset}
-            className="btn btn-secondary flex items-center gap-2"
-        >
+        <button type="button" onClick={onReset} className="btn btn-secondary flex items-center gap-2">
             <RefreshCw size={14} />
             Try again
         </button>
@@ -56,9 +52,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
     render(): React.ReactNode {
         if (this.state.hasError) {
-            return this.props.fallback ?? (
-                <DefaultFallback error={this.state.error} onReset={this.reset} />
-            );
+            return this.props.fallback ?? <DefaultFallback error={this.state.error} onReset={this.reset} />;
         }
         return this.props.children;
     }

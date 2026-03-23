@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Show;
-use App\Models\Venue;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,6 +13,7 @@ class ShowControllerTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Venue $venue;
 
     protected function setUp(): void

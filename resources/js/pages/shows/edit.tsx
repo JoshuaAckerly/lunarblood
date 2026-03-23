@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { useForm } from "@inertiajs/react";
-import { Link } from "@inertiajs/react";
-import Main from "@/layouts/main";
-import Seo from "@/components/Seo";
-import { ArrowLeft, ArrowRight, Save, Eye, Calendar, MapPin, Clock, DollarSign } from "lucide-react";
+import Seo from '@/components/Seo';
+import Main from '@/layouts/main';
+import { Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, ArrowRight, Calendar, Clock, DollarSign, Eye, MapPin, Save } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface Venue {
     id: number;
@@ -68,7 +67,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
         put(`/shows/${show.id}`);
     };
 
-    const selectedVenue = venues.find(v => v.id === data.venue_id);
+    const selectedVenue = venues.find((v) => v.id === data.venue_id);
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -76,7 +75,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                 return (
                     <div className="space-y-6">
                         <div>
-                            <label htmlFor="venue_id" className="block text-sm font-medium mb-2">
+                            <label htmlFor="venue_id" className="mb-2 block text-sm font-medium">
                                 Venue *
                             </label>
                             <select
@@ -93,12 +92,12 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                     </option>
                                 ))}
                             </select>
-                            {errors.venue_id && <p className="text-red-500 text-sm mt-1">{errors.venue_id}</p>}
+                            {errors.venue_id && <p className="mt-1 text-sm text-red-500">{errors.venue_id}</p>}
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid gap-6 md:grid-cols-2">
                             <div>
-                                <label htmlFor="date" className="block text-sm font-medium mb-2">
+                                <label htmlFor="date" className="mb-2 block text-sm font-medium">
                                     Date *
                                 </label>
                                 <input
@@ -110,11 +109,11 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                     min={new Date().toISOString().split('T')[0]}
                                     required
                                 />
-                                {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
+                                {errors.date && <p className="mt-1 text-sm text-red-500">{errors.date}</p>}
                             </div>
 
                             <div>
-                                <label htmlFor="time" className="block text-sm font-medium mb-2">
+                                <label htmlFor="time" className="mb-2 block text-sm font-medium">
                                     Time *
                                 </label>
                                 <input
@@ -125,7 +124,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                     className="input w-full"
                                     required
                                 />
-                                {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                                {errors.time && <p className="mt-1 text-sm text-red-500">{errors.time}</p>}
                             </div>
                         </div>
                     </div>
@@ -135,7 +134,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                 return (
                     <div className="space-y-6">
                         <div>
-                            <label htmlFor="status" className="block text-sm font-medium mb-2">
+                            <label htmlFor="status" className="mb-2 block text-sm font-medium">
                                 Status *
                             </label>
                             <select
@@ -150,15 +149,15 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                 <option value="sold-out">Sold Out</option>
                                 <option value="cancelled">Cancelled</option>
                             </select>
-                            {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
+                            {errors.status && <p className="mt-1 text-sm text-red-500">{errors.status}</p>}
                         </div>
 
                         <div>
-                            <label htmlFor="price" className="block text-sm font-medium mb-2">
+                            <label htmlFor="price" className="mb-2 block text-sm font-medium">
                                 Price (optional)
                             </label>
                             <div className="relative">
-                                <DollarSign size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--muted-foreground)]" />
+                                <DollarSign size={16} className="absolute top-1/2 left-3 -translate-y-1/2 transform text-[var(--muted-foreground)]" />
                                 <input
                                     type="number"
                                     id="price"
@@ -170,11 +169,11 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                     min="0"
                                 />
                             </div>
-                            {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
+                            {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
                         </div>
 
                         <div>
-                            <label htmlFor="description" className="block text-sm font-medium mb-2">
+                            <label htmlFor="description" className="mb-2 block text-sm font-medium">
                                 Description
                             </label>
                             <textarea
@@ -185,7 +184,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                 rows={4}
                                 placeholder="Describe the show, special guests, setlist, etc."
                             />
-                            {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                            {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
                         </div>
                     </div>
                 );
@@ -194,7 +193,7 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                 return (
                     <div className="space-y-6">
                         <div>
-                            <label htmlFor="ticket_url" className="block text-sm font-medium mb-2">
+                            <label htmlFor="ticket_url" className="mb-2 block text-sm font-medium">
                                 Ticket URL
                             </label>
                             <input
@@ -205,11 +204,11 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                 className="input w-full"
                                 placeholder="https://tickets.example.com"
                             />
-                            {errors.ticket_url && <p className="text-red-500 text-sm mt-1">{errors.ticket_url}</p>}
+                            {errors.ticket_url && <p className="mt-1 text-sm text-red-500">{errors.ticket_url}</p>}
                         </div>
 
                         <div className="card bg-[var(--muted)]">
-                            <h3 className="text-lg font-semibold mb-4">Preview</h3>
+                            <h3 className="mb-4 text-lg font-semibold">Preview</h3>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <MapPin size={20} />
@@ -233,12 +232,17 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                                     </div>
                                 )}
                                 <div className="mt-4">
-                                    <span className={`px-2 py-1 rounded text-sm ${
-                                        data.status === 'on-sale' ? 'bg-green-100 text-green-800' :
-                                        data.status === 'sold-out' ? 'bg-red-100 text-red-800' :
-                                        data.status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
-                                        'bg-blue-100 text-blue-800'
-                                    }`}>
+                                    <span
+                                        className={`rounded px-2 py-1 text-sm ${
+                                            data.status === 'on-sale'
+                                                ? 'bg-green-100 text-green-800'
+                                                : data.status === 'sold-out'
+                                                  ? 'bg-red-100 text-red-800'
+                                                  : data.status === 'cancelled'
+                                                    ? 'bg-gray-100 text-gray-800'
+                                                    : 'bg-blue-100 text-blue-800'
+                                        }`}
+                                    >
                                         {data.status.replace('-', ' ').toUpperCase()}
                                     </span>
                                 </div>
@@ -259,16 +263,13 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
 
     return (
         <Main>
-            <Seo
-                title="Edit Show"
-                description="Edit an existing Lunar Blood show event."
-            />
+            <Seo title="Edit Show" description="Edit an existing Lunar Blood show event." />
 
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-4xl">
                 <div className="mb-6">
                     <Link
                         href="/shows"
-                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
                     >
                         <ArrowLeft size={16} />
                         Back to Shows
@@ -276,32 +277,38 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                 </div>
 
                 <div className="card">
-                    <h1 className="text-2xl font-bold mb-6">Edit Show</h1>
+                    <h1 className="mb-6 text-2xl font-bold">Edit Show</h1>
 
                     {/* Progress Steps */}
                     <div className="mb-8">
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="mb-4 flex items-center justify-between">
                             {steps.map((stepItem, index) => (
                                 <React.Fragment key={stepItem.id}>
-                                    <div className={`flex flex-col items-center ${
-                                        stepItem.id <= currentStep ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'
-                                    }`}>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium mb-2 ${
-                                            stepItem.id < currentStep ? 'bg-[var(--primary)] text-white' :
-                                            stepItem.id === currentStep ? 'bg-[var(--primary)] text-white' :
-                                            'bg-[var(--muted)] text-[var(--muted-foreground)]'
-                                        }`}>
+                                    <div
+                                        className={`flex flex-col items-center ${
+                                            stepItem.id <= currentStep ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'
+                                        }`}
+                                    >
+                                        <div
+                                            className={`mb-2 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
+                                                stepItem.id < currentStep
+                                                    ? 'bg-[var(--primary)] text-white'
+                                                    : stepItem.id === currentStep
+                                                      ? 'bg-[var(--primary)] text-white'
+                                                      : 'bg-[var(--muted)] text-[var(--muted-foreground)]'
+                                            }`}
+                                        >
                                             {stepItem.id < currentStep ? '✓' : stepItem.id}
                                         </div>
                                         <div className="text-center">
-                                            <div className="font-medium text-sm">{stepItem.title}</div>
+                                            <div className="text-sm font-medium">{stepItem.title}</div>
                                             <div className="text-xs">{stepItem.description}</div>
                                         </div>
                                     </div>
                                     {index < steps.length - 1 && (
-                                        <div className={`flex-1 h-px mx-4 ${
-                                            stepItem.id < currentStep ? 'bg-[var(--primary)]' : 'bg-[var(--muted)]'
-                                        }`} />
+                                        <div
+                                            className={`mx-4 h-px flex-1 ${stepItem.id < currentStep ? 'bg-[var(--primary)]' : 'bg-[var(--muted)]'}`}
+                                        />
                                     )}
                                 </React.Fragment>
                             ))}
@@ -311,14 +318,10 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
                     <form onSubmit={handleSubmit}>
                         {renderStepContent()}
 
-                        <div className="flex items-center justify-between pt-6 border-t mt-8">
+                        <div className="mt-8 flex items-center justify-between border-t pt-6">
                             <div className="flex gap-3">
                                 {currentStep === 3 && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsPreview(!isPreview)}
-                                        className="btn btn-secondary"
-                                    >
+                                    <button type="button" onClick={() => setIsPreview(!isPreview)} className="btn btn-secondary">
                                         <Eye size={16} className="mr-2" />
                                         {isPreview ? 'Hide' : 'Show'} Preview
                                     </button>
@@ -327,31 +330,19 @@ const EditShow: React.FC<EditShowProps> = ({ show, venues }) => {
 
                             <div className="flex gap-3">
                                 {currentStep > 1 && (
-                                    <button
-                                        type="button"
-                                        onClick={handlePrevious}
-                                        className="btn btn-secondary"
-                                    >
+                                    <button type="button" onClick={handlePrevious} className="btn btn-secondary">
                                         <ArrowLeft size={16} className="mr-2" />
                                         Previous
                                     </button>
                                 )}
 
                                 {currentStep < 3 ? (
-                                    <button
-                                        type="button"
-                                        onClick={handleNext}
-                                        className="btn btn-primary"
-                                    >
+                                    <button type="button" onClick={handleNext} className="btn btn-primary">
                                         Next
                                         <ArrowRight size={16} className="ml-2" />
                                     </button>
                                 ) : (
-                                    <button
-                                        type="submit"
-                                        disabled={processing}
-                                        className="btn btn-primary"
-                                    >
+                                    <button type="submit" disabled={processing} className="btn btn-primary">
                                         <Save size={16} className="mr-2" />
                                         {processing ? 'Saving...' : 'Save Changes'}
                                     </button>

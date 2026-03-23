@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, User, ChevronDown } from 'lucide-react';
 import NotificationBell from '@/components/NotificationBell';
 import { usePage } from '@inertiajs/react';
+import { ChevronDown, Menu, User, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,23 +24,37 @@ const Header: React.FC = () => {
         <header className="py-4">
             <div className="container flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <a href="/" className="text-2xl font-semibold text-[var(--primary-foreground)] hover:opacity-80 transition-opacity">LunarBlood</a>
-                    <span className="hidden sm:block text-sm text-[var(--muted-foreground)]">Dark • Mood • Heavy</span>
+                    <a href="/" className="text-2xl font-semibold text-[var(--primary-foreground)] transition-opacity hover:opacity-80">
+                        LunarBlood
+                    </a>
+                    <span className="hidden text-sm text-[var(--muted-foreground)] sm:block">Dark • Mood • Heavy</span>
                 </div>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-4">
-                    <a className="nav-link" href="/">Home</a>
-                    <a className="nav-link" href="/listen">Listen</a>
-                    <a className="nav-link" href="/venues">Venues</a>
-                    <a className="nav-link" href="/tour">Tour</a>
-                    <a className="nav-link" href="/shop">Shop</a>
-                    <a className="btn btn-primary" href="/listen">Listen Now</a>
+                <nav className="hidden items-center gap-4 md:flex">
+                    <a className="nav-link" href="/">
+                        Home
+                    </a>
+                    <a className="nav-link" href="/listen">
+                        Listen
+                    </a>
+                    <a className="nav-link" href="/venues">
+                        Venues
+                    </a>
+                    <a className="nav-link" href="/tour">
+                        Tour
+                    </a>
+                    <a className="nav-link" href="/shop">
+                        Shop
+                    </a>
+                    <a className="btn btn-primary" href="/listen">
+                        Listen Now
+                    </a>
                     <NotificationBell />
                     {auth?.user ? (
                         <div className="relative" ref={userMenuRef}>
                             <button
-                                className="flex items-center gap-2 nav-link"
+                                className="nav-link flex items-center gap-2"
                                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                                 aria-expanded={isUserMenuOpen}
                                 aria-haspopup="true"
@@ -50,26 +64,26 @@ const Header: React.FC = () => {
                                 <ChevronDown size={14} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                             </button>
                             {isUserMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-[var(--background)] border border-[var(--border)] rounded-md shadow-lg z-50">
+                                <div className="absolute right-0 z-50 mt-2 w-48 rounded-md border border-[var(--border)] bg-[var(--background)] shadow-lg">
                                     <a
                                         href="/dashboard"
-                                        className="block px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                        className="block px-4 py-2 text-sm transition-colors hover:bg-[var(--accent)]"
                                         onClick={() => setIsUserMenuOpen(false)}
                                     >
                                         Dashboard
                                     </a>
                                     <a
                                         href="/settings/profile"
-                                        className="block px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                        className="block px-4 py-2 text-sm transition-colors hover:bg-[var(--accent)]"
                                         onClick={() => setIsUserMenuOpen(false)}
                                     >
                                         Profile Settings
                                     </a>
-                                    <hr className="border-[var(--border)] my-1" />
+                                    <hr className="my-1 border-[var(--border)]" />
                                     <form method="POST" action="/logout" className="block">
                                         <button
                                             type="submit"
-                                            className="w-full text-left px-4 py-2 text-sm hover:bg-[var(--accent)] transition-colors"
+                                            className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-[var(--accent)]"
                                         >
                                             Log out
                                         </button>
@@ -78,46 +92,59 @@ const Header: React.FC = () => {
                             )}
                         </div>
                     ) : (
-                        <a className="nav-link" href="/login">Login</a>
+                        <a className="nav-link" href="/login">
+                            Login
+                        </a>
                     )}
                 </nav>
 
                 {/* Mobile Menu Button */}
-                <button 
-                    className="md:hidden p-2"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
+                <button className="p-2 md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
-                <div className="md:hidden mt-4 pb-4 border-t border-[var(--border)]">
+                <div className="mt-4 border-t border-[var(--border)] pb-4 md:hidden">
                     <nav className="container flex flex-col gap-4 pt-4">
-                        <a className="nav-link" href="/" onClick={() => setIsMenuOpen(false)}>Home</a>
-                        <a className="nav-link" href="/listen" onClick={() => setIsMenuOpen(false)}>Listen</a>
-                        <a className="nav-link" href="/venues" onClick={() => setIsMenuOpen(false)}>Venues</a>
+                        <a className="nav-link" href="/" onClick={() => setIsMenuOpen(false)}>
+                            Home
+                        </a>
+                        <a className="nav-link" href="/listen" onClick={() => setIsMenuOpen(false)}>
+                            Listen
+                        </a>
+                        <a className="nav-link" href="/venues" onClick={() => setIsMenuOpen(false)}>
+                            Venues
+                        </a>
                         {auth?.user ? (
                             <>
-                                <a className="nav-link" href="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</a>
-                                <a className="nav-link" href="/settings/profile" onClick={() => setIsMenuOpen(false)}>Profile Settings</a>
+                                <a className="nav-link" href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                                    Dashboard
+                                </a>
+                                <a className="nav-link" href="/settings/profile" onClick={() => setIsMenuOpen(false)}>
+                                    Profile Settings
+                                </a>
                                 <form method="POST" action="/logout" className="inline">
-                                    <button
-                                        type="submit"
-                                        className="nav-link w-full text-left"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
+                                    <button type="submit" className="nav-link w-full text-left" onClick={() => setIsMenuOpen(false)}>
                                         Log out
                                     </button>
                                 </form>
                             </>
                         ) : (
-                            <a className="nav-link" href="/login" onClick={() => setIsMenuOpen(false)}>Login</a>
+                            <a className="nav-link" href="/login" onClick={() => setIsMenuOpen(false)}>
+                                Login
+                            </a>
                         )}
-                        <a className="nav-link" href="/tour" onClick={() => setIsMenuOpen(false)}>Tour</a>
-                        <a className="nav-link" href="/shop" onClick={() => setIsMenuOpen(false)}>Shop</a>
-                        <a className="btn btn-primary w-full justify-center" href="/listen" onClick={() => setIsMenuOpen(false)}>Listen Now</a>
+                        <a className="nav-link" href="/tour" onClick={() => setIsMenuOpen(false)}>
+                            Tour
+                        </a>
+                        <a className="nav-link" href="/shop" onClick={() => setIsMenuOpen(false)}>
+                            Shop
+                        </a>
+                        <a className="btn btn-primary w-full justify-center" href="/listen" onClick={() => setIsMenuOpen(false)}>
+                            Listen Now
+                        </a>
                     </nav>
                 </div>
             )}

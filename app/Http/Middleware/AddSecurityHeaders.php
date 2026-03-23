@@ -29,7 +29,7 @@ class AddSecurityHeaders
 
         $csp = "default-src 'self'";
         if (app()->environment('local')) {
-            $csp .= " http:";
+            $csp .= ' http:';
         }
         $csp .= "; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com";
         if (app()->environment('local')) {
@@ -37,19 +37,19 @@ class AddSecurityHeaders
         }
         $csp .= "; style-src 'self' 'unsafe-inline'";
         if (app()->environment('local')) {
-            $csp .= " http:";
+            $csp .= ' http:';
         }
         $csp .= " https://fonts.bunny.net; font-src 'self'";
         if (app()->environment('local')) {
-            $csp .= " http:";
+            $csp .= ' http:';
         }
         $csp .= " https://fonts.bunny.net; img-src 'self' https://d3fjkusrpksks7.cloudfront.net";
         if (app()->environment('local')) {
-            $csp .= " http://d3fjkusrpksks7.cloudfront.net http:";
+            $csp .= ' http://d3fjkusrpksks7.cloudfront.net http:';
         }
         $csp .= "; connect-src 'self' https://graveyardjokes.com";
         if (app()->environment('local')) {
-            $csp .= " http: ws: wss:";
+            $csp .= ' http: ws: wss:';
         }
         $csp .= "; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';";
 

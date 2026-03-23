@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "@inertiajs/react";
-import Main from "@/layouts/main";
-import Seo from "@/components/Seo";
-import { ArrowLeft, MapPin, ExternalLink, Edit } from "lucide-react";
-import StatusBadge from "@/components/StatusBadge";
+import Seo from '@/components/Seo';
+import StatusBadge from '@/components/StatusBadge';
+import Main from '@/layouts/main';
+import { Link } from '@inertiajs/react';
+import { ArrowLeft, Edit, ExternalLink, MapPin } from 'lucide-react';
+import React from 'react';
 
 interface Show {
     id: number;
@@ -52,9 +52,7 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
         });
     };
 
-    const upcomingShows = venue.shows.filter(
-        (show) => new Date(`${show.date}T${show.time}`) > new Date()
-    );
+    const upcomingShows = venue.shows.filter((show) => new Date(`${show.date}T${show.time}`) > new Date());
 
     return (
         <Main>
@@ -63,11 +61,11 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
                 description={`${venue.name} in ${venue.city}${venue.state ? `, ${venue.state}` : ''}, ${venue.country}. ${venue.description || ''}`}
             />
 
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-4xl">
                 <div className="mb-6">
                     <Link
                         href="/venues"
-                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
                     >
                         <ArrowLeft size={16} />
                         Back to Venues
@@ -75,41 +73,33 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
                 </div>
 
                 <div className="card mb-6">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+                    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-bold mb-2">{venue.name}</h1>
+                            <h1 className="mb-2 text-2xl font-bold sm:text-3xl">{venue.name}</h1>
                             <div className="flex flex-wrap items-center gap-3 text-[var(--muted-foreground)]">
                                 <span className="inline-flex items-center gap-1">
                                     <MapPin size={14} />
-                                    {venue.city}{venue.state ? `, ${venue.state}` : ''}, {venue.country}
+                                    {venue.city}
+                                    {venue.state ? `, ${venue.state}` : ''}, {venue.country}
                                 </span>
-                                {venue.capacity && (
-                                    <span>Capacity: {venue.capacity.toLocaleString()}</span>
-                                )}
+                                {venue.capacity && <span>Capacity: {venue.capacity.toLocaleString()}</span>}
                             </div>
                         </div>
-                        <Link
-                            href={`/venues/${venue.id}/edit`}
-                            className="btn btn-secondary inline-flex items-center gap-2 shrink-0"
-                        >
+                        <Link href={`/venues/${venue.id}/edit`} className="btn btn-secondary inline-flex shrink-0 items-center gap-2">
                             <Edit size={14} />
                             Edit Venue
                         </Link>
                     </div>
 
                     {venue.image && (
-                        <div className="aspect-video bg-[var(--muted)] rounded-lg mb-6 overflow-hidden">
-                            <img
-                                src={venue.image}
-                                alt={venue.name}
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="mb-6 aspect-video overflow-hidden rounded-lg bg-[var(--muted)]">
+                            <img src={venue.image} alt={venue.name} className="h-full w-full object-cover" />
                         </div>
                     )}
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid gap-6 md:grid-cols-2">
                         <div>
-                            <h2 className="font-semibold mb-3">Details</h2>
+                            <h2 className="mb-3 font-semibold">Details</h2>
                             <dl className="space-y-2 text-sm">
                                 <div>
                                     <dt className="text-[var(--muted-foreground)]">Address</dt>
@@ -126,12 +116,12 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
 
                         {venue.website && (
                             <div>
-                                <h2 className="font-semibold mb-3">Links</h2>
+                                <h2 className="mb-3 font-semibold">Links</h2>
                                 <a
                                     href={venue.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-[var(--primary)] hover:underline text-sm"
+                                    className="inline-flex items-center gap-2 text-sm text-[var(--primary)] hover:underline"
                                 >
                                     <ExternalLink size={14} />
                                     Visit Website
@@ -141,15 +131,15 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
                     </div>
 
                     {venue.description && (
-                        <div className="mt-6 pt-6 border-t border-[var(--border)]">
-                            <h2 className="font-semibold mb-3">About</h2>
-                            <p className="text-[var(--muted-foreground)] text-sm leading-relaxed">{venue.description}</p>
+                        <div className="mt-6 border-t border-[var(--border)] pt-6">
+                            <h2 className="mb-3 font-semibold">About</h2>
+                            <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{venue.description}</p>
                         </div>
                     )}
                 </div>
 
                 <div className="card">
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="mb-6 flex items-center justify-between">
                         <h2 className="text-xl font-bold">
                             Shows at {venue.name}
                             <span className="ml-2 text-sm font-normal text-[var(--muted-foreground)]">
@@ -162,29 +152,24 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
                     </div>
 
                     {venue.shows.length === 0 ? (
-                        <p className="text-[var(--muted-foreground)] text-sm">No shows scheduled at this venue yet.</p>
+                        <p className="text-sm text-[var(--muted-foreground)]">No shows scheduled at this venue yet.</p>
                     ) : (
                         <div className="space-y-3">
                             {venue.shows.map((show) => (
-                                <div key={show.id} className="flex items-center justify-between p-3 rounded-lg bg-[var(--muted)] gap-4">
+                                <div key={show.id} className="flex items-center justify-between gap-4 rounded-lg bg-[var(--muted)] p-3">
                                     <div className="min-w-0">
-                                        <div className="flex items-center gap-2 flex-wrap">
-                                            <span className="font-medium text-sm">{formatDate(show.date)}</span>
-                                            <span className="text-[var(--muted-foreground)] text-sm">{formatTime(show.time)}</span>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-sm font-medium">{formatDate(show.date)}</span>
+                                            <span className="text-sm text-[var(--muted-foreground)]">{formatTime(show.time)}</span>
                                             <StatusBadge status={show.status} />
                                         </div>
                                         {show.description && (
-                                            <p className="text-xs text-[var(--muted-foreground)] mt-1 truncate">{show.description}</p>
+                                            <p className="mt-1 truncate text-xs text-[var(--muted-foreground)]">{show.description}</p>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-2 shrink-0">
-                                        {show.price && (
-                                            <span className="text-sm">${show.price}</span>
-                                        )}
-                                        <Link
-                                            href={`/shows/${show.id}`}
-                                            className="btn btn-secondary text-xs px-2 py-1"
-                                        >
+                                    <div className="flex shrink-0 items-center gap-2">
+                                        {show.price && <span className="text-sm">${show.price}</span>}
+                                        <Link href={`/shows/${show.id}`} className="btn btn-secondary px-2 py-1 text-xs">
                                             View
                                         </Link>
                                     </div>

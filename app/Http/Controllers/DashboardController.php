@@ -100,7 +100,7 @@ class DashboardController extends Controller
                 'venues.state as venue_state',
             ])
             ->selectRaw(
-                "(
+                '(
                     CASE WHEN LOWER(venues.name) = ? THEN 500 ELSE 0 END +
                     CASE WHEN LOWER(venues.name) LIKE ? THEN 300 ELSE 0 END +
                     CASE WHEN LOWER(venues.name) LIKE ? THEN 180 ELSE 0 END +
@@ -110,7 +110,7 @@ class DashboardController extends Controller
                     CASE WHEN LOWER(shows.status) = ? THEN 110 ELSE 0 END +
                     CASE WHEN LOWER(shows.status) LIKE ? THEN 70 ELSE 0 END +
                     CASE WHEN LOWER(shows.description) LIKE ? THEN 40 ELSE 0 END
-                ) as search_score",
+                ) as search_score',
                 [$exact, $prefix, $contains, $exact, $contains, $exact, $exact, $contains, $contains]
             )
             ->orderByDesc('search_score')
@@ -144,7 +144,7 @@ class DashboardController extends Controller
             })
             ->select(['id', 'name', 'city', 'state'])
             ->selectRaw(
-                "(
+                '(
                     CASE WHEN LOWER(name) = ? THEN 500 ELSE 0 END +
                     CASE WHEN LOWER(name) LIKE ? THEN 320 ELSE 0 END +
                     CASE WHEN LOWER(name) LIKE ? THEN 180 ELSE 0 END +
@@ -152,7 +152,7 @@ class DashboardController extends Controller
                     CASE WHEN LOWER(city) LIKE ? THEN 90 ELSE 0 END +
                     CASE WHEN LOWER(state) = ? THEN 120 ELSE 0 END +
                     CASE WHEN LOWER(description) LIKE ? THEN 40 ELSE 0 END
-                ) as search_score",
+                ) as search_score',
                 [$exact, $prefix, $contains, $exact, $contains, $exact, $contains]
             )
             ->orderByDesc('search_score')
