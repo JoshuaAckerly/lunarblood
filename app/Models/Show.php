@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Show extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'venue_id',
         'date',

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link, router } from "@inertiajs/react";
-import Main from "@/layouts/main";
-import Seo from "@/components/Seo";
-import { Plus, Calendar, MapPin, Clock, DollarSign, Edit, Eye, Trash2 } from "lucide-react";
-import StatusBadge from "@/components/StatusBadge";
-import { ShowCardSkeleton } from "@/components/Skeleton";
+import Seo from '@/components/Seo';
+import { ShowCardSkeleton } from '@/components/Skeleton';
+import StatusBadge from '@/components/StatusBadge';
+import Main from '@/layouts/main';
+import { Link, router } from '@inertiajs/react';
+import { Calendar, Clock, DollarSign, Edit, Eye, MapPin, Plus, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface Show {
     id: number;
@@ -45,7 +45,7 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
             weekday: 'short',
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
         });
     };
 
@@ -53,24 +53,18 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
         return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
             hour: 'numeric',
             minute: '2-digit',
-            hour12: true
+            hour12: true,
         });
     };
 
     return (
         <Main>
-            <Seo
-                title="Shows Management"
-                description="Manage Lunar Blood shows and events."
-            />
+            <Seo title="Shows Management" description="Manage Lunar Blood shows and events." />
 
-            <div className="max-w-6xl mx-auto">
-                <div className="flex items-center justify-between mb-6">
+            <div className="mx-auto max-w-6xl">
+                <div className="mb-6 flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Shows Management</h1>
-                    <Link
-                        href="/shows/create"
-                        className="btn btn-primary"
-                    >
+                    <Link href="/shows/create" className="btn btn-primary">
                         <Plus size={16} className="mr-2" />
                         Create New Show
                     </Link>
@@ -83,16 +77,11 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                         <ShowCardSkeleton />
                     </div>
                 ) : shows.length === 0 ? (
-                    <div className="card text-center py-12">
-                        <Calendar size={48} className="mx-auto text-[var(--muted-foreground)] mb-4" />
-                        <h3 className="text-lg font-medium mb-2">No shows yet</h3>
-                        <p className="text-[var(--muted-foreground)] mb-6">
-                            Get started by creating your first show event.
-                        </p>
-                        <Link
-                            href="/shows/create"
-                            className="btn btn-primary"
-                        >
+                    <div className="card py-12 text-center">
+                        <Calendar size={48} className="mx-auto mb-4 text-[var(--muted-foreground)]" />
+                        <h3 className="mb-2 text-lg font-medium">No shows yet</h3>
+                        <p className="mb-6 text-[var(--muted-foreground)]">Get started by creating your first show event.</p>
+                        <Link href="/shows/create" className="btn btn-primary">
                             <Plus size={16} className="mr-2" />
                             Create Your First Show
                         </Link>
@@ -103,14 +92,12 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                             <div key={show.id} className="card">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                                            <h3 className="text-lg font-semibold">
-                                                {show.venue.name}
-                                            </h3>
+                                        <div className="mb-3 flex flex-wrap items-center gap-3">
+                                            <h3 className="text-lg font-semibold">{show.venue.name}</h3>
                                             <StatusBadge status={show.status} size="sm" />
                                         </div>
 
-                                        <div className="grid md:grid-cols-3 gap-4 mb-4">
+                                        <div className="mb-4 grid gap-4 md:grid-cols-3">
                                             <div className="flex items-center gap-2 text-sm">
                                                 <MapPin size={16} className="text-[var(--muted-foreground)]" />
                                                 <span>
@@ -128,16 +115,14 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                         </div>
 
                                         {show.price && (
-                                            <div className="flex items-center gap-2 text-sm mb-3">
+                                            <div className="mb-3 flex items-center gap-2 text-sm">
                                                 <DollarSign size={16} className="text-[var(--muted-foreground)]" />
                                                 <span className="font-medium">${show.price}</span>
                                             </div>
                                         )}
 
                                         {show.description && (
-                                            <p className="text-[var(--muted-foreground)] text-sm mb-4 line-clamp-2">
-                                                {show.description}
-                                            </p>
+                                            <p className="mb-4 line-clamp-2 text-sm text-[var(--muted-foreground)]">{show.description}</p>
                                         )}
 
                                         {show.ticket_url && (
@@ -152,17 +137,11 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                         )}
                                     </div>
 
-                                    <div className="flex items-center gap-2 ml-4">
-                                        <Link
-                                            href={`/shows/${show.id}`}
-                                            className="btn btn-secondary btn-sm"
-                                        >
+                                    <div className="ml-4 flex items-center gap-2">
+                                        <Link href={`/shows/${show.id}`} className="btn btn-secondary btn-sm">
                                             <Eye size={14} />
                                         </Link>
-                                        <Link
-                                            href={`/shows/${show.id}/edit`}
-                                            className="btn btn-secondary btn-sm"
-                                        >
+                                        <Link href={`/shows/${show.id}/edit`} className="btn btn-secondary btn-sm">
                                             <Edit size={14} />
                                         </Link>
                                         <button

@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\MessageProxyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Api\MessageProxyController;
 
 Route::get('/messages', [MessageProxyController::class, 'index']);
 Route::patch('/messages/read-all', [MessageProxyController::class, 'markAllRead']);
@@ -58,7 +58,7 @@ Route::middleware(['throttle:5,1'])->group(function () {
         return response()->json([
             'success' => true,
             'message' => 'Payment processed successfully',
-            'order_id' => 'LB-' . strtoupper(substr(md5($sanitized['email'] . now()->timestamp), 0, 9))
+            'order_id' => 'LB-'.strtoupper(substr(md5($sanitized['email'].now()->timestamp), 0, 9)),
         ]);
     });
 });
@@ -76,7 +76,7 @@ Route::middleware(['throttle:3,1'])->group(function () {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'message' => 'required|string|max:1000'
+            'message' => 'required|string|max:1000',
         ]);
 
         if ($validator->fails()) {
@@ -101,10 +101,10 @@ Route::middleware(['throttle:3,1'])->group(function () {
                 'message' => 'Invalid contact data provided',
             ], 422);
         }
-        
+
         return response()->json([
             'success' => true,
-            'message' => 'Message sent successfully'
+            'message' => 'Message sent successfully',
         ]);
     });
 });

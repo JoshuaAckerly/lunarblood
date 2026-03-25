@@ -1,7 +1,7 @@
-import React, { FormEvent, useEffect } from 'react';
-import { useForm, Head, usePage } from '@inertiajs/react';
-import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
+import Main from '@/layouts/main';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import React, { FormEvent, useEffect } from 'react';
 
 interface PageProps {
     [key: string]: unknown;
@@ -42,19 +42,19 @@ const Login: React.FC = () => {
                 canonical="https://lunarblood.graveyardjokes.com/login"
             />
 
-            <section className="max-w-md mx-auto px-4">
-                <h1 className="page-title !text-2xl md:!text-3xl !mb-2">Log in</h1>
-                <p className="text-[var(--muted-foreground)] mb-6">Welcome back! Please sign in to your account.</p>
+            <section className="mx-auto max-w-md px-4">
+                <h1 className="page-title !mb-2 !text-2xl md:!text-3xl">Log in</h1>
+                <p className="mb-6 text-[var(--muted-foreground)]">Welcome back! Please sign in to your account.</p>
 
                 {status && (
-                    <div className="mb-4 p-4 bg-[var(--accent)] border border-[var(--border)] rounded-md">
+                    <div className="mb-4 rounded-md border border-[var(--border)] bg-[var(--accent)] p-4">
                         <p className="text-sm">{status}</p>
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="card space-y-4">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-2">
+                        <label htmlFor="email" className="mb-2 block text-sm font-medium">
                             Email
                         </label>
                         <input
@@ -67,13 +67,11 @@ const Login: React.FC = () => {
                             autoComplete="email"
                             autoFocus
                         />
-                        {form.errors.email && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.email}</p>
-                        )}
+                        {form.errors.email && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.email}</p>}
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium mb-2">
+                        <label htmlFor="password" className="mb-2 block text-sm font-medium">
                             Password
                         </label>
                         <input
@@ -85,9 +83,7 @@ const Login: React.FC = () => {
                             required
                             autoComplete="current-password"
                         />
-                        {form.errors.password && (
-                            <p className="text-sm text-[var(--destructive)] mt-2">{form.errors.password}</p>
-                        )}
+                        {form.errors.password && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password}</p>}
                     </div>
 
                     <div className="flex items-center">
@@ -104,23 +100,16 @@ const Login: React.FC = () => {
                     </div>
 
                     <div className="flex items-center justify-between pt-2">
-                        <a
-                            href="/forgot-password"
-                            className="text-sm text-[var(--primary)] hover:underline"
-                        >
+                        <a href="/forgot-password" className="text-sm text-[var(--primary)] hover:underline">
                             Forgot your password?
                         </a>
-                        <button
-                            type="submit"
-                            disabled={form.processing}
-                            className="btn btn-primary"
-                        >
+                        <button type="submit" disabled={form.processing} className="btn btn-primary">
                             {form.processing ? 'Logging in...' : 'Log in'}
                         </button>
                     </div>
                 </form>
 
-                <p className="text-center mt-6 text-sm text-[var(--muted-foreground)]">
+                <p className="mt-6 text-center text-sm text-[var(--muted-foreground)]">
                     Don't have an account?{' '}
                     <a href="/register" className="text-[var(--primary)] hover:underline">
                         Sign up

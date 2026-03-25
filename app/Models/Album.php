@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Album extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'title',
         'type',

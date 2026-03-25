@@ -1,5 +1,5 @@
-import React from 'react';
 import { Head } from '@inertiajs/react';
+import React from 'react';
 
 interface SeoProps {
     title?: string;
@@ -24,7 +24,7 @@ const Seo: React.FC<SeoProps> = ({
     twitterCard = 'summary_large_image',
     canonical,
     noindex = false,
-    structuredData
+    structuredData,
 }) => {
     const siteUrl = 'https://lunarblood.graveyardjokes.com';
     const siteName = 'Lunar Blood';
@@ -38,10 +38,10 @@ const Seo: React.FC<SeoProps> = ({
             <meta name="title" content={fullTitle} />
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords} />
-            
+
             {/* Canonical URL */}
             {canonical && <link rel="canonical" href={canonical} />}
-            
+
             {/* Robots */}
             {noindex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -51,14 +51,14 @@ const Seo: React.FC<SeoProps> = ({
             <meta property="og:description" content={description} />
             <meta property="og:image" content={ogImage} />
             <meta property="og:site_name" content={siteName} />
-            
+
             {/* Twitter */}
             <meta property="twitter:card" content={twitterCard} />
             <meta property="twitter:url" content={currentUrl} />
             <meta property="twitter:title" content={fullTitle} />
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={ogImage} />
-            
+
             {/* Music-specific meta tags for band/artists */}
             {ogType.startsWith('music') && (
                 <>
@@ -66,13 +66,9 @@ const Seo: React.FC<SeoProps> = ({
                     <meta property="og:audio:type" content="audio/vnd.facebook.bridge" />
                 </>
             )}
-            
+
             {/* Structured Data */}
-            {structuredData && (
-                <script type="application/ld+json">
-                    {JSON.stringify(structuredData)}
-                </script>
-            )}
+            {structuredData && <script type="application/ld+json">{JSON.stringify(structuredData)}</script>}
         </Head>
     );
 };

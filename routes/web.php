@@ -52,7 +52,7 @@ Route::get('/shop/{id}', function ($id) {
             'category' => 'Apparel',
             'description' => 'Black cotton tee with band logo',
             'details' => 'Premium 100% cotton t-shirt featuring the iconic Lunar Blood logo. Comfortable fit with reinforced seams for durability.',
-            'sizes' => ['S', 'M', 'L', 'XL', 'XXL']
+            'sizes' => ['S', 'M', 'L', 'XL', 'XXL'],
         ],
         2 => [
             'id' => 2,
@@ -60,10 +60,10 @@ Route::get('/shop/{id}', function ($id) {
             'price' => 35.00,
             'category' => 'Music',
             'description' => 'Limited edition red vinyl LP',
-            'details' => 'Limited edition pressing on translucent red vinyl. Includes digital download code and exclusive liner notes.'
-        ]
+            'details' => 'Limited edition pressing on translucent red vinyl. Includes digital download code and exclusive liner notes.',
+        ],
     ];
-    
+
     $productId = (int) $id;
     $product = $products[$productId] ?? null;
 
@@ -81,9 +81,9 @@ Route::get('/checkout', function () {
         'price' => request('price', '25.00'),
         'quantity' => request('quantity', '1'),
         'size' => request('size', ''),
-        'total' => request('total', '25.00')
+        'total' => request('total', '25.00'),
     ];
-    
+
     return Inertia::render('checkout', ['orderData' => $orderData]);
 })->name('checkout');
 

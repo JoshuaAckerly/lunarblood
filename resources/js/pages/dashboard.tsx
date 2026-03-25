@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Main from '@/layouts/main';
 import Seo from '@/components/Seo';
-import { CalendarDays, Clock3, Music2, RefreshCw, ShoppingBag, Store, TriangleAlert, Plus, MapPin } from 'lucide-react';
+import { DashboardStatCardSkeleton, LowStockItemSkeleton, UpcomingShowItemSkeleton } from '@/components/Skeleton';
 import StatusBadge from '@/components/StatusBadge';
-import { DashboardStatCardSkeleton, UpcomingShowItemSkeleton, LowStockItemSkeleton } from '@/components/Skeleton';
+import Main from '@/layouts/main';
+import { CalendarDays, Clock3, MapPin, Music2, Plus, RefreshCw, ShoppingBag, Store, TriangleAlert } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 interface DashboardStats {
     venues: number;
@@ -245,10 +245,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
             }
 
             const target = event.target as HTMLElement | null;
-            const isTypingContext =
-                target instanceof HTMLInputElement ||
-                target instanceof HTMLTextAreaElement ||
-                target?.isContentEditable === true;
+            const isTypingContext = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable === true;
 
             if (isTypingContext) {
                 return;
@@ -493,13 +490,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                     <p className="mt-2 text-sm text-[var(--muted-foreground)]">Last updated: {generatedAt}</p>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={refreshDashboard}
-                    className="btn btn-secondary"
-                    disabled={isLoading}
-                    aria-busy={isLoading}
-                >
+                <button type="button" onClick={refreshDashboard} className="btn btn-secondary" disabled={isLoading} aria-busy={isLoading}>
                     <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
                     {isLoading ? 'Refreshing...' : 'Refresh Data'}
                 </button>
@@ -511,19 +502,19 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         <TriangleAlert size={18} className="mt-0.5" />
                         <div>
                             <h2 className="font-semibold">Data load issue</h2>
-                            <p className="text-sm text-[var(--muted-foreground)] mt-1">{errorMessage}</p>
+                            <p className="mt-1 text-sm text-[var(--muted-foreground)]">{errorMessage}</p>
                         </div>
                     </div>
                 </section>
             )}
 
-            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5 mb-8">
+            <section className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 {isLoading ? (
                     Array.from({ length: 5 }).map((_, i) => <DashboardStatCardSkeleton key={i} />)
                 ) : (
                     <>
                         <article className="card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm text-[var(--muted-foreground)]">Venues</span>
                                 <Store size={16} />
                             </div>
@@ -532,7 +523,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         </article>
 
                         <article className="card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm text-[var(--muted-foreground)]">Total Shows</span>
                                 <Music2 size={16} />
                             </div>
@@ -541,7 +532,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         </article>
 
                         <article className="card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm text-[var(--muted-foreground)]">Upcoming Shows</span>
                                 <CalendarDays size={16} />
                             </div>
@@ -550,7 +541,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         </article>
 
                         <article className="card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm text-[var(--muted-foreground)]">Active Products</span>
                                 <ShoppingBag size={16} />
                             </div>
@@ -559,7 +550,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         </article>
 
                         <article className="card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="mb-2 flex items-center justify-between">
                                 <span className="text-sm text-[var(--muted-foreground)]">Low Stock</span>
                                 <TriangleAlert size={16} className="text-[var(--destructive)]" />
                             </div>
@@ -573,27 +564,15 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
             <section className="card mb-8">
                 <h2 className="section-title !mb-4">Quick Actions</h2>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                    <a
-                        href="/shows/create"
-                        className="btn btn-primary flex items-center justify-center gap-2"
-                        aria-label="Create a new show"
-                    >
+                    <a href="/shows/create" className="btn btn-primary flex items-center justify-center gap-2" aria-label="Create a new show">
                         <Plus size={16} />
                         Add New Show
                     </a>
-                    <a
-                        href="/venues"
-                        className="btn btn-primary flex items-center justify-center gap-2"
-                        aria-label="Manage venues"
-                    >
+                    <a href="/venues" className="btn btn-primary flex items-center justify-center gap-2" aria-label="Manage venues">
                         <MapPin size={16} />
                         Manage Venues
                     </a>
-                    <a
-                        href="/shop"
-                        className="btn btn-primary flex items-center justify-center gap-2"
-                        aria-label="View all products"
-                    >
+                    <a href="/shop" className="btn btn-primary flex items-center justify-center gap-2" aria-label="View all products">
                         <ShoppingBag size={16} />
                         View All Products
                     </a>
@@ -634,7 +613,10 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                             Scope: shows and venues. Try terms like {SEARCH_HINTS.join(', ')}.
                         </p>
                         <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                            Shortcuts: <kbd className="rounded border border-[var(--border)] px-1">/</kbd> focus, <kbd className="rounded border border-[var(--border)] px-1">↑↓</kbd> navigate results, <kbd className="rounded border border-[var(--border)] px-1">Enter</kbd> open, <kbd className="rounded border border-[var(--border)] px-1">Esc</kbd> clear.
+                            Shortcuts: <kbd className="rounded border border-[var(--border)] px-1">/</kbd> focus,{' '}
+                            <kbd className="rounded border border-[var(--border)] px-1">↑↓</kbd> navigate results,{' '}
+                            <kbd className="rounded border border-[var(--border)] px-1">Enter</kbd> open,{' '}
+                            <kbd className="rounded border border-[var(--border)] px-1">Esc</kbd> clear.
                         </p>
 
                         {recentSearches.length > 0 && (
@@ -660,14 +642,14 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                     </button>
                 </form>
 
-                {searchErrorMessage && (
-                    <p className="mt-3 text-sm text-[var(--destructive)]">{searchErrorMessage}</p>
-                )}
+                {searchErrorMessage && <p className="mt-3 text-sm text-[var(--destructive)]">{searchErrorMessage}</p>}
 
                 {hasSearched && !isSearching && !searchErrorMessage && totalSearchResults === 0 && (
                     <div className="mt-3 rounded-md border border-dashed border-[var(--border)] p-3">
                         <p className="text-sm text-[var(--muted-foreground)]">No results found for “{searchQuery.trim()}”.</p>
-                        <p className="mt-1 text-xs text-[var(--muted-foreground)]">Try a venue name, city/state, show status, or a synonym like “gig” or “concert”.</p>
+                        <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                            Try a venue name, city/state, show status, or a synonym like “gig” or “concert”.
+                        </p>
                         <button type="button" className="mt-3 text-sm font-medium hover:underline" onClick={clearSearch}>
                             Clear search
                         </button>
@@ -678,24 +660,27 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
 
                 {hasSearched && totalSearchResults > 0 && !searchErrorMessage && (
                     <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                        <p className="lg:col-span-2 text-sm text-[var(--muted-foreground)]">
-                            Top matches shown: {searchResults.shows.length} show{searchResults.shows.length === 1 ? '' : 's'} and {searchResults.venues.length} venue{searchResults.venues.length === 1 ? '' : 's'}.
+                        <p className="text-sm text-[var(--muted-foreground)] lg:col-span-2">
+                            Top matches shown: {searchResults.shows.length} show{searchResults.shows.length === 1 ? '' : 's'} and{' '}
+                            {searchResults.venues.length} venue{searchResults.venues.length === 1 ? '' : 's'}.
                         </p>
 
                         <article>
-                            <h3 className="text-sm font-semibold mb-2">Shows</h3>
+                            <h3 className="mb-2 text-sm font-semibold">Shows</h3>
                             {searchResults.shows.length === 0 ? (
                                 <p className="text-sm text-[var(--muted-foreground)]">No matching shows.</p>
                             ) : (
                                 <ul className="space-y-2">
                                     {searchResults.shows.map((show, showIndex) => (
-                                        <li key={show.id} id={`search-result-${showIndex}`} className={`rounded-md border p-3 ${selectedResultIndex === showIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}>
+                                        <li
+                                            key={show.id}
+                                            id={`search-result-${showIndex}`}
+                                            className={`rounded-md border p-3 ${selectedResultIndex === showIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}
+                                        >
                                             <a href={`/shows/${show.id}`} className="font-medium hover:underline">
                                                 {show.venue_name ?? 'Show'}
                                             </a>
-                                            <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                                                {show.venue_location ?? 'Location TBD'}
-                                            </p>
+                                            <p className="mt-1 text-sm text-[var(--muted-foreground)]">{show.venue_location ?? 'Location TBD'}</p>
                                             <div className="mt-1 flex flex-wrap items-center gap-2">
                                                 <span className="text-sm text-[var(--muted-foreground)]">{show.date ?? 'Date TBD'}</span>
                                                 <StatusBadge status={show.status} size="sm" />
@@ -715,19 +700,21 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                         </article>
 
                         <article>
-                            <h3 className="text-sm font-semibold mb-2">Venues</h3>
+                            <h3 className="mb-2 text-sm font-semibold">Venues</h3>
                             {searchResults.venues.length === 0 ? (
                                 <p className="text-sm text-[var(--muted-foreground)]">No matching venues.</p>
                             ) : (
                                 <ul className="space-y-2">
                                     {searchResults.venues.map((venue, venueIndex) => (
-                                        <li key={venue.id} id={`search-result-${searchResults.shows.length + venueIndex}`} className={`rounded-md border p-3 ${selectedResultIndex === searchResults.shows.length + venueIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}>
+                                        <li
+                                            key={venue.id}
+                                            id={`search-result-${searchResults.shows.length + venueIndex}`}
+                                            className={`rounded-md border p-3 ${selectedResultIndex === searchResults.shows.length + venueIndex ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[var(--border)]'}`}
+                                        >
                                             <a href={`/venues/${venue.id}`} className="font-medium hover:underline">
                                                 {venue.name}
                                             </a>
-                                            <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                                                {venue.location ?? 'Location TBD'}
-                                            </p>
+                                            <p className="mt-1 text-sm text-[var(--muted-foreground)]">{venue.location ?? 'Location TBD'}</p>
                                             <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                                                 <a href={`/venues/${venue.id}`} className="font-medium hover:underline">
                                                     Open venue
@@ -764,9 +751,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                                 <li key={show.id} className="rounded-md border border-[var(--border)] p-3">
                                     <p className="font-medium">{show.venue.name ?? 'Venue TBD'}</p>
                                     <p className="text-sm text-[var(--muted-foreground)]">
-                                        {show.venue.city && show.venue.state
-                                            ? `${show.venue.city}, ${show.venue.state}`
-                                            : 'Location TBD'}
+                                        {show.venue.city && show.venue.state ? `${show.venue.city}, ${show.venue.state}` : 'Location TBD'}
                                     </p>
                                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                                         <span className="inline-flex items-center gap-1">
@@ -802,9 +787,7 @@ const Dashboard: React.FC<DashboardProps> = ({ dashboard, initialError = null, r
                             {data.low_stock_products.map((product) => (
                                 <li key={product.id} className="rounded-md border border-[var(--border)] p-3">
                                     <p className="font-medium">{product.name}</p>
-                                    <p className="text-sm text-[var(--muted-foreground)]">
-                                        {product.category ?? 'Uncategorized'}
-                                    </p>
+                                    <p className="text-sm text-[var(--muted-foreground)]">{product.category ?? 'Uncategorized'}</p>
                                     <p className="mt-2 text-sm">
                                         Stock remaining: <span className="font-semibold">{product.stock}</span>
                                     </p>

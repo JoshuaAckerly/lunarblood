@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "@inertiajs/react";
-import Main from "@/layouts/main";
-import Seo from "@/components/Seo";
-import { ArrowLeft, Calendar, MapPin, Clock, DollarSign, Edit, ExternalLink } from "lucide-react";
-import StatusBadge from "@/components/StatusBadge";
+import Seo from '@/components/Seo';
+import StatusBadge from '@/components/StatusBadge';
+import Main from '@/layouts/main';
+import { Link } from '@inertiajs/react';
+import { ArrowLeft, Calendar, Clock, DollarSign, Edit, ExternalLink, MapPin } from 'lucide-react';
+import React from 'react';
 
 interface Show {
     id: number;
@@ -33,7 +33,7 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
         });
     };
 
@@ -41,7 +41,7 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
         return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
             hour: 'numeric',
             minute: '2-digit',
-            hour12: true
+            hour12: true,
         });
     };
 
@@ -49,16 +49,13 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
 
     return (
         <Main>
-            <Seo
-                title={`${show.venue.name} - Lunar Blood Show`}
-                description={`Lunar Blood show at ${show.venue.name} on ${formatDate(show.date)}`}
-            />
+            <Seo title={`${show.venue.name} - Lunar Blood Show`} description={`Lunar Blood show at ${show.venue.name} on ${formatDate(show.date)}`} />
 
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-4xl">
                 <div className="mb-6">
                     <Link
                         href="/shows"
-                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                        className="inline-flex items-center gap-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
                     >
                         <ArrowLeft size={16} />
                         Back to Shows
@@ -66,29 +63,27 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
                 </div>
 
                 <div className="card">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+                    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-bold mb-2">{show.venue.name}</h1>
+                            <h1 className="mb-2 text-2xl font-bold sm:text-3xl">{show.venue.name}</h1>
                             <div className="flex flex-wrap items-center gap-3">
                                 <StatusBadge status={show.status} />
                                 {isUpcoming && (
                                     <span className="text-sm text-[var(--muted-foreground)]">
-                                        {Math.ceil((new Date(`${show.date}T${show.time}`).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days away
+                                        {Math.ceil((new Date(`${show.date}T${show.time}`).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}{' '}
+                                        days away
                                     </span>
                                 )}
                             </div>
                         </div>
 
-                        <Link
-                            href={`/shows/${show.id}/edit`}
-                            className="btn btn-secondary self-start"
-                        >
+                        <Link href={`/shows/${show.id}/edit`} className="btn btn-secondary self-start">
                             <Edit size={16} className="mr-2" />
                             Edit Show
                         </Link>
                     </div>
 
-                    <div className="grid gap-6 sm:gap-8 md:grid-cols-2 mb-8">
+                    <div className="mb-8 grid gap-6 sm:gap-8 md:grid-cols-2">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
                                 <MapPin size={20} className="text-[var(--muted-foreground)]" />
@@ -113,7 +108,7 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
                             {show.price && (
                                 <div className="flex items-center gap-3">
                                     <DollarSign size={20} className="text-[var(--muted-foreground)]" />
-                                    <span className="font-medium text-lg">${show.price}</span>
+                                    <span className="text-lg font-medium">${show.price}</span>
                                 </div>
                             )}
                         </div>
@@ -121,16 +116,14 @@ const ShowShow: React.FC<ShowShowProps> = ({ show }) => {
                         <div className="space-y-4">
                             {show.description && (
                                 <div>
-                                    <h3 className="font-medium mb-2">Description</h3>
-                                    <p className="text-[var(--muted-foreground)] leading-relaxed">
-                                        {show.description}
-                                    </p>
+                                    <h3 className="mb-2 font-medium">Description</h3>
+                                    <p className="leading-relaxed text-[var(--muted-foreground)]">{show.description}</p>
                                 </div>
                             )}
 
                             {show.ticket_url && (
                                 <div>
-                                    <h3 className="font-medium mb-2">Tickets</h3>
+                                    <h3 className="mb-2 font-medium">Tickets</h3>
                                     <a
                                         href={show.ticket_url}
                                         target="_blank"

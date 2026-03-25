@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { usePage } from "@inertiajs/react";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { useToast } from "@/components/Toast";
+import ErrorBoundary from '@/components/ErrorBoundary';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
+import { useToast } from '@/components/Toast';
+import { usePage } from '@inertiajs/react';
+import React, { useEffect } from 'react';
 
 interface FlashData {
     success?: string | null;
@@ -22,13 +22,11 @@ const Main: React.FC<React.PropsWithChildren> = ({ children }) => {
     }, [flash?.success, flash?.error, flash?.info]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div className="flex flex-col min-h-screen bg-[var(--background)]">
+        <div className="flex min-h-screen flex-col bg-[var(--background)]">
             <Header />
             <main className="flex-grow py-8">
                 <div className="container">
-                    <ErrorBoundary>
-                        {children}
-                    </ErrorBoundary>
+                    <ErrorBoundary>{children}</ErrorBoundary>
                 </div>
             </main>
             <Footer />

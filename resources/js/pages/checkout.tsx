@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Main from "@/layouts/main";
-import { CreditCard, Lock } from "lucide-react";
+import Main from '@/layouts/main';
+import { CreditCard, Lock } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface CheckoutProps {
     orderData: {
@@ -24,7 +24,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
         zip: '',
         cardNumber: '',
         expiry: '',
-        cvv: ''
+        cvv: '',
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
@@ -37,7 +37,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
 
         // Get CSRF token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        
+
         // Simulate payment processing with CSRF validation
         try {
             const response = await fetch('/api/process-payment', {
@@ -49,10 +49,10 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    orderData
-                })
+                    orderData,
+                }),
             });
-            
+
             if (response.ok) {
                 setTimeout(() => {
                     window.location.href = '/order-success';
@@ -74,16 +74,16 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
     return (
         <Main>
-            <section className="max-w-4xl mx-auto px-4">
-                <h1 className="page-title !text-2xl md:!text-3xl !mb-6 md:!mb-8">Checkout</h1>
-                
-                <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+            <section className="mx-auto max-w-4xl px-4">
+                <h1 className="page-title !mb-6 !text-2xl md:!mb-8 md:!text-3xl">Checkout</h1>
+
+                <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
                     <div>
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {errorMessage && (
@@ -93,7 +93,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                             )}
 
                             <div className="card">
-                                <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+                                <h2 className="mb-4 text-xl font-semibold">Contact Information</h2>
                                 <div className="space-y-4">
                                     <input
                                         type="email"
@@ -108,7 +108,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                             </div>
 
                             <div className="card">
-                                <h2 className="text-xl font-semibold mb-4">Shipping Address</h2>
+                                <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
                                         <input
@@ -172,7 +172,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                             </div>
 
                             <div className="card">
-                                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
                                     <CreditCard size={20} />
                                     Payment Information
                                 </h2>
@@ -209,11 +209,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                 </div>
                             </div>
 
-                            <button
-                                type="submit"
-                                disabled={isProcessing}
-                                className="btn btn-primary w-full flex items-center justify-center gap-2"
-                            >
+                            <button type="submit" disabled={isProcessing} className="btn btn-primary flex w-full items-center justify-center gap-2">
                                 <Lock size={16} />
                                 {isProcessing ? 'Processing...' : `Complete Purchase - $${orderData.total}`}
                             </button>
@@ -222,7 +218,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
 
                     <div>
                         <div className="card lg:sticky lg:top-8">
-                            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                            <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
                             <div className="space-y-4">
                                 <div className="flex justify-between">
                                     <span>{orderData.name}</span>
@@ -241,7 +237,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                     <span>Free</span>
                                 </div>
                                 <hr className="border-[var(--border)]" />
-                                <div className="flex justify-between font-semibold text-lg">
+                                <div className="flex justify-between text-lg font-semibold">
                                     <span>Total</span>
                                     <span>${orderData.total}</span>
                                 </div>

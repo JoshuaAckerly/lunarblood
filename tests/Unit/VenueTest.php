@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Models\Venue;
 use App\Models\Show;
+use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

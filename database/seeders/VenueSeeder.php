@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Venue;
 use App\Models\Show;
+use App\Models\Venue;
 use Illuminate\Database\Seeder;
 
 class VenueSeeder extends Seeder
@@ -45,14 +45,14 @@ class VenueSeeder extends Seeder
 
         foreach ($venues as $venueData) {
             $venue = Venue::create($venueData);
-            
+
             // Create shows for each venue
             Show::create([
                 'venue_id' => $venue->id,
                 'date' => '2024-03-15',
                 'time' => '20:00',
                 'status' => 'on-sale',
-                'ticket_url' => 'https://tickets.com/lunar-blood-' . strtolower($venue->city),
+                'ticket_url' => 'https://tickets.com/lunar-blood-'.strtolower($venue->city),
                 'price' => 25.00,
             ]);
         }

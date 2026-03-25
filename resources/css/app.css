@@ -148,15 +148,15 @@
     }
 
     .page-title {
-        @apply text-3xl md:text-4xl font-bold mb-2;
+        @apply mb-2 text-3xl font-bold md:text-4xl;
     }
 
     .page-subtitle {
-        @apply text-[var(--muted-foreground)] max-w-2xl;
+        @apply max-w-2xl text-[var(--muted-foreground)];
     }
 
     .section-title {
-        @apply text-2xl font-semibold mb-6;
+        @apply mb-6 text-2xl font-semibold;
     }
 
     .hero {
@@ -164,11 +164,11 @@
     }
 
     .hero-overlay {
-        background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.75) 100%);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.75) 100%);
     }
 
     .btn {
-        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-transform duration-150 min-h-[44px] touch-manipulation;
+        @apply inline-flex min-h-[44px] touch-manipulation items-center justify-center gap-2 rounded-md px-4 py-2 font-medium transition-transform duration-150;
     }
 
     .btn-primary {
@@ -180,15 +180,15 @@
     }
 
     .card {
-        @apply bg-[var(--card)] text-[var(--card-foreground)] rounded-lg p-6 shadow-lg;
+        @apply rounded-lg bg-[var(--card)] p-6 text-[var(--card-foreground)] shadow-lg;
     }
 
     .input-field {
-        @apply w-full p-3 border border-[var(--border)] rounded-md bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--ring)];
+        @apply w-full rounded-md border border-[var(--border)] bg-[var(--background)] p-3 text-[var(--foreground)] focus:border-[var(--ring)] focus:ring-2 focus:ring-[var(--ring)] focus:outline-none;
     }
 
     .nav-link {
-        @apply text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors py-2 px-1 min-h-[44px] flex items-center touch-manipulation;
+        @apply flex min-h-[44px] touch-manipulation items-center px-1 py-2 text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)];
     }
 
     .status-on-sale {
@@ -210,13 +210,19 @@
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .glass {
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-        border: 1px solid rgba(255,255,255,0.06);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(6px);
     }
 }
