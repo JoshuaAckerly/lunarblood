@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\VenueController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -43,35 +44,23 @@ Route::get('/shop', function () {
 })->name('shop');
 
 Route::get('/shop/{id}', function ($id) {
-    // Mock product data - replace with database query
-    $products = [
-        1 => [
-            'id' => 1,
-            'name' => 'Lunar Blood T-Shirt',
-            'price' => 25.00,
-            'category' => 'Apparel',
-            'description' => 'Black cotton tee with band logo',
-            'details' => 'Premium 100% cotton t-shirt featuring the iconic Lunar Blood logo. Comfortable fit with reinforced seams for durability.',
-            'sizes' => ['S', 'M', 'L', 'XL', 'XXL'],
-        ],
-        2 => [
-            'id' => 2,
-            'name' => 'Blood Moon Vinyl',
-            'price' => 35.00,
-            'category' => 'Music',
-            'description' => 'Limited edition red vinyl LP',
-            'details' => 'Limited edition pressing on translucent red vinyl. Includes digital download code and exclusive liner notes.',
-        ],
-    ];
-
-    $productId = (int) $id;
-    $product = $products[$productId] ?? null;
+    $product = Product::find((int) $id);
 
     if (! $product) {
         abort(404);
     }
 
-    return Inertia::render('product', ['product' => $product]);
+    return Inertia::render('product', [
+        'product' => [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => (float) $product->price,
+            'category' => $product->category,
+            'description' => $product->description,
+            'details' => $product->description,
+            'sizes' => $product->sizes,
+        ],
+    ]);
 })->whereNumber('id')->name('product.show');
 
 Route::get('/checkout', function () {
