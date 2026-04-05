@@ -5,7 +5,7 @@
 
 BASE_URL="http://lunarblood.graveyardjokes.local"
 LOG_FILE="/tmp/lunarblood-health-check.log"
-ALERT_EMAIL=${ALERT_EMAIL:-"admin@graveyardjokes.com"}
+ALERT_EMAIL=${ALERT_EMAIL:-"dev@graveyardjokes.com"}
 VERBOSE=false
 SEND_ALERT=false
 
