@@ -1,4 +1,5 @@
 import Main from '@/layouts/main';
+import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
 import { CreditCard, Lock } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -54,6 +55,20 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
             });
 
             if (response.ok) {
+                // Track purchase event
+                trackPurchase({
+                    productId: orderData.productId,
+                    name: orderData.name,
+                    price: parseFloat(orderData.price),
+                    quantity: parseInt(orderData.quantity),
+                    total: parseFloat(orderData.total),
+                    transactionId: `order-${Date.now()}`,
+                    email: formData.email,
+                });
+                
+                // Track form submission
+                trackFormSubmission('checkout_form');
+                
                 setTimeout(() => {
                     window.location.href = '/order-success';
                 }, 1000);

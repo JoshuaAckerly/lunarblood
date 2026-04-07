@@ -1,7 +1,8 @@
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
+import { trackViewItem } from '@/hooks/use-google-analytics';
 import { ShoppingCart } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Use CDN in production, local images in development
 const cdn = import.meta.env.VITE_ASSET_URL || '';
@@ -60,6 +61,18 @@ const products = [
 
 const Shop: React.FC = () => {
     const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
+
+    // Track product views on page load
+    useEffect(() => {
+        products.forEach((product) => {
+            trackViewItem({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                category: product.category,
+            });
+        });
+    }, []);
 
     return (
         <Main>

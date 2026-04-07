@@ -1,5 +1,6 @@
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
+import { trackAddToCart, trackBeginCheckout } from '@/hooks/use-google-analytics';
 import { ArrowLeft, Minus, Plus, ShoppingCart } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -42,6 +43,23 @@ const Product: React.FC<ProductProps> = ({ product }) => {
         setIsRedirecting(true);
 
         try {
+            // Track add_to_cart and begin_checkout events
+            trackAddToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                category: product.category,
+                quantity,
+            });
+            
+            trackBeginCheckout({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity,
+                total: product.price * quantity,
+            });
+
             const purchaseData: Record<string, string> = {
                 productId: product.id.toString(),
                 name: product.name,
