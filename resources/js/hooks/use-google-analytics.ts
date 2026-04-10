@@ -5,8 +5,8 @@
 
 declare global {
     interface Window {
-        gtag?: Function;
-        dataLayer?: any[];
+        gtag?: (...args: unknown[]) => void;
+        dataLayer?: unknown[];
     }
 }
 
@@ -160,8 +160,8 @@ export const initializeGoogleAnalytics = (measurementId: string) => {
 
     // Initialize gtag
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-        window.dataLayer!.push(arguments);
+    function gtag(...args: unknown[]) {
+        window.dataLayer!.push(...args);
     }
     gtag('js', new Date());
     gtag('config', measurementId, {
