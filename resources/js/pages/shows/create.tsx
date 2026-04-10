@@ -141,7 +141,7 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
         post('/shows');
     };
 
-    const selectedVenue = venues.find((v) => v.id === parseInt(data.venue_id));
+    const selectedVenue = venues.find((v) => v.id === parseInt(String(data.venue_id)));
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -318,7 +318,7 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                                         : 'bg-blue-100 text-blue-800'
                                             }`}
                                         >
-                                            {data.status.replace('-', ' ').toUpperCase()}
+                                            {String(data.status).replace('-', ' ').toUpperCase()}
                                         </span>
                                     </div>
                                     {data.description && (
