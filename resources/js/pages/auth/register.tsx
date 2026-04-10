@@ -1,3 +1,4 @@
+import Input from '@/components/Input';
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
 import { Head, useForm } from '@inertiajs/react';
@@ -41,72 +42,50 @@ const Register: React.FC = () => {
                 <p className="mb-6 text-[var(--muted-foreground)]">Join the Lunarblood community.</p>
 
                 <form onSubmit={handleSubmit} className="card space-y-4">
-                    <div>
-                        <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                            Name
-                        </label>
-                        <input
-                            id="name"
-                            type="text"
-                            value={form.data.name}
-                            onChange={(event) => form.setData('name', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="name"
-                            autoFocus
-                        />
-                        {form.errors.name && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.name}</p>}
-                    </div>
+                    <Input
+                        id="name"
+                        label="Name"
+                        type="text"
+                        value={form.data.name}
+                        onChange={(event) => form.setData('name', event.target.value)}
+                        error={form.errors.name}
+                        required
+                        autoComplete="name"
+                        autoFocus
+                    />
 
-                    <div>
-                        <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={form.data.email}
-                            onChange={(event) => form.setData('email', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="email"
-                        />
-                        {form.errors.email && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.email}</p>}
-                    </div>
+                    <Input
+                        id="email"
+                        label="Email"
+                        type="email"
+                        value={form.data.email}
+                        onChange={(event) => form.setData('email', event.target.value)}
+                        error={form.errors.email}
+                        required
+                        autoComplete="email"
+                    />
 
-                    <div>
-                        <label htmlFor="password" className="mb-2 block text-sm font-medium">
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={form.data.password}
-                            onChange={(event) => form.setData('password', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="new-password"
-                        />
-                        {form.errors.password && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password}</p>}
-                    </div>
+                    <Input
+                        id="password"
+                        label="Password"
+                        type="password"
+                        value={form.data.password}
+                        onChange={(event) => form.setData('password', event.target.value)}
+                        error={form.errors.password}
+                        required
+                        autoComplete="new-password"
+                    />
 
-                    <div>
-                        <label htmlFor="password_confirmation" className="mb-2 block text-sm font-medium">
-                            Confirm Password
-                        </label>
-                        <input
-                            id="password_confirmation"
-                            type="password"
-                            value={form.data.password_confirmation}
-                            onChange={(event) => form.setData('password_confirmation', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="new-password"
-                        />
-                        {form.errors.password_confirmation && (
-                            <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password_confirmation}</p>
-                        )}
-                    </div>
+                    <Input
+                        id="password_confirmation"
+                        label="Confirm Password"
+                        type="password"
+                        value={form.data.password_confirmation}
+                        onChange={(event) => form.setData('password_confirmation', event.target.value)}
+                        error={form.errors.password_confirmation}
+                        required
+                        autoComplete="new-password"
+                    />
 
                     <div className="flex items-center justify-between pt-2">
                         <p className="text-sm text-[var(--muted-foreground)]">Already have an account?</p>

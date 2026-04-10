@@ -1,3 +1,7 @@
+import FormField from '@/components/FormField';
+import Input from '@/components/Input';
+import Select from '@/components/Select';
+import Textarea from '@/components/Textarea';
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
 import { Link, useForm } from '@inertiajs/react';
@@ -148,58 +152,43 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
             case 1:
                 return (
                     <div className="space-y-6">
-                        <div>
-                            <label htmlFor="venue_id" className="mb-2 block text-sm font-medium">
-                                Venue *
-                            </label>
-                            <select
-                                id="venue_id"
-                                value={data.venue_id}
-                                onChange={(e) => setData('venue_id', e.target.value)}
-                                className="input w-full"
-                                required
-                            >
-                                <option value="">Select a venue</option>
-                                {venues.map((venue) => (
-                                    <option key={venue.id} value={venue.id}>
-                                        {venue.name} - {venue.city}, {venue.state} {venue.country}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.venue_id && <p className="mt-1 text-sm text-red-500">{errors.venue_id}</p>}
-                        </div>
+                        <Select
+                            id="venue_id"
+                            label="Venue"
+                            value={data.venue_id}
+                            onChange={(e) => setData('venue_id', e.target.value)}
+                            error={errors.venue_id}
+                            required
+                        >
+                            <option value="">Select a venue</option>
+                            {venues.map((venue) => (
+                                <option key={venue.id} value={venue.id}>
+                                    {venue.name} - {venue.city}, {venue.state} {venue.country}
+                                </option>
+                            ))}
+                        </Select>
 
                         <div className="grid gap-6 md:grid-cols-2">
-                            <div>
-                                <label htmlFor="date" className="mb-2 block text-sm font-medium">
-                                    Date *
-                                </label>
-                                <input
-                                    type="date"
-                                    id="date"
-                                    value={data.date}
-                                    onChange={(e) => setData('date', e.target.value)}
-                                    className="input w-full"
-                                    min={new Date().toISOString().split('T')[0]}
-                                    required
-                                />
-                                {errors.date && <p className="mt-1 text-sm text-red-500">{errors.date}</p>}
-                            </div>
+                            <Input
+                                id="date"
+                                label="Date"
+                                type="date"
+                                value={data.date}
+                                onChange={(e) => setData('date', e.target.value)}
+                                error={errors.date}
+                                min={new Date().toISOString().split('T')[0]}
+                                required
+                            />
 
-                            <div>
-                                <label htmlFor="time" className="mb-2 block text-sm font-medium">
-                                    Time *
-                                </label>
-                                <input
-                                    type="time"
-                                    id="time"
-                                    value={data.time}
-                                    onChange={(e) => setData('time', e.target.value)}
-                                    className="input w-full"
-                                    required
-                                />
-                                {errors.time && <p className="mt-1 text-sm text-red-500">{errors.time}</p>}
-                            </div>
+                            <Input
+                                id="time"
+                                label="Time"
+                                type="time"
+                                value={data.time}
+                                onChange={(e) => setData('time', e.target.value)}
+                                error={errors.time}
+                                required
+                            />
                         </div>
                     </div>
                 );
@@ -207,29 +196,21 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
             case 2:
                 return (
                     <div className="space-y-6">
-                        <div>
-                            <label htmlFor="status" className="mb-2 block text-sm font-medium">
-                                Status *
-                            </label>
-                            <select
-                                id="status"
-                                value={data.status}
-                                onChange={(e) => setData('status', e.target.value)}
-                                className="input w-full"
-                                required
-                            >
-                                <option value="coming-soon">Coming Soon</option>
-                                <option value="on-sale">On Sale</option>
-                                <option value="sold-out">Sold Out</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                            {errors.status && <p className="mt-1 text-sm text-red-500">{errors.status}</p>}
-                        </div>
+                        <Select
+                            id="status"
+                            label="Status"
+                            value={data.status}
+                            onChange={(e) => setData('status', e.target.value)}
+                            error={errors.status}
+                            required
+                        >
+                            <option value="coming-soon">Coming Soon</option>
+                            <option value="on-sale">On Sale</option>
+                            <option value="sold-out">Sold Out</option>
+                            <option value="cancelled">Cancelled</option>
+                        </Select>
 
-                        <div>
-                            <label htmlFor="price" className="mb-2 block text-sm font-medium">
-                                Price (optional)
-                            </label>
+                        <FormField id="price" label="Price (optional)" error={errors.price}>
                             <div className="relative">
                                 <DollarSign size={16} className="absolute top-1/2 left-3 -translate-y-1/2 transform text-[var(--muted-foreground)]" />
                                 <input
@@ -237,49 +218,38 @@ const CreateShow: React.FC<CreateShowProps> = ({ step: initialStep, venues, draf
                                     id="price"
                                     value={data.price}
                                     onChange={(e) => setData('price', e.target.value)}
-                                    className="input w-full pl-10"
+                                    className="input-field pl-10"
                                     placeholder="0.00"
                                     step="0.01"
                                     min="0"
                                 />
                             </div>
-                            {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
-                        </div>
+                        </FormField>
 
-                        <div>
-                            <label htmlFor="description" className="mb-2 block text-sm font-medium">
-                                Description
-                            </label>
-                            <textarea
-                                id="description"
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                                className="input w-full"
-                                rows={4}
-                                placeholder="Describe the show, special guests, setlist, etc."
-                            />
-                            {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
-                        </div>
+                        <Textarea
+                            id="description"
+                            label="Description"
+                            value={data.description}
+                            onChange={(e) => setData('description', e.target.value)}
+                            error={errors.description}
+                            rows={4}
+                            placeholder="Describe the show, special guests, setlist, etc."
+                        />
                     </div>
                 );
 
             case 3:
                 return (
                     <div className="space-y-6">
-                        <div>
-                            <label htmlFor="ticket_url" className="mb-2 block text-sm font-medium">
-                                Ticket URL
-                            </label>
-                            <input
-                                type="url"
-                                id="ticket_url"
-                                value={data.ticket_url}
-                                onChange={(e) => setData('ticket_url', e.target.value)}
-                                className="input w-full"
-                                placeholder="https://tickets.example.com"
-                            />
-                            {errors.ticket_url && <p className="mt-1 text-sm text-red-500">{errors.ticket_url}</p>}
-                        </div>
+                        <Input
+                            id="ticket_url"
+                            label="Ticket URL"
+                            type="url"
+                            value={data.ticket_url}
+                            onChange={(e) => setData('ticket_url', e.target.value)}
+                            error={errors.ticket_url}
+                            placeholder="https://tickets.example.com"
+                        />
 
                         {isPreview ? (
                             <div className="card bg-[var(--muted)]">

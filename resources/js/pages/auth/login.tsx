@@ -1,3 +1,4 @@
+import Input from '@/components/Input';
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
 import { Head, useForm, usePage } from '@inertiajs/react';
@@ -53,38 +54,28 @@ const Login: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="card space-y-4">
-                    <div>
-                        <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={form.data.email}
-                            onChange={(event) => form.setData('email', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        {form.errors.email && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.email}</p>}
-                    </div>
+                    <Input
+                        id="email"
+                        label="Email"
+                        type="email"
+                        value={form.data.email}
+                        onChange={(event) => form.setData('email', event.target.value)}
+                        error={form.errors.email}
+                        required
+                        autoComplete="email"
+                        autoFocus
+                    />
 
-                    <div>
-                        <label htmlFor="password" className="mb-2 block text-sm font-medium">
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={form.data.password}
-                            onChange={(event) => form.setData('password', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="current-password"
-                        />
-                        {form.errors.password && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.password}</p>}
-                    </div>
+                    <Input
+                        id="password"
+                        label="Password"
+                        type="password"
+                        value={form.data.password}
+                        onChange={(event) => form.setData('password', event.target.value)}
+                        error={form.errors.password}
+                        required
+                        autoComplete="current-password"
+                    />
 
                     <div className="flex items-center">
                         <input

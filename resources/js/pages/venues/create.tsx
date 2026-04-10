@@ -1,4 +1,6 @@
+import Input from '@/components/Input';
 import Seo from '@/components/Seo';
+import Textarea from '@/components/Textarea';
 import Main from '@/layouts/main';
 import { Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -43,160 +45,110 @@ const CreateVenue: React.FC = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid gap-6 md:grid-cols-2">
-                            <div>
-                                <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                                    Venue Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    value={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
-                                    className="input w-full"
-                                    required
-                                />
-                                {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                            </div>
+                            <Input
+                                id="name"
+                                label="Venue Name"
+                                type="text"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                error={errors.name}
+                                required
+                            />
 
-                            <div>
-                                <label htmlFor="capacity" className="mb-2 block text-sm font-medium">
-                                    Capacity
-                                </label>
-                                <input
-                                    type="number"
-                                    id="capacity"
-                                    value={data.capacity}
-                                    onChange={(e) => setData('capacity', e.target.value)}
-                                    className="input w-full"
-                                    placeholder="e.g. 500"
-                                />
-                                {errors.capacity && <p className="mt-1 text-sm text-red-500">{errors.capacity}</p>}
-                            </div>
+                            <Input
+                                id="capacity"
+                                label="Capacity"
+                                type="number"
+                                value={data.capacity}
+                                onChange={(e) => setData('capacity', e.target.value)}
+                                error={errors.capacity}
+                                placeholder="e.g. 500"
+                            />
                         </div>
 
                         <div className="grid gap-6 md:grid-cols-3">
-                            <div>
-                                <label htmlFor="city" className="mb-2 block text-sm font-medium">
-                                    City *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="city"
-                                    value={data.city}
-                                    onChange={(e) => setData('city', e.target.value)}
-                                    className="input w-full"
-                                    required
-                                />
-                                {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="state" className="mb-2 block text-sm font-medium">
-                                    State
-                                </label>
-                                <input
-                                    type="text"
-                                    id="state"
-                                    value={data.state}
-                                    onChange={(e) => setData('state', e.target.value)}
-                                    className="input w-full"
-                                    placeholder="e.g. WA"
-                                />
-                                {errors.state && <p className="mt-1 text-sm text-red-500">{errors.state}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="country" className="mb-2 block text-sm font-medium">
-                                    Country *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="country"
-                                    value={data.country}
-                                    onChange={(e) => setData('country', e.target.value)}
-                                    className="input w-full"
-                                    required
-                                />
-                                {errors.country && <p className="mt-1 text-sm text-red-500">{errors.country}</p>}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label htmlFor="address" className="mb-2 block text-sm font-medium">
-                                Full Address *
-                            </label>
-                            <textarea
-                                id="address"
-                                value={data.address}
-                                onChange={(e) => setData('address', e.target.value)}
-                                className="input w-full"
-                                rows={3}
+                            <Input
+                                id="city"
+                                label="City"
+                                type="text"
+                                value={data.city}
+                                onChange={(e) => setData('city', e.target.value)}
+                                error={errors.city}
                                 required
                             />
-                            {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address}</p>}
+
+                            <Input
+                                id="state"
+                                label="State"
+                                type="text"
+                                value={data.state}
+                                onChange={(e) => setData('state', e.target.value)}
+                                error={errors.state}
+                                placeholder="e.g. WA"
+                            />
+
+                            <Input
+                                id="country"
+                                label="Country"
+                                type="text"
+                                value={data.country}
+                                onChange={(e) => setData('country', e.target.value)}
+                                error={errors.country}
+                                required
+                            />
                         </div>
+
+                        <Textarea
+                            id="address"
+                            label="Full Address"
+                            value={data.address}
+                            onChange={(e) => setData('address', e.target.value)}
+                            error={errors.address}
+                            rows={3}
+                            required
+                        />
 
                         <div className="grid gap-6 md:grid-cols-2">
-                            <div>
-                                <label htmlFor="website" className="mb-2 block text-sm font-medium">
-                                    Website
-                                </label>
-                                <input
-                                    type="url"
-                                    id="website"
-                                    value={data.website}
-                                    onChange={(e) => setData('website', e.target.value)}
-                                    className="input w-full"
-                                    placeholder="https://venue.com"
-                                />
-                                {errors.website && <p className="mt-1 text-sm text-red-500">{errors.website}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="phone" className="mb-2 block text-sm font-medium">
-                                    Phone
-                                </label>
-                                <input
-                                    type="tel"
-                                    id="phone"
-                                    value={data.phone}
-                                    onChange={(e) => setData('phone', e.target.value)}
-                                    className="input w-full"
-                                    placeholder="(206) 555-0123"
-                                />
-                                {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label htmlFor="description" className="mb-2 block text-sm font-medium">
-                                Description
-                            </label>
-                            <textarea
-                                id="description"
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                                className="input w-full"
-                                rows={4}
-                                placeholder="Describe the venue, atmosphere, acoustics, etc."
-                            />
-                            {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
-                        </div>
-
-                        <div>
-                            <label htmlFor="image" className="mb-2 block text-sm font-medium">
-                                Image URL
-                            </label>
-                            <input
+                            <Input
+                                id="website"
+                                label="Website"
                                 type="url"
-                                id="image"
-                                value={data.image}
-                                onChange={(e) => setData('image', e.target.value)}
-                                className="input w-full"
-                                placeholder="https://example.com/venue-image.jpg"
+                                value={data.website}
+                                onChange={(e) => setData('website', e.target.value)}
+                                error={errors.website}
+                                placeholder="https://venue.com"
                             />
-                            {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
+
+                            <Input
+                                id="phone"
+                                label="Phone"
+                                type="tel"
+                                value={data.phone}
+                                onChange={(e) => setData('phone', e.target.value)}
+                                error={errors.phone}
+                                placeholder="(206) 555-0123"
+                            />
                         </div>
+
+                        <Textarea
+                            id="description"
+                            label="Description"
+                            value={data.description}
+                            onChange={(e) => setData('description', e.target.value)}
+                            error={errors.description}
+                            rows={4}
+                            placeholder="Describe the venue, atmosphere, acoustics, etc."
+                        />
+
+                        <Input
+                            id="image"
+                            label="Image URL"
+                            type="url"
+                            value={data.image}
+                            onChange={(e) => setData('image', e.target.value)}
+                            error={errors.image}
+                            placeholder="https://example.com/venue-image.jpg"
+                        />
 
                         <div className="flex gap-4 border-t pt-6">
                             <Link href="/venues" className="btn btn-secondary">

@@ -93,7 +93,7 @@ const VenueShow: React.FC<VenueShowProps> = ({ venue }) => {
 
                     {venue.image && (
                         <div className="mb-6 aspect-video overflow-hidden rounded-lg bg-[var(--muted)]">
-                            <img src={venue.image} alt={venue.name} className="h-full w-full object-cover" />
+                            <img src={venue.image} alt={venue.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                         </div>
                     )}
 

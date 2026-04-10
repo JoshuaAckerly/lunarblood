@@ -75,7 +75,7 @@ const VenueDetail: React.FC<VenueDetailProps> = ({ venue }) => {
                     <div>
                         <div className="mb-6 aspect-video overflow-hidden rounded-lg bg-[var(--muted)]">
                             {venue.image ? (
-                                <img src={venue.image} alt={venue.name} className="h-full w-full object-cover" />
+                                <img src={venue.image} alt={venue.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                             ) : (
                                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]">
                                     <span className="text-[var(--muted-foreground)]">Venue Photo</span>

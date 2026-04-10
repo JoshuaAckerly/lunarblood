@@ -1,3 +1,4 @@
+import Input from '@/components/Input';
 import Seo from '@/components/Seo';
 import Main from '@/layouts/main';
 import { useForm, usePage } from '@inertiajs/react';
@@ -49,37 +50,27 @@ const ProfileSettings: React.FC = () => {
                 <p className="mb-6 text-[var(--muted-foreground)]">Update your account name and email address.</p>
 
                 <form onSubmit={handleSubmit} className="card space-y-4">
-                    <div>
-                        <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                            Name
-                        </label>
-                        <input
-                            id="name"
-                            type="text"
-                            value={form.data.name}
-                            onChange={(event) => form.setData('name', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="name"
-                        />
-                        {form.errors.name && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.name}</p>}
-                    </div>
+                    <Input
+                        id="name"
+                        label="Name"
+                        type="text"
+                        value={form.data.name}
+                        onChange={(event) => form.setData('name', event.target.value)}
+                        error={form.errors.name}
+                        required
+                        autoComplete="name"
+                    />
 
-                    <div>
-                        <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={form.data.email}
-                            onChange={(event) => form.setData('email', event.target.value)}
-                            className="input-field"
-                            required
-                            autoComplete="email"
-                        />
-                        {form.errors.email && <p className="mt-2 text-sm text-[var(--destructive)]">{form.errors.email}</p>}
-                    </div>
+                    <Input
+                        id="email"
+                        label="Email"
+                        type="email"
+                        value={form.data.email}
+                        onChange={(event) => form.setData('email', event.target.value)}
+                        error={form.errors.email}
+                        required
+                        autoComplete="email"
+                    />
 
                     <div className="flex items-center justify-between pt-2">
                         <p className="text-sm text-[var(--muted-foreground)]">Changes apply immediately after save.</p>
