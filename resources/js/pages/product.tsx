@@ -1,6 +1,6 @@
 import Seo from '@/components/Seo';
-import Main from '@/layouts/main';
 import { trackAddToCart, trackBeginCheckout } from '@/hooks/use-google-analytics';
+import Main from '@/layouts/main';
 import { ArrowLeft, Minus, Plus, ShoppingCart } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -51,7 +51,7 @@ const Product: React.FC<ProductProps> = ({ product }) => {
                 category: product.category,
                 quantity,
             });
-            
+
             trackBeginCheckout({
                 id: product.id,
                 name: product.name,

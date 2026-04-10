@@ -13,12 +13,7 @@ declare global {
 /**
  * Track a view_item event when a product is viewed
  */
-export const trackViewItem = (product: {
-    id: number | string;
-    name: string;
-    price: number;
-    category: string;
-}) => {
+export const trackViewItem = (product: { id: number | string; name: string; price: number; category: string }) => {
     if (window.gtag) {
         window.gtag('event', 'view_item', {
             currency: 'USD',
@@ -37,13 +32,7 @@ export const trackViewItem = (product: {
 /**
  * Track an add_to_cart event when a user adds a product to checkout
  */
-export const trackAddToCart = (product: {
-    id: number | string;
-    name: string;
-    price: number;
-    category: string;
-    quantity: number;
-}) => {
+export const trackAddToCart = (product: { id: number | string; name: string; price: number; category: string; quantity: number }) => {
     if (window.gtag) {
         window.gtag('event', 'add_to_cart', {
             currency: 'USD',
@@ -64,13 +53,7 @@ export const trackAddToCart = (product: {
 /**
  * Track a begin_checkout event when user starts checkout process
  */
-export const trackBeginCheckout = (product: {
-    id: number | string;
-    name: string;
-    price: number;
-    quantity: number;
-    total: number;
-}) => {
+export const trackBeginCheckout = (product: { id: number | string; name: string; price: number; quantity: number; total: number }) => {
     if (window.gtag) {
         window.gtag('event', 'begin_checkout', {
             currency: 'USD',

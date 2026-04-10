@@ -1,6 +1,6 @@
 import Seo from '@/components/Seo';
-import Main from '@/layouts/main';
 import { trackViewItem } from '@/hooks/use-google-analytics';
+import Main from '@/layouts/main';
 import { ShoppingCart } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

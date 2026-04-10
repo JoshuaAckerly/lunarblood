@@ -1,5 +1,5 @@
-import Main from '@/layouts/main';
 import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
+import Main from '@/layouts/main';
 import { CreditCard, Lock } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -65,10 +65,10 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                     transactionId: `order-${Date.now()}`,
                     email: formData.email,
                 });
-                
+
                 // Track form submission
                 trackFormSubmission('checkout_form');
-                
+
                 setTimeout(() => {
                     window.location.href = '/order-success';
                 }, 1000);

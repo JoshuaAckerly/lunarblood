@@ -19,7 +19,13 @@ const Listen: React.FC = () => {
                 <div className="card">
                     <div className="grid items-center gap-6 md:grid-cols-2">
                         <div>
-                            <img src={getImageUrl('/images/album-cover.jpg')} alt="Latest Album" className="w-full rounded-lg shadow-lg" loading="lazy" decoding="async" />
+                            <img
+                                src={getImageUrl('/images/album-cover.jpg')}
+                                alt="Latest Album"
+                                className="w-full rounded-lg shadow-lg"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
                         <div>
                             <h3 className="mb-2 text-xl font-semibold">Shadows & Echoes</h3>

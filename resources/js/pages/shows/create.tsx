@@ -1,8 +1,8 @@
 import FormField from '@/components/FormField';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
-import Textarea from '@/components/Textarea';
 import Seo from '@/components/Seo';
+import Textarea from '@/components/Textarea';
 import Main from '@/layouts/main';
 import { Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, Calendar, Clock, DollarSign, Eye, MapPin, Save } from 'lucide-react';
