@@ -27,28 +27,30 @@ class AddSecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
+        $isNonProd = app()->environment('local', 'testing') || env('VITE_SERVER_ENV') !== 'production';
+
         $csp = "default-src 'self'";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= ' http:';
         }
         $csp .= "; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= " 'unsafe-inline' http:";
         }
         $csp .= "; style-src 'self' 'unsafe-inline'";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= ' http:';
         }
         $csp .= " https://fonts.bunny.net; font-src 'self'";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= ' http:';
         }
         $csp .= " https://fonts.bunny.net; img-src 'self' https://d3fjkusrpksks7.cloudfront.net";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= ' http://d3fjkusrpksks7.cloudfront.net http:';
         }
         $csp .= "; connect-src 'self' https://graveyardjokes.com";
-        if (app()->environment('local')) {
+        if ($isNonProd) {
             $csp .= ' http: ws: wss:';
         }
         $csp .= "; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self';";
