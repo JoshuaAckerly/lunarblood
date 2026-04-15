@@ -1,14 +1,11 @@
-import { act, render, screen } from '@testing-library/react';
+import { ToastProvider, useToast } from '@/components/Toast';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { ToastProvider, useToast } from '@/components/Toast';
 
 // Helper component to trigger toasts via the context hook
-const ToastTrigger: React.FC<{ message: string; variant?: 'success' | 'error' | 'info' }> = ({
-    message,
-    variant = 'info',
-}) => {
+const ToastTrigger: React.FC<{ message: string; variant?: 'success' | 'error' | 'info' }> = ({ message, variant = 'info' }) => {
     const { addToast } = useToast();
     return (
         <button type="button" onClick={() => addToast(message, variant)}>
