@@ -1,3 +1,4 @@
+import Input from '@/components/Input';
 import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
 import Main from '@/layouts/main';
 import { CreditCard, Lock } from 'lucide-react';
@@ -110,13 +111,14 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                             <div className="card">
                                 <h2 className="mb-4 text-xl font-semibold">Contact Information</h2>
                                 <div className="space-y-4">
-                                    <input
+                                    <Input
+                                        id="email"
+                                        label="Email address"
                                         type="email"
                                         name="email"
-                                        placeholder="Email address"
+                                        placeholder="you@example.com"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className="input-field"
                                         required
                                     />
                                 </div>
@@ -126,60 +128,60 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                 <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
-                                        <input
+                                        <Input
+                                            id="firstName"
+                                            label="First name"
                                             type="text"
                                             name="firstName"
-                                            placeholder="First name"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
-                                        <input
+                                        <Input
+                                            id="lastName"
+                                            label="Last name"
                                             type="text"
                                             name="lastName"
-                                            placeholder="Last name"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
                                     </div>
-                                    <input
+                                    <Input
+                                        id="address"
+                                        label="Address"
                                         type="text"
                                         name="address"
-                                        placeholder="Address"
                                         value={formData.address}
                                         onChange={handleInputChange}
-                                        className="input-field"
                                         required
                                     />
                                     <div className="grid grid-cols-3 gap-4">
-                                        <input
+                                        <Input
+                                            id="city"
+                                            label="City"
                                             type="text"
                                             name="city"
-                                            placeholder="City"
                                             value={formData.city}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
-                                        <input
+                                        <Input
+                                            id="state"
+                                            label="State"
                                             type="text"
                                             name="state"
-                                            placeholder="State"
                                             value={formData.state}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
-                                        <input
+                                        <Input
+                                            id="zip"
+                                            label="ZIP"
                                             type="text"
                                             name="zip"
-                                            placeholder="ZIP"
                                             value={formData.zip}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
                                     </div>
@@ -192,32 +194,35 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                                     Payment Information
                                 </h2>
                                 <div className="space-y-4">
-                                    <input
+                                    <Input
+                                        id="cardNumber"
+                                        label="Card number"
                                         type="text"
                                         name="cardNumber"
-                                        placeholder="Card number (4242 4242 4242 4242)"
+                                        placeholder="4242 4242 4242 4242"
                                         value={formData.cardNumber}
                                         onChange={handleInputChange}
-                                        className="input-field"
                                         required
                                     />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <input
+                                        <Input
+                                            id="expiry"
+                                            label="Expiry date"
                                             type="text"
                                             name="expiry"
                                             placeholder="MM/YY"
                                             value={formData.expiry}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
-                                        <input
+                                        <Input
+                                            id="cvv"
+                                            label="CVV"
                                             type="text"
                                             name="cvv"
-                                            placeholder="CVV"
+                                            placeholder="123"
                                             value={formData.cvv}
                                             onChange={handleInputChange}
-                                            className="input-field"
                                             required
                                         />
                                     </div>

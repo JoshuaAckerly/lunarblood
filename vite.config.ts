@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
+import type { UserConfig } from 'vitest/config';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
@@ -60,5 +61,14 @@ export default defineConfig(({ mode }) => {
         ssr: {
             noExternal: ['react', 'react-dom', '@inertiajs/react', '@inertiajs/core'],
         },
+        test: {
+            environment: 'jsdom',
+            globals: true,
+            setupFiles: ['resources/js/__tests__/setup.ts'],
+            include: ['resources/js/__tests__/**/*.{test,spec}.{ts,tsx}'],
+            alias: {
+                '@': resolve(__dirname, 'resources/js'),
+            },
+        } satisfies UserConfig['test'],
     };
 });
