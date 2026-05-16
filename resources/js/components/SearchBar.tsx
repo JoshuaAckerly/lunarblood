@@ -48,12 +48,16 @@ const SearchBar: React.FC = () => {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                onBlur={() => { if (!value) setOpen(false); }}
+                onBlur={() => {
+                    if (!value) setOpen(false);
+                }}
                 placeholder="Search…"
                 className="input w-40 py-1 text-sm"
                 aria-label="Search"
             />
-            <button type="submit" className="btn btn-primary py-1 text-sm">Go</button>
+            <button type="submit" className="btn btn-primary py-1 text-sm">
+                Go
+            </button>
         </form>
     );
 };

@@ -17,12 +17,12 @@ class SearchController extends Controller
 
         if ($q === '') {
             return Inertia::render('search', [
-                'query'   => '',
+                'query' => '',
                 'results' => ['venues' => [], 'shows' => [], 'products' => []],
             ]);
         }
 
-        $like = '%' . $q . '%';
+        $like = '%'.$q.'%';
 
         $venues = Venue::where('name', 'LIKE', $like)
             ->orWhere('city', 'LIKE', $like)
@@ -42,14 +42,14 @@ class SearchController extends Controller
             ->limit(10)
             ->get()
             ->map(fn ($show) => [
-                'id'         => $show->id,
-                'date'       => $show->date?->format('M j, Y'),
-                'venue'      => $show->venue?->name,
-                'city'       => $show->venue?->city,
-                'state'      => $show->venue?->state,
-                'status'     => $show->status,
+                'id' => $show->id,
+                'date' => $show->date?->format('M j, Y'),
+                'venue' => $show->venue?->name,
+                'city' => $show->venue?->city,
+                'state' => $show->venue?->state,
+                'status' => $show->status,
                 'ticket_url' => $show->ticket_url,
-                'price'      => $show->price,
+                'price' => $show->price,
             ]);
 
         $products = Product::active()
@@ -64,10 +64,10 @@ class SearchController extends Controller
             ->get();
 
         return Inertia::render('search', [
-            'query'   => $q,
+            'query' => $q,
             'results' => [
-                'venues'   => $venues,
-                'shows'    => $shows,
+                'venues' => $venues,
+                'shows' => $shows,
                 'products' => $products,
             ],
         ]);

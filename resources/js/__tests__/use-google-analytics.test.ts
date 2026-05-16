@@ -10,7 +10,9 @@ vi.mock('@inertiajs/react', () => ({
         on: vi.fn((event: string, cb: () => void) => {
             if (event === 'navigate') navigateCallback = cb;
             // return a cleanup function (mirrors the real router.on API)
-            return () => { navigateCallback = null; };
+            return () => {
+                navigateCallback = null;
+            };
         }),
     },
 }));
