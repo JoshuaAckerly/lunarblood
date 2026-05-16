@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\MessageProxyController;
+use App\Mail\ContactFormMail;
+use App\Mail\OrderConfirmationMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,10 +58,20 @@ Route::middleware(['throttle:5,1'])->group(function () {
             ], 422);
         }
 
+        $orderId = 'LB-'.strtoupper(substr(md5($sanitized['email'].now()->timestamp), 0, 9));
+
+        Mail::to($sanitized['email'])->send(new OrderConfirmationMail(
+            customerEmail: $sanitized['email'],
+            firstName: $sanitized['firstName'],
+            orderId: $orderId,
+            productName: $request->input('orderData.name', 'Your Order'),
+            total: $request->input('orderData.total', '0.00'),
+        ));
+
         return response()->json([
             'success' => true,
             'message' => 'Payment processed successfully',
-            'order_id' => 'LB-'.strtoupper(substr(md5($sanitized['email'].now()->timestamp), 0, 9)),
+            'order_id' => $orderId,
         ]);
     });
 });
@@ -101,6 +114,12 @@ Route::middleware(['throttle:3,1'])->group(function () {
                 'message' => 'Invalid contact data provided',
             ], 422);
         }
+
+        Mail::to(config('mail.from.address'))->send(new ContactFormMail(
+            senderName: $sanitized['name'],
+            senderEmail: $sanitized['email'],
+            messageBody: $sanitized['message'],
+        ));
 
         return response()->json([
             'success' => true,

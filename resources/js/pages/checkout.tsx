@@ -1,4 +1,5 @@
 import Input from '@/components/Input';
+import { useToast } from '@/components/Toast';
 import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
 import Main from '@/layouts/main';
 import { CreditCard, Lock } from 'lucide-react';
@@ -30,12 +31,11 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const { addToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsProcessing(true);
-        setErrorMessage('');
 
         // Get CSRF token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -74,7 +74,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                     window.location.href = '/order-success';
                 }, 1000);
             } else if (response.status === 429) {
-                setErrorMessage('Too many payment attempts. Please wait a moment and try again.');
+                addToast('Too many payment attempts. Please wait a moment and try again.', 'error');
                 setIsProcessing(false);
                 return;
             } else {
@@ -82,7 +82,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
             }
         } catch (error) {
             console.error('Payment error:', error);
-            setErrorMessage('Payment failed. Please check your details and try again.');
+            addToast('Payment failed. Please check your details and try again.', 'error');
             setIsProcessing(false);
         }
     };
@@ -102,12 +102,6 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
                     <div>
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {errorMessage && (
-                                <div className="rounded-md border border-[var(--destructive)]/40 bg-[var(--destructive)]/10 p-3 text-sm text-[var(--foreground)]">
-                                    {errorMessage}
-                                </div>
-                            )}
-
                             <div className="card">
                                 <h2 className="mb-4 text-xl font-semibold">Contact Information</h2>
                                 <div className="space-y-4">

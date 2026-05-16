@@ -1,6 +1,7 @@
 import Seo from '@/components/Seo';
 import { ShowCardSkeleton } from '@/components/Skeleton';
 import StatusBadge from '@/components/StatusBadge';
+import { useToast } from '@/components/Toast';
 import Main from '@/layouts/main';
 import { Link, router } from '@inertiajs/react';
 import { Calendar, Clock, DollarSign, Edit, Eye, MapPin, Plus, Trash2 } from 'lucide-react';
@@ -30,6 +31,7 @@ interface ShowsIndexProps {
 
 const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
     const [isNavigating, setIsNavigating] = useState(false);
+    const { addToast } = useToast();
 
     useEffect(() => {
         const removeStart = router.on('start', () => setIsNavigating(true));
@@ -148,7 +150,9 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                             className="btn btn-secondary btn-sm text-red-600 hover:text-red-700"
                                             onClick={() => {
                                                 if (confirm('Are you sure you want to delete this show?')) {
-                                                    // Handle delete
+                                                    router.delete(`/shows/${show.id}`, {
+                                                        onError: () => addToast('Failed to delete show.', 'error'),
+                                                    });
                                                 }
                                             }}
                                         >
