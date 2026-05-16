@@ -3,12 +3,32 @@
  * Provides GA4 event tracking functions for eCommerce conversions
  */
 
+import { router } from '@inertiajs/react';
+import { useEffect } from 'react';
+
 declare global {
     interface Window {
         gtag?: (...args: unknown[]) => void;
         dataLayer?: unknown[];
     }
 }
+
+/**
+ * Hook: fires a GA4 page_view event on every Inertia SPA navigation.
+ * Mount once in the root layout.
+ */
+export const useGoogleAnalytics = () => {
+    useEffect(() => {
+        return router.on('navigate', () => {
+            if (window.gtag) {
+                window.gtag('event', 'page_view', {
+                    page_path: window.location.pathname + window.location.search,
+                    page_title: document.title,
+                });
+            }
+        });
+    }, []);
+};
 
 /**
  * Track a view_item event when a product is viewed

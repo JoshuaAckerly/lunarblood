@@ -1,4 +1,5 @@
 import NotificationBell from '@/components/NotificationBell';
+import SearchBar from '@/components/SearchBar';
 import { usePage } from '@inertiajs/react';
 import { ChevronDown, Menu, User, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -50,6 +51,7 @@ const Header: React.FC = () => {
                     <a className="btn btn-primary" href="/listen">
                         Listen Now
                     </a>
+                    <SearchBar />
                     <NotificationBell />
                     {auth?.user ? (
                         <div className="relative" ref={userMenuRef}>
@@ -144,6 +146,9 @@ const Header: React.FC = () => {
                         </a>
                         <a className="btn btn-primary w-full justify-center" href="/listen" onClick={() => setIsMenuOpen(false)}>
                             Listen Now
+                        </a>
+                        <a className="nav-link" href="/search" onClick={() => setIsMenuOpen(false)}>
+                            Search
                         </a>
                     </nav>
                 </div>

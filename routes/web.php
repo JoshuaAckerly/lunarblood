@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\VenueController;
 use App\Models\Product;
@@ -95,6 +96,8 @@ Route::get('/test-403', function () {
 
 // Dynamic sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

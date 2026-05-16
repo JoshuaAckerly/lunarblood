@@ -2,6 +2,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { useToast } from '@/components/Toast';
+import { useGoogleAnalytics } from '@/hooks/use-google-analytics';
 import { usePage } from '@inertiajs/react';
 import React, { useEffect } from 'react';
 
@@ -14,6 +15,7 @@ interface FlashData {
 const Main: React.FC<React.PropsWithChildren> = ({ children }) => {
     const { flash } = usePage().props as { flash?: FlashData };
     const { addToast } = useToast();
+    useGoogleAnalytics();
 
     useEffect(() => {
         if (flash?.success) addToast(flash.success, 'success');
