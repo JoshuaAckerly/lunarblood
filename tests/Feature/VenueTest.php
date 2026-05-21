@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class VenueTest extends TestCase
@@ -17,7 +18,7 @@ class VenueTest extends TestCase
         $response = $this->get('/venues');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('venues/index')
             ->has('venues', 3)
         );
@@ -45,13 +46,13 @@ class VenueTest extends TestCase
 
     public function test_venue_show_page_loads(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
 
         $response = $this->get("/venues/{$venue->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('venues/show')
             ->has('venue')
             ->where('venue.id', $venue->id)
@@ -60,7 +61,7 @@ class VenueTest extends TestCase
 
     public function test_venue_update(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
         $updatedData = [
             'name' => 'Updated Venue Name',
@@ -78,7 +79,7 @@ class VenueTest extends TestCase
 
     public function test_venue_deletion(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
 
         $response = $this->delete("/venues/{$venue->id}");

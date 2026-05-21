@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VenueController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -95,7 +96,7 @@ Route::get('/test-403', function () {
 });
 
 // Dynamic sitemap
-Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 

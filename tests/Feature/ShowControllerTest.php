@@ -6,6 +6,7 @@ use App\Models\Show;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class ShowControllerTest extends TestCase
@@ -21,7 +22,7 @@ class ShowControllerTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
         $this->venue = $venue;
     }
@@ -33,7 +34,7 @@ class ShowControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/shows');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/index')
             ->has('shows', 3)
         );
@@ -44,7 +45,7 @@ class ShowControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/shows/create');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/create')
             ->has('venues')
             ->where('step', 1)
@@ -151,7 +152,7 @@ class ShowControllerTest extends TestCase
 
     public function test_show_update(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $updateData = [
@@ -174,13 +175,13 @@ class ShowControllerTest extends TestCase
 
     public function test_show_show_displays_show(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/show')
             ->has('show')
             ->where('show.id', $show->id)
@@ -189,13 +190,13 @@ class ShowControllerTest extends TestCase
 
     public function test_show_edit_displays_form(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}/edit");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/edit')
             ->has('show')
             ->has('venues')
@@ -205,7 +206,7 @@ class ShowControllerTest extends TestCase
 
     public function test_show_deletion(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->delete("/shows/{$show->id}");
@@ -236,7 +237,7 @@ class ShowControllerTest extends TestCase
         // Navigate away and come back
         $response = $this->actingAs($this->user)->get('/shows/create');
 
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->where('step', 2)
             ->where('draftData.venue_id', $this->venue->id)
         );

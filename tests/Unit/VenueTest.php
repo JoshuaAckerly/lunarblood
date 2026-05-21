@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Show;
 use App\Models\Venue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -29,11 +30,11 @@ class VenueTest extends TestCase
 
     public function test_venue_has_shows_relationship(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
         $show = Show::factory()->create(['venue_id' => $venue->id]);
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Show> $shows */
+        /** @var Collection<int, Show> $shows */
         $shows = $venue->shows;
         $this->assertTrue($shows->contains($show));
     }

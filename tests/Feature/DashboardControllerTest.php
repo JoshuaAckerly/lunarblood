@@ -31,7 +31,7 @@ class DashboardControllerTest extends TestCase
 
     public function test_dashboard_page_uses_expected_payload_shape_for_production_data(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create([
             'name' => 'Midnight Theater',
             'city' => 'Austin',

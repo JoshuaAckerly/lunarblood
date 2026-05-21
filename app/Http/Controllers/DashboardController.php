@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Show;
 use App\Models\Venue;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -121,7 +123,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get()
             // @phpstan-ignore argument.type, argument.unresolvableType, method.unresolvableReturnType
-            ->map(function (\Illuminate\Database\Eloquent\Model $show): array {
+            ->map(function (Model $show): array {
                 return [
                     'id' => $show->id, // @phpstan-ignore-line
                     'date' => optional($show->date)->format('Y-m-d'), // @phpstan-ignore-line
@@ -289,7 +291,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get()
             ->map(function (Show $show): array {
-                /** @var \Carbon\Carbon|null $showDate */
+                /** @var Carbon|null $showDate */
                 $showDate = $show->date;
 
                 return [

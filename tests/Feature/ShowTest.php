@@ -6,6 +6,7 @@ use App\Models\Show;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class ShowTest extends TestCase
@@ -21,7 +22,7 @@ class ShowTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create();
         $this->venue = $venue;
     }
@@ -33,7 +34,7 @@ class ShowTest extends TestCase
         $response = $this->actingAs($this->user)->get('/shows');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/index')
             ->has('shows', 3)
         );
@@ -41,13 +42,13 @@ class ShowTest extends TestCase
 
     public function test_show_page_displays_show(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/show')
             ->has('show')
             ->where('show.id', $show->id)
@@ -81,7 +82,7 @@ class ShowTest extends TestCase
 
     public function test_show_update(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $updateData = [
@@ -106,7 +107,7 @@ class ShowTest extends TestCase
 
     public function test_show_deletion(): void
     {
-        /** @var \App\Models\Show $show */
+        /** @var Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->delete("/shows/{$show->id}");

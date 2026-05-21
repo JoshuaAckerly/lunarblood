@@ -30,7 +30,7 @@ class DashboardSearchTest extends TestCase
 
     public function test_dashboard_search_returns_matching_shows_and_venues(): void
     {
-        /** @var \App\Models\Venue $matchingVenue */
+        /** @var Venue $matchingVenue */
         $matchingVenue = Venue::factory()->create([
             'name' => 'Lunar Hall',
             'city' => 'Austin',
@@ -38,7 +38,7 @@ class DashboardSearchTest extends TestCase
             'description' => 'Darkwave venue',
         ]);
 
-        /** @var \App\Models\Venue $nonMatchingVenue */
+        /** @var Venue $nonMatchingVenue */
         $nonMatchingVenue = Venue::factory()->create([
             'name' => 'Solar Arena',
             'city' => 'Dallas',
@@ -108,14 +108,14 @@ class DashboardSearchTest extends TestCase
 
     public function test_dashboard_search_prioritizes_exact_name_matches(): void
     {
-        /** @var \App\Models\Venue $exactVenue */
+        /** @var Venue $exactVenue */
         $exactVenue = Venue::factory()->create([
             'name' => 'Lunar',
             'city' => 'Austin',
             'state' => 'TX',
         ]);
 
-        /** @var \App\Models\Venue $partialVenue */
+        /** @var Venue $partialVenue */
         $partialVenue = Venue::factory()->create([
             'name' => 'Lunar Hall',
             'city' => 'Austin',
@@ -145,7 +145,7 @@ class DashboardSearchTest extends TestCase
 
     public function test_dashboard_search_supports_practical_synonym_queries(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create([
             'name' => 'Moonlight Hall',
             'city' => 'Austin',
@@ -171,7 +171,7 @@ class DashboardSearchTest extends TestCase
 
     public function test_dashboard_search_handles_sold_out_phrase_without_hyphen(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create([
             'name' => 'Signal Room',
             'city' => 'Austin',
@@ -194,14 +194,14 @@ class DashboardSearchTest extends TestCase
 
     public function test_dashboard_search_prioritizes_upcoming_matches_over_past_matches(): void
     {
-        /** @var \App\Models\Venue $venue */
+        /** @var Venue $venue */
         $venue = Venue::factory()->create([
             'name' => 'Orbit Hall',
             'city' => 'Austin',
             'state' => 'TX',
         ]);
 
-        /** @var \App\Models\Show $pastShow */
+        /** @var Show $pastShow */
         $pastShow = Show::factory()->create([
             'venue_id' => $venue->id,
             'status' => 'on-sale',
@@ -209,7 +209,7 @@ class DashboardSearchTest extends TestCase
             'date' => now()->subDays(1)->format('Y-m-d'),
         ]);
 
-        /** @var \App\Models\Show $upcomingShow */
+        /** @var Show $upcomingShow */
         $upcomingShow = Show::factory()->create([
             'venue_id' => $venue->id,
             'status' => 'on-sale',
