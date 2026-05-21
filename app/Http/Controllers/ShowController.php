@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Show;
 use App\Models\Venue;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ShowController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $shows = Show::with('venue')->orderBy('date', 'desc')->get();
 
@@ -25,28 +28,31 @@ class ShowController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request): Response
     {
-        $draftStep = (int) data_get(Session::get('show_draft', []), 'step', 1);
-        $step = (int) $request->get('step', $draftStep);
+        $draftData = Session::get('show_draft', []);
+        $draftStep = is_array($draftData) && isset($draftData['step']) && is_numeric($draftData['step']) ? intval($draftData['step']) : 1;
+        $stepParam = $request->get('step');
+        $step = is_numeric($stepParam) ? intval($stepParam) : $draftStep;
         $venues = Venue::orderBy('name')->get();
 
         // Get draft data from session if exists
-        $draftData = Session::get('show_draft', []);
+        $draftDataFull = Session::get('show_draft', []);
 
         return Inertia::render('shows/create', [
             'step' => $step,
             'venues' => $venues,
-            'draftData' => $draftData,
+            'draftData' => $draftDataFull,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Response|RedirectResponse|JsonResponse
     {
-        $step = $request->get('step', 1);
+        $stepRaw = $request->get('step', 1);
+        $step = is_numeric($stepRaw) ? (int) $stepRaw : 1;
         $action = $request->get('action', 'next');
 
         if ($action === 'save_draft') {
@@ -63,6 +69,7 @@ class ShowController extends Controller
             $incomingDraft = $request->only($draftFields);
             $incomingDraft['step'] = (int) $step;
 
+            /** @var array<string, mixed> $draftData */
             $draftData = Session::get('show_draft', []);
             Session::put('show_draft', array_merge($draftData, $incomingDraft));
 
@@ -71,9 +78,11 @@ class ShowController extends Controller
 
         // Validate current step
         $rules = $this->getValidationRules($step);
+        /** @var array<string, mixed> $validated */
         $validated = $request->validate($rules);
 
         // Store draft data in session
+        /** @var array<string, mixed> $draftData */
         $draftData = Session::get('show_draft', []);
         $draftData = array_merge($draftData, $validated);
         $draftData['step'] = $action === 'next' && $step < 3
@@ -93,11 +102,14 @@ class ShowController extends Controller
                 'ticket_url' => 'nullable|url',
             ];
 
+            /** @var array<string, mixed> $allValidated */
             $allValidated = $request->validate($allRules);
             $draftData = array_merge($draftData, $allValidated);
 
             // Create the show
-            $show = Show::create($draftData);
+            /** @var array<string, mixed> $createData */
+            $createData = $draftData;
+            Show::create($createData);
             Session::forget('show_draft');
 
             return redirect()->route('shows.index')->with('success', 'Show created successfully!');
@@ -110,7 +122,7 @@ class ShowController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Show $show)
+    public function show(Show $show): Response
     {
         $show->load('venue');
 
@@ -122,7 +134,7 @@ class ShowController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Show $show)
+    public function edit(Show $show): Response
     {
         $venues = Venue::orderBy('name')->get();
 
@@ -135,8 +147,9 @@ class ShowController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Show $show)
+    public function update(Request $request, Show $show): RedirectResponse
     {
+        /** @var array<string, mixed> $validated */
         $validated = $request->validate([
             'venue_id' => 'required|exists:venues,id',
             'date' => 'required|date|after:today',
@@ -155,7 +168,7 @@ class ShowController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Show $show)
+    public function destroy(Show $show): RedirectResponse
     {
         $show->delete();
 
@@ -165,6 +178,7 @@ class ShowController extends Controller
     /**
      * Get validation rules for each step
      */
+    /** @return array<string, mixed> */
     private function getValidationRules(int $step): array
     {
         $rules = [];

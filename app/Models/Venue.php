@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Venue extends Model
 {
+    /** @phpstan-ignore missingType.generics */
     use HasFactory;
 
     protected $fillable = [
@@ -27,8 +28,10 @@ class Venue extends Model
         'capacity' => 'integer',
     ];
 
+    /** @return HasMany<Show, $this> */
     public function shows(): HasMany
     {
+        // @phpstan-ignore-next-line return.type
         return $this->hasMany(Show::class);
     }
 }

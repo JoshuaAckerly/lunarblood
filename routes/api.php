@@ -36,19 +36,35 @@ Route::middleware(['throttle:5,1'])->group(function () {
             ], 422);
         }
 
+        /** @var array<string, mixed> $validated */
         $validated = $validator->validated();
 
+        $emailVal = $validated['email'] ?? '';
+        $firstNameVal = $validated['firstName'] ?? '';
+        $lastNameVal = $validated['lastName'] ?? '';
+        $addressVal = $validated['address'] ?? '';
+        $cityVal = $validated['city'] ?? '';
+        $stateVal = $validated['state'] ?? '';
+        $zipVal = $validated['zip'] ?? '';
+        $cardNumberVal = $validated['cardNumber'] ?? '';
+        $expiryVal = $validated['expiry'] ?? '';
+        $cvvVal = $validated['cvv'] ?? '';
+
+        assert(is_string($emailVal) && is_string($firstNameVal) && is_string($lastNameVal));
+        assert(is_string($addressVal) && is_string($cityVal) && is_string($stateVal));
+        assert(is_string($zipVal) && is_string($cardNumberVal) && is_string($expiryVal) && is_string($cvvVal));
+
         $sanitized = [
-            'email' => strtolower(trim($validated['email'])),
-            'firstName' => trim(strip_tags($validated['firstName'])),
-            'lastName' => trim(strip_tags($validated['lastName'])),
-            'address' => trim(strip_tags($validated['address'])),
-            'city' => trim(strip_tags($validated['city'])),
-            'state' => strtoupper(trim(strip_tags($validated['state']))),
-            'zip' => strtoupper(preg_replace('/[^A-Za-z0-9- ]/', '', $validated['zip']) ?? ''),
-            'cardNumber' => preg_replace('/\D/', '', $validated['cardNumber']) ?? '',
-            'expiry' => trim($validated['expiry']),
-            'cvv' => preg_replace('/\D/', '', $validated['cvv']) ?? '',
+            'email' => strtolower(trim($emailVal)),
+            'firstName' => trim(strip_tags($firstNameVal)),
+            'lastName' => trim(strip_tags($lastNameVal)),
+            'address' => trim(strip_tags($addressVal)),
+            'city' => trim(strip_tags($cityVal)),
+            'state' => strtoupper(trim(strip_tags($stateVal))),
+            'zip' => strtoupper(preg_replace('/[^A-Za-z0-9- ]/', '', $zipVal) ?? ''),
+            'cardNumber' => preg_replace('/\D/', '', $cardNumberVal) ?? '',
+            'expiry' => trim($expiryVal),
+            'cvv' => preg_replace('/\D/', '', $cvvVal) ?? '',
         ];
 
         if (strlen($sanitized['cardNumber']) < 12 || strlen($sanitized['cardNumber']) > 19) {
@@ -60,12 +76,14 @@ Route::middleware(['throttle:5,1'])->group(function () {
 
         $orderId = 'LB-'.strtoupper(substr(md5($sanitized['email'].now()->timestamp), 0, 9));
 
+        $productName = $request->input('orderData.name', 'Your Order');
+        $total = $request->input('orderData.total', '0.00');
         Mail::to($sanitized['email'])->send(new OrderConfirmationMail(
             customerEmail: $sanitized['email'],
             firstName: $sanitized['firstName'],
             orderId: $orderId,
-            productName: $request->input('orderData.name', 'Your Order'),
-            total: $request->input('orderData.total', '0.00'),
+            productName: is_string($productName) ? $productName : 'Your Order',
+            total: is_string($total) ? $total : '0.00',
         ));
 
         return response()->json([
@@ -100,12 +118,18 @@ Route::middleware(['throttle:3,1'])->group(function () {
             ], 422);
         }
 
+        /** @var array<string, mixed> $validated */
         $validated = $validator->validated();
 
+        $nameVal = $validated['name'] ?? '';
+        $emailVal2 = $validated['email'] ?? '';
+        $messageVal = $validated['message'] ?? '';
+        assert(is_string($nameVal) && is_string($emailVal2) && is_string($messageVal));
+
         $sanitized = [
-            'name' => trim(strip_tags($validated['name'])),
-            'email' => strtolower(trim($validated['email'])),
-            'message' => trim(strip_tags($validated['message'])),
+            'name' => trim(strip_tags($nameVal)),
+            'email' => strtolower(trim($emailVal2)),
+            'message' => trim(strip_tags($messageVal)),
         ];
 
         if ($sanitized['name'] === '' || $sanitized['message'] === '') {

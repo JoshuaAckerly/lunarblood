@@ -49,7 +49,9 @@ class ProductTest extends TestCase
         $activeProducts = Product::active()->get();
 
         $this->assertCount(1, $activeProducts);
-        $this->assertEquals('Active Product', $activeProducts->first()->name);
+        $firstActive = $activeProducts->first();
+        $this->assertNotNull($firstActive);
+        $this->assertEquals('Active Product', $firstActive->name);
     }
 
     public function test_in_stock_scope_filters_products_with_stock(): void
@@ -60,6 +62,8 @@ class ProductTest extends TestCase
         $inStockProducts = Product::inStock()->get();
 
         $this->assertCount(1, $inStockProducts);
-        $this->assertEquals('In Stock', $inStockProducts->first()->name);
+        $firstInStock = $inStockProducts->first();
+        $this->assertNotNull($firstInStock);
+        $this->assertEquals('In Stock', $firstInStock->name);
     }
 }

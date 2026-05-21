@@ -18,6 +18,7 @@ class ReportVisitToAuthSystem implements ShouldQueue
 
     public int $timeout = 10;
 
+    /** @param array<string, mixed> $visitData */
     public function __construct(private readonly array $visitData) {}
 
     public function handle(): void
@@ -28,6 +29,9 @@ class ReportVisitToAuthSystem implements ShouldQueue
         if (! $url || ! $token) {
             return;
         }
+
+        assert(is_string($url));
+        assert(is_string($token));
 
         try {
             Http::withToken($token)

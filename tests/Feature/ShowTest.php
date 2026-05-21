@@ -21,37 +21,40 @@ class ShowTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        $this->venue = Venue::factory()->create();
+        /** @var \App\Models\Venue $venue */
+        $venue = Venue::factory()->create();
+        $this->venue = $venue;
     }
 
-    public function test_shows_index_displays_shows()
+    public function test_shows_index_displays_shows(): void
     {
         Show::factory()->count(3)->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get('/shows');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/index')
             ->has('shows', 3)
         );
     }
 
-    public function test_show_page_displays_show()
+    public function test_show_page_displays_show(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/show')
             ->has('show')
             ->where('show.id', $show->id)
         );
     }
 
-    public function test_show_creation()
+    public function test_show_creation(): void
     {
         $showData = [
             'venue_id' => $this->venue->id,
@@ -76,8 +79,9 @@ class ShowTest extends TestCase
         ]);
     }
 
-    public function test_show_update()
+    public function test_show_update(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $updateData = [
@@ -100,8 +104,9 @@ class ShowTest extends TestCase
         ]);
     }
 
-    public function test_show_deletion()
+    public function test_show_deletion(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->delete("/shows/{$show->id}");
@@ -110,7 +115,7 @@ class ShowTest extends TestCase
         $this->assertDatabaseMissing('shows', ['id' => $show->id]);
     }
 
-    public function test_show_validation_requires_fields()
+    public function test_show_validation_requires_fields(): void
     {
         $response = $this->actingAs($this->user)->post('/shows', [
             'step' => 1,
@@ -120,7 +125,7 @@ class ShowTest extends TestCase
         $response->assertSessionHasErrors(['venue_id', 'date', 'time']);
     }
 
-    public function test_unauthenticated_user_cannot_access_shows()
+    public function test_unauthenticated_user_cannot_access_shows(): void
     {
         $response = $this->get('/shows');
 

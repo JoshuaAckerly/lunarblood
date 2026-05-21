@@ -48,7 +48,7 @@ class NewPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password),
+                    'password' => Hash::make($request->string('password')->value()),
                     'remember_token' => Str::random(60),
                 ])->save();
 
@@ -60,9 +60,11 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status == Password::PasswordReset) {
+            assert(is_string($status));
             return to_route('login')->with('status', __($status));
         }
 
+        assert(is_string($status));
         throw ValidationException::withMessages([
             'email' => [__($status)],
         ]);

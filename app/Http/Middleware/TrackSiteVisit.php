@@ -20,6 +20,7 @@ class TrackSiteVisit
 
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var \Symfony\Component\HttpFoundation\Response $response */
         $response = $next($request);
 
         if ($this->shouldTrack($request)) {

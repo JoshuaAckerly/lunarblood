@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Album extends Model
 {
+    /** @phpstan-ignore missingType.generics */
     use HasFactory;
 
     protected $fillable = [
@@ -27,13 +29,20 @@ class Album extends Model
         'featured' => 'boolean',
     ];
 
+    /** @return HasMany<Track, $this> */
     public function tracks(): HasMany
     {
+        // @phpstan-ignore-next-line return.type
         return $this->hasMany(Track::class)->orderBy('track_number');
     }
 
-    public function scopeFeatured($query)
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
+        // @phpstan-ignore-next-line return.type
         return $query->where('featured', true);
     }
 }

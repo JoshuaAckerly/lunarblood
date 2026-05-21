@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Show;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/** @extends Factory<Show> */
 class ShowFactory extends Factory
 {
     public function definition(): array

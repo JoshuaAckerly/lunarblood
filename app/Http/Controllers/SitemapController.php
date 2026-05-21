@@ -12,6 +12,7 @@ class SitemapController extends Controller
     public function index(): Response
     {
         $baseUrl = config('app.url');
+        assert(is_string($baseUrl));
         $now = Carbon::now()->toW3cString();
 
         // Static pages
@@ -27,7 +28,7 @@ class SitemapController extends Controller
         $venues = Venue::all()->map(function ($venue) use ($baseUrl) {
             return [
                 'loc' => $baseUrl.'/venues/'.$venue->id,
-                'lastmod' => $venue->updated_at->toW3cString(),
+                'lastmod' => $venue->updated_at?->toW3cString() ?? now()->toW3cString(),
                 'priority' => '0.7',
                 'changefreq' => 'weekly',
             ];
@@ -36,7 +37,7 @@ class SitemapController extends Controller
         $products = Product::all()->map(function ($product) use ($baseUrl) {
             return [
                 'loc' => $baseUrl.'/shop/'.$product->id,
-                'lastmod' => $product->updated_at->toW3cString(),
+                'lastmod' => $product->updated_at?->toW3cString() ?? now()->toW3cString(),
                 'priority' => '0.7',
                 'changefreq' => 'monthly',
             ];

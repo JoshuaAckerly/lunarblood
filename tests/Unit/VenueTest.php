@@ -29,10 +29,13 @@ class VenueTest extends TestCase
 
     public function test_venue_has_shows_relationship(): void
     {
+        /** @var \App\Models\Venue $venue */
         $venue = Venue::factory()->create();
         $show = Show::factory()->create(['venue_id' => $venue->id]);
 
-        $this->assertTrue($venue->shows->contains($show));
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Show> $shows */
+        $shows = $venue->shows;
+        $this->assertTrue($shows->contains($show));
     }
 
     public function test_venue_capacity_is_cast_to_integer(): void

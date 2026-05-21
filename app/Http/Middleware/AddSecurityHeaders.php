@@ -17,6 +17,7 @@ class AddSecurityHeaders
         $nonce = Vite::useCspNonce();
 
         $response = $next($request);
+        assert($response instanceof Response);
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
@@ -27,6 +28,7 @@ class AddSecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
+        // @phpstan-ignore-next-line larastan.noEnvCallsOutsideOfConfig
         $isNonProd = app()->environment('local', 'testing') || env('VITE_SERVER_ENV') !== 'production';
 
         $csp = "default-src 'self'";

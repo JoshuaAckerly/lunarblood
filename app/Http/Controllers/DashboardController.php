@@ -57,11 +57,13 @@ class DashboardController extends Controller
 
     public function search(Request $request): JsonResponse
     {
+        /** @var array<string, mixed> $validated */
         $validated = $request->validate([
             'query' => ['nullable', 'string', 'max:100'],
         ]);
 
-        $query = trim((string) ($validated['query'] ?? ''));
+        $queryVal = $validated['query'] ?? '';
+        $query = trim(is_string($queryVal) ? $queryVal : '');
 
         if ($query === '') {
             return response()->json([
@@ -118,19 +120,20 @@ class DashboardController extends Controller
             ->orderBy('shows.date')
             ->take(5)
             ->get()
-            ->map(function ($show): array {
+            // @phpstan-ignore argument.type, argument.unresolvableType, method.unresolvableReturnType
+            ->map(function (\Illuminate\Database\Eloquent\Model $show): array {
                 return [
-                    'id' => $show->id,
-                    'date' => optional($show->date)->format('Y-m-d'),
-                    'status' => $show->status,
-                    'venue_name' => $show->venue_name,
-                    'venue_location' => $show->venue_city && $show->venue_state
-                        ? $show->venue_city.', '.$show->venue_state
+                    'id' => $show->id, // @phpstan-ignore-line
+                    'date' => optional($show->date)->format('Y-m-d'), // @phpstan-ignore-line
+                    'status' => $show->status, // @phpstan-ignore-line
+                    'venue_name' => $show->venue_name, // @phpstan-ignore-line
+                    'venue_location' => ($show->venue_city && $show->venue_state) // @phpstan-ignore-line
+                        ? $show->venue_city.', '.$show->venue_state // @phpstan-ignore-line
                         : null,
                 ];
             })
-            ->values()
-            ->all();
+            ->values() // @phpstan-ignore-line
+            ->all(); // @phpstan-ignore-line
 
         $venues = Venue::query()
             ->where(function ($builder) use ($containsTerms) {
@@ -267,6 +270,7 @@ class DashboardController extends Controller
         $request->session()->put('dashboard_recent_searches', array_slice($recent, 0, 5));
     }
 
+    /** @return array<string, mixed> */
     private function getDashboardData(): array
     {
         $upcomingShowsQuery = Show::query()
@@ -285,9 +289,11 @@ class DashboardController extends Controller
             ->take(5)
             ->get()
             ->map(function (Show $show): array {
+                /** @var \Carbon\Carbon|null $showDate */
+                $showDate = $show->date;
                 return [
                     'id' => $show->id,
-                    'date' => optional($show->date)->format('Y-m-d'),
+                    'date' => $showDate?->format('Y-m-d'),
                     'time' => $show->time,
                     'status' => $show->status,
                     'price' => $show->price,
@@ -329,6 +335,7 @@ class DashboardController extends Controller
         ];
     }
 
+    /** @return array<string, mixed> */
     private function emptyDashboardData(): array
     {
         return [

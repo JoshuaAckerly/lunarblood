@@ -21,35 +21,37 @@ class ShowControllerTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        $this->venue = Venue::factory()->create();
+        /** @var \App\Models\Venue $venue */
+        $venue = Venue::factory()->create();
+        $this->venue = $venue;
     }
 
-    public function test_shows_index_displays_shows()
+    public function test_shows_index_displays_shows(): void
     {
         Show::factory()->count(3)->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get('/shows');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/index')
             ->has('shows', 3)
         );
     }
 
-    public function test_shows_create_displays_form()
+    public function test_shows_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)->get('/shows/create');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/create')
             ->has('venues')
             ->where('step', 1)
         );
     }
 
-    public function test_show_creation_step_validation()
+    public function test_show_creation_step_validation(): void
     {
         // Step 1 validation - venue, date, time required
         $response = $this->actingAs($this->user)->post('/shows', [
@@ -72,7 +74,7 @@ class ShowControllerTest extends TestCase
         $response->assertRedirect('/shows/create?step=2');
     }
 
-    public function test_show_creation_with_draft_saving()
+    public function test_show_creation_with_draft_saving(): void
     {
         // Save draft at step 1
         $response = $this->actingAs($this->user)->postJson('/shows', [
@@ -91,7 +93,7 @@ class ShowControllerTest extends TestCase
         $this->assertEquals(1, session('show_draft.step'));
     }
 
-    public function test_complete_show_creation()
+    public function test_complete_show_creation(): void
     {
         // Complete all steps
         $showData = [
@@ -120,7 +122,7 @@ class ShowControllerTest extends TestCase
         ]);
     }
 
-    public function test_show_creation_validation_rules()
+    public function test_show_creation_validation_rules(): void
     {
         // Test date cannot be in the past
         $response = $this->actingAs($this->user)->post('/shows', [
@@ -147,8 +149,9 @@ class ShowControllerTest extends TestCase
         $response->assertSessionHasErrors('price');
     }
 
-    public function test_show_update()
+    public function test_show_update(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $updateData = [
@@ -169,28 +172,30 @@ class ShowControllerTest extends TestCase
         $this->assertDatabaseHas('shows', array_merge($updateData, ['id' => $show->id]));
     }
 
-    public function test_show_show_displays_show()
+    public function test_show_show_displays_show(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/show')
             ->has('show')
             ->where('show.id', $show->id)
         );
     }
 
-    public function test_show_edit_displays_form()
+    public function test_show_edit_displays_form(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->get("/shows/{$show->id}/edit");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('shows/edit')
             ->has('show')
             ->has('venues')
@@ -198,8 +203,9 @@ class ShowControllerTest extends TestCase
         );
     }
 
-    public function test_show_deletion()
+    public function test_show_deletion(): void
     {
+        /** @var \App\Models\Show $show */
         $show = Show::factory()->create(['venue_id' => $this->venue->id]);
 
         $response = $this->actingAs($this->user)->delete("/shows/{$show->id}");
@@ -210,13 +216,13 @@ class ShowControllerTest extends TestCase
         $this->assertDatabaseMissing('shows', ['id' => $show->id]);
     }
 
-    public function test_unauthenticated_user_cannot_access_shows()
+    public function test_unauthenticated_user_cannot_access_shows(): void
     {
         $response = $this->get('/shows');
         $response->assertRedirect('/login');
     }
 
-    public function test_draft_session_persistence()
+    public function test_draft_session_persistence(): void
     {
         // Start creating a show
         $this->actingAs($this->user)->post('/shows', [
@@ -230,13 +236,13 @@ class ShowControllerTest extends TestCase
         // Navigate away and come back
         $response = $this->actingAs($this->user)->get('/shows/create');
 
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->where('step', 2)
             ->where('draftData.venue_id', $this->venue->id)
         );
     }
 
-    public function test_step_navigation_validation()
+    public function test_step_navigation_validation(): void
     {
         // Try to jump to step 3 without completing step 1
         $response = $this->actingAs($this->user)->post('/shows', [

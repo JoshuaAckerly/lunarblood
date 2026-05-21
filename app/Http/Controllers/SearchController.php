@@ -41,9 +41,9 @@ class SearchController extends Controller
             ->orderBy('date')
             ->limit(10)
             ->get()
-            ->map(fn ($show) => [
+            ->map(fn (Show $show): array => [
                 'id' => $show->id,
-                'date' => $show->date?->format('M j, Y'),
+                'date' => $show->date->format('M j, Y'),
                 'venue' => $show->venue?->name,
                 'city' => $show->venue?->city,
                 'state' => $show->venue?->state,

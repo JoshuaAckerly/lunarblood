@@ -44,7 +44,7 @@ Route::get('/shop', function () {
     return Inertia::render('shop');
 })->name('shop');
 
-Route::get('/shop/{id}', function ($id) {
+Route::get('/shop/{id}', function (string $id) {
     $product = Product::find((int) $id);
 
     if (! $product) {

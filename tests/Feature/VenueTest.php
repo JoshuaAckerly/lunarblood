@@ -10,20 +10,20 @@ class VenueTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_venues_index_page_loads()
+    public function test_venues_index_page_loads(): void
     {
         Venue::factory()->count(3)->create();
 
         $response = $this->get('/venues');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('venues/index')
             ->has('venues', 3)
         );
     }
 
-    public function test_venue_creation()
+    public function test_venue_creation(): void
     {
         $venueData = [
             'name' => 'Test Venue',
@@ -43,22 +43,24 @@ class VenueTest extends TestCase
         $this->assertDatabaseHas('venues', $venueData);
     }
 
-    public function test_venue_show_page_loads()
+    public function test_venue_show_page_loads(): void
     {
+        /** @var \App\Models\Venue $venue */
         $venue = Venue::factory()->create();
 
         $response = $this->get("/venues/{$venue->id}");
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(fn (\Inertia\Testing\AssertableInertia $page) => $page
             ->component('venues/show')
             ->has('venue')
             ->where('venue.id', $venue->id)
         );
     }
 
-    public function test_venue_update()
+    public function test_venue_update(): void
     {
+        /** @var \App\Models\Venue $venue */
         $venue = Venue::factory()->create();
         $updatedData = [
             'name' => 'Updated Venue Name',
@@ -74,8 +76,9 @@ class VenueTest extends TestCase
         $this->assertDatabaseHas('venues', ['id' => $venue->id, 'name' => 'Updated Venue Name']);
     }
 
-    public function test_venue_deletion()
+    public function test_venue_deletion(): void
     {
+        /** @var \App\Models\Venue $venue */
         $venue = Venue::factory()->create();
 
         $response = $this->delete("/venues/{$venue->id}");
@@ -84,7 +87,7 @@ class VenueTest extends TestCase
         $this->assertDatabaseMissing('venues', ['id' => $venue->id]);
     }
 
-    public function test_venue_validation_errors()
+    public function test_venue_validation_errors(): void
     {
         $invalidData = [
             'name' => '',

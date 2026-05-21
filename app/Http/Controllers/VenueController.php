@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venue;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class VenueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): Response
     {
         $venues = Venue::withCount('shows')->get();
 
@@ -20,19 +19,14 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('venues/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
+        /** @var array<string, mixed> $validated */
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -51,10 +45,7 @@ class VenueController extends Controller
         return redirect()->route('venues.index')->with('success', 'Venue created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Venue $venue)
+    public function show(Venue $venue): Response
     {
         $venue->load('shows');
 
@@ -63,21 +54,16 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Venue $venue)
+    public function edit(Venue $venue): Response
     {
         return Inertia::render('venues/edit', [
             'venue' => $venue,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Venue $venue)
+    public function update(Request $request, Venue $venue): RedirectResponse
     {
+        /** @var array<string, mixed> $validated */
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -96,10 +82,7 @@ class VenueController extends Controller
         return redirect()->route('venues.index')->with('success', 'Venue updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Venue $venue)
+    public function destroy(Venue $venue): RedirectResponse
     {
         $venue->delete();
 

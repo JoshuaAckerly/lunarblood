@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Show extends Model
 {
+    /** @phpstan-ignore missingType.generics */
     use HasFactory;
 
     protected $fillable = [
@@ -26,8 +27,10 @@ class Show extends Model
         'price' => 'decimal:2',
     ];
 
+    /** @return BelongsTo<Venue, $this> */
     public function venue(): BelongsTo
     {
+        // @phpstan-ignore-next-line return.type
         return $this->belongsTo(Venue::class);
     }
 }

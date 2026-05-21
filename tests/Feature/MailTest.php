@@ -12,6 +12,7 @@ class MailTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @var array<string, mixed> */
     private array $validPaymentData = [
         'email' => 'customer@example.com',
         'firstName' => 'Jane',

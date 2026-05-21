@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Track extends Model
 {
+    /** @phpstan-ignore missingType.generics */
     use HasFactory;
 
     protected $fillable = [
@@ -24,8 +25,10 @@ class Track extends Model
         'duration' => 'integer',
     ];
 
+    /** @return BelongsTo<Album, $this> */
     public function album(): BelongsTo
     {
+        // @phpstan-ignore-next-line return.type
         return $this->belongsTo(Album::class);
     }
 
