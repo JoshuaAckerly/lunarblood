@@ -109,7 +109,7 @@
         "skipLibCheck": true /* Skip type checking all .d.ts files. */,
         "paths": {
             "@/*": ["./resources/js/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "ziggy-js": ["./vendor/tightenco/ziggy", "./node_modules/ziggy-js"]
         },
         "jsx": "react-jsx"
     },
