@@ -1,9 +1,9 @@
 # TODO - Lunar Blood
 
 ## 🎨 UI/UX
-- [ ] Build reusable form components
+- [x] Build reusable form components
 - [ ] Create loading states and skeletons
-- [ ] Add toast notification system
+- [x] Add toast notification system
 - [ ] Implement modal dialogs
 - [ ] Add pagination components
 - [ ] Add custom animations and transitions
@@ -16,15 +16,15 @@
 - [ ] Set up caching strategies
 - [ ] Optimize database queries
 - [ ] Bundle size optimization
-- [ ] Set up automated testing pipeline
-- [ ] Implement proper error boundaries
+- [x] Set up automated testing pipeline
+- [x] Implement proper error boundaries
 - [ ] Set up CI/CD pipeline
 - [ ] Add monitoring and logging
 - [ ] Implement soft deletes where needed
 
 ## 📱 Features
 - [ ] Add search functionality
-- [ ] Email service integration
+- [x] Email service integration
 - [ ] Analytics tracking
 - [ ] Multi-language support (i18n)
 
