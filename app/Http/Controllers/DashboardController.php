@@ -291,6 +291,7 @@ class DashboardController extends Controller
             ->map(function (Show $show): array {
                 /** @var \Carbon\Carbon|null $showDate */
                 $showDate = $show->date;
+
                 return [
                     'id' => $show->id,
                     'date' => $showDate?->format('Y-m-d'),

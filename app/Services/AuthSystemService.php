@@ -23,6 +23,7 @@ class AuthSystemService
         if ($response->successful()) {
             /** @var array<string, mixed> $data */
             $data = $response->json();
+
             return $data;
         }
 

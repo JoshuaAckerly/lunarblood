@@ -61,6 +61,7 @@ class NewPasswordController extends Controller
         // redirect them back to where they came from with their error message.
         if ($status == Password::PasswordReset) {
             assert(is_string($status));
+
             return to_route('login')->with('status', __($status));
         }
 
