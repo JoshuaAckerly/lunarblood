@@ -22,9 +22,9 @@
 - [x] Responsive mobile layout
 - [x] Error handling pages (404, 500, 403)
 - [x] Add pagination components (venues paginate(12), shows paginate(15), Pagination.tsx component)
-- [ ] Optimize for accessibility (WCAG compliance -- aria labels, heading hierarchy)
-- [ ] Implement dark/light theme toggle
-- [ ] Implement modal dialogs (confirmations, quick-view)
+- [x] Optimize for accessibility (WCAG compliance -- aria labels, heading hierarchy, skip-to-content, aria-expanded, aria-controls, pagination aria-current)
+- [x] Implement dark/light theme toggle (Sun/Moon button in header using useAppearance)
+- [x] Implement modal dialogs (ConfirmDialog.tsx -- replace window.confirm on delete actions in shows + venues)
 
 ## 🔧 Technical
 - [x] Set up automated testing pipeline
