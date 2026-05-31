@@ -179,6 +179,10 @@
         @apply bg-[var(--secondary)] text-[var(--secondary-foreground)]/95 hover:brightness-95;
     }
 
+    .btn-danger {
+        @apply bg-red-600 text-white shadow-md hover:bg-red-700 active:scale-[0.99];
+    }
+
     .card {
         @apply rounded-lg bg-[var(--card)] p-6 text-[var(--card-foreground)] shadow-lg;
     }

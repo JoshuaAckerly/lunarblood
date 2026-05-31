@@ -1,10 +1,11 @@
+import ConfirmDialog from '@/components/ConfirmDialog';
 import Input from '@/components/Input';
 import Seo from '@/components/Seo';
 import Textarea from '@/components/Textarea';
 import Main from '@/layouts/main';
 import { Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Venue {
     id: number;
@@ -25,6 +26,7 @@ interface EditVenueProps {
 }
 
 const EditVenue: React.FC<EditVenueProps> = ({ venue }) => {
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const {
         data,
         setData,
@@ -51,9 +53,12 @@ const EditVenue: React.FC<EditVenueProps> = ({ venue }) => {
     };
 
     const handleDelete = () => {
-        if (confirm('Are you sure you want to delete this venue? This action cannot be undone.')) {
-            destroy(`/venues/${venue.id}`);
-        }
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        setShowDeleteConfirm(false);
+        destroy(`/venues/${venue.id}`);
     };
 
     return (
@@ -197,6 +202,16 @@ const EditVenue: React.FC<EditVenueProps> = ({ venue }) => {
                     </form>
                 </div>
             </div>
+
+            <ConfirmDialog
+                isOpen={showDeleteConfirm}
+                title="Delete Venue"
+                message="Are you sure you want to delete this venue? This action cannot be undone."
+                confirmLabel="Delete"
+                onConfirm={confirmDelete}
+                onCancel={() => setShowDeleteConfirm(false)}
+                variant="danger"
+            />
         </Main>
     );
 };

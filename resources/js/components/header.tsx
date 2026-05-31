@@ -1,13 +1,25 @@
 import NotificationBell from '@/components/NotificationBell';
 import SearchBar from '@/components/SearchBar';
 import { usePage } from '@inertiajs/react';
-import { ChevronDown, Menu, User, X } from 'lucide-react';
+import { useAppearance } from '@/hooks/use-appearance';
+import { ChevronDown, Menu, Moon, Sun, User, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement>(null);
+    const { appearance, updateAppearance } = useAppearance();
+
+    const toggleTheme = () => {
+        if (appearance === 'dark') {
+            updateAppearance('light');
+        } else {
+            updateAppearance('dark');
+        }
+    };
+
+    const isDark = appearance === 'dark' || (appearance === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     const { auth } = usePage().props as { auth?: { user?: { name: string } | null } };
 
     useEffect(() => {
@@ -51,6 +63,14 @@ const Header: React.FC = () => {
                     <a className="btn btn-primary" href="/listen">
                         Listen Now
                     </a>
+                    <button
+                        onClick={toggleTheme}
+                        className="rounded-md p-2 text-[var(--muted-foreground)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--primary-foreground)]"
+                        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                    >
+                        {isDark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+                    </button>
                     <SearchBar />
                     <NotificationBell />
                     {auth?.user ? (
@@ -156,6 +176,14 @@ const Header: React.FC = () => {
                         <a className="nav-link" href="/search" onClick={() => setIsMenuOpen(false)}>
                             Search
                         </a>
+                        <button
+                            onClick={() => { toggleTheme(); setIsMenuOpen(false); }}
+                            className="nav-link flex items-center gap-2 text-left"
+                            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                        >
+                            {isDark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
+                            {isDark ? 'Light mode' : 'Dark mode'}
+                        </button>
                     </nav>
                 </div>
             )}

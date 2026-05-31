@@ -1,3 +1,4 @@
+import ConfirmDialog from '@/components/ConfirmDialog';
 import Pagination, { PaginationLinks, PaginationMeta } from '@/components/Pagination';
 import Seo from '@/components/Seo';
 import { ShowCardSkeleton } from '@/components/Skeleton';
@@ -36,6 +37,8 @@ interface ShowsIndexProps {
 
 const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
     const [isNavigating, setIsNavigating] = useState(false);
+    const [deleteShowId, setDeleteShowId] = useState<number | null>(null);
+    const [deleteShowLabel, setDeleteShowLabel] = useState('');
     const { addToast } = useToast();
 
     useEffect(() => {
@@ -61,6 +64,15 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
             hour: 'numeric',
             minute: '2-digit',
             hour12: true,
+        });
+    };
+
+    const handleDeleteConfirm = () => {
+        if (deleteShowId === null) return;
+        const id = deleteShowId;
+        setDeleteShowId(null);
+        router.delete(`/shows/${id}`, {
+            onError: () => addToast('Failed to delete show.', 'error'),
         });
     };
 
@@ -155,11 +167,8 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                             className="btn btn-secondary btn-sm text-red-600 hover:text-red-700"
                                             aria-label={`Delete show at ${show.venue.name}`}
                                             onClick={() => {
-                                                if (confirm('Are you sure you want to delete this show?')) {
-                                                    router.delete(`/shows/${show.id}`, {
-                                                        onError: () => addToast('Failed to delete show.', 'error'),
-                                                    });
-                                                }
+                                                setDeleteShowLabel(show.venue.name);
+                                                setDeleteShowId(show.id);
                                             }}
                                         >
                                             <Trash2 size={14} aria-hidden="true" />
@@ -173,6 +182,16 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
 
                 <Pagination meta={shows.meta} links={shows.links} />
             </div>
+
+            <ConfirmDialog
+                isOpen={deleteShowId !== null}
+                title="Delete Show"
+                message={`Are you sure you want to delete the show at ${deleteShowLabel}? This action cannot be undone.`}
+                confirmLabel="Delete"
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => setDeleteShowId(null)}
+                variant="danger"
+            />
         </Main>
     );
 };
