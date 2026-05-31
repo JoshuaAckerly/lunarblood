@@ -44,6 +44,9 @@
 - [x] console.warn in use-google-analytics.ts — now only fires in DEV mode
 - [ ] Edge cases: empty cart checkout, duplicate order submission
 
+## 🤖 Automation
+- [ ] Add Dependabot (`.github/dependabot.yml`) for npm + composer automated dependency PRs
+
 ## ✅ Completed
 - [x] Initial project setup with Laravel + React + Inertia
 - [x] Basic routing, dev environment, formatting/linting
