@@ -1,154 +1,62 @@
 # TODO - Lunar Blood
 
-## 🎨 UI/UX
-- [x] Build reusable form components
-- [ ] Create loading states and skeletons
-- [x] Add toast notification system
-- [ ] Implement modal dialogs
-- [ ] Add pagination components
-- [ ] Add custom animations and transitions
-- [ ] Optimize for accessibility (WCAG compliance)
-- [ ] Implement dark/light theme toggle
-
-## 🔧 Technical
-- [ ] Implement lazy loading for components
-- [ ] Add image optimization
-- [ ] Set up caching strategies
-- [ ] Optimize database queries
-- [ ] Bundle size optimization
-- [x] Set up automated testing pipeline
-- [x] Implement proper error boundaries
-- [x] Set up CI/CD pipeline
-- [ ] Add monitoring and logging
-- [ ] Implement soft deletes where needed
-
-## 📱 Features
-- [ ] Add search functionality
-- [x] Email service integration
-- [ ] Analytics tracking
-- [ ] Multi-language support (i18n)
-
-## 🐛 Known Issues
-- [ ] Review and fix console warnings
-- [ ] Test cross-browser compatibility
-- [ ] Validate form submissions properly
-
-## ✅ Completed
+## 🔒 Security
 - [x] CSRF protection validation
 - [x] Rate limiting for API endpoints
-- [x] Navigation menu system
-- [x] Responsive mobile layout
-- [x] Error handling pages (404, 500)
-- [x] Listen page for music/audio content
-- [x] Venues listing and detail pages
-- [x] Tour page with dates and venues
-- [x] Shop page for merchandise
-- [x] Core database schema and Eloquent models
-- [x] Model relationships
-- [x] Database seeders for development
-- [x] Comprehensive test coverage
-- [x] API rate limiting and throttling
-- [x] Fix mobile responsiveness issues
-- [ ] Handle edge cases in user flows
-
-### Security Concerns
-- [ ] Audit dependencies for vulnerabilities
-- [ ] Implement proper input sanitization
 - [x] Add request validation
-- [x] Set up security headers
+- [x] Set up security headers (middleware with CSP, HSTS, XCPDP, COOP, CORP)
+- [x] Audit dependencies for vulnerabilities (npm audit fix -- 0 vulns)
 - [ ] Review file upload security
+- [ ] Input sanitization review (controller-level, beyond form request validation)
 
-## 📚 Documentation
+## 🚀 CI/CD & Infrastructure
+- [x] Set up CI/CD pipeline (GitHub Actions CI + CD via SSH)
+- [x] FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 (Node 24 migration)
+- [x] deploy-production.sh: git fetch + reset --hard (divergent branch fix)
+- [ ] Add monitoring and logging (error tracking e.g. Sentry)
 
-### Technical Documentation
-- [ ] API documentation with examples
-- [ ] Component library documentation
-- [ ] Database schema documentation
-- [ ] Deployment guide
-- [ ] Troubleshooting guide
-- [x] Update documentation to reflect Linux backend setup
+## 🎨 UI/UX
+- [x] Build reusable form components (Input, Select, Textarea, FormField)
+- [x] Add toast notification system
+- [x] Loading states and skeletons (Skeleton components used in dashboard)
+- [x] Responsive mobile layout
+- [x] Error handling pages (404, 500, 403)
+- [ ] Add pagination components (shops/venues/shows currently load all records)
+- [ ] Optimize for accessibility (WCAG compliance -- aria labels, heading hierarchy)
+- [ ] Implement dark/light theme toggle
+- [ ] Implement modal dialogs (confirmations, quick-view)
 
-### User Documentation
-- [ ] User manual/guide
-- [ ] FAQ section
-- [ ] Video tutorials
-- [ ] Feature announcements
-- [ ] Changelog maintenance
+## 🔧 Technical
+- [x] Set up automated testing pipeline
+- [x] Implement proper error boundaries
+- [x] Comprehensive test coverage (unit + feature)
+- [ ] Add image optimization (lazy loading, width/height on img tags)
+- [ ] Set up caching strategies (query caching for albums/venues/shows)
+- [ ] Implement soft deletes (shows, products)
+- [ ] Bundle size optimization
 
-## 🎯 Future Enhancements
+## 📱 Features
+- [x] Search functionality (search.tsx -- venues, shows, products)
+- [x] Email service integration
+- [ ] Analytics tracking (use-google-analytics.ts exists; configure MEASUREMENT_ID)
 
-### Long-term Goals
-- [ ] Mobile app development
-- [ ] Advanced analytics dashboard
-- [ ] Plugin/extension system
-- [ ] Multi-tenant architecture
-- [ ] Microservices migration
-
-### Performance Goals
-- [ ] Sub-second page load times
-- [ ] 95%+ uptime target
-- [ ] Scalability for 10k+ users
-- [ ] Mobile-first optimization
-- [ ] SEO optimization
-
----
-
-## 📝 Notes
-
-- Prioritize items based on user feedback and business requirements
-- Review and update this TODO list weekly
-- Mark completed items with ✅ and move to DONE section
-- Add estimated time/effort for each task when planning sprints
+## 🐛 Known Issues
+- [ ] console.warn in use-google-analytics.ts fires in prod if MEASUREMENT_ID unset -- suppress or configure
+- [ ] Edge cases: empty cart checkout, duplicate order submission
 
 ## ✅ Completed
-
-- [x] Initial project setup with Laravel + React
-- [x] Basic routing configuration
-- [x] Development environment setup
-- [x] Code formatting and linting configuration
-- [x] Basic component structure
+- [x] Initial project setup with Laravel + React + Inertia
+- [x] Basic routing, dev environment, formatting/linting
+- [x] Navigation menu system
 - [x] Listen page with audio player and discography
-- [x] Venues system with listing and detail pages
-- [x] Navigation menu with proper routing
-- [x] Enhanced AudioPlayer component with titles
+- [x] Venues listing and detail pages
 - [x] Tour page with show listings and ticket purchasing
-- [x] Updated welcome page with proper navigation
-- [x] Complete shop system with product listings
-- [x] Product detail pages with size/quantity selection
-- [x] Checkout flow with fake payment processing
-- [x] Order success page with confirmation details
-- [x] Error handling pages (404, 500, 403) with navigation
-- [x] Laravel error views integrated with React components
-- [x] Test routes for error page development
-- [x] Responsive mobile layout with hamburger menu
-- [x] Mobile-optimized tour and welcome pages
-- [x] Touch-friendly buttons and navigation
-- [x] Mobile-first CSS improvements
-- [x] CSRF protection with meta tags and API validation
-- [x] Payment form validation and security headers
-- [x] API routes with proper middleware protection
-- [x] Rate limiting for API endpoints with tiered restrictions
-- [x] Payment processing rate limits (5/min) for security
-- [x] Contact form rate limits (3/min) to prevent spam
-- [x] Client-side rate limit error handling
-- [x] Core database schema with venues, shows, products, albums, tracks
-- [x] Foreign key relationships and data integrity constraints
-- [x] Enum fields for status validation and categories
-- [x] JSON fields for flexible product data (sizes)
-- [x] Database migrations successfully executed
-- [x] Eloquent models for Venue, Show, Product, Album, Track
-- [x] Model relationships (hasMany, belongsTo) properly configured
-- [x] Type casting for data integrity (dates, decimals, JSON)
-- [x] Query scopes for common filters (active, featured, inStock)
-- [x] Accessor methods for formatted output (duration formatting)
-- [x] PHPUnit test suite with unit and feature tests
-- [x] Model factories for test data generation (Venue, Show)
-- [x] Unit tests for model functionality and relationships
-- [x] Feature tests for API endpoints and security
-- [x] Test coverage for CSRF protection and rate limiting
-- [x] Database testing with RefreshDatabase trait
-- [x] Database seeders for development data (venues, products, albums)
-- [x] VenueSeeder with realistic venue data and associated shows
-- [x] ProductSeeder with complete merchandise catalog
-- [x] AlbumSeeder with discography and track relationships
-- [x] HasFactory traits added to all models for testing
+- [x] Shop system with product listings, detail pages, size/quantity selection
+- [x] Checkout flow with payment form validation
+- [x] Order success page
+- [x] Core database schema (venues, shows, products, albums, tracks)
+- [x] Eloquent models, relationships, type casting, query scopes
+- [x] Database seeders (venues, products, albums)
+- [x] PHPUnit test suite -- unit + feature, model factories, RefreshDatabase
+- [x] API rate limiting (payment 5/min, contact 3/min)
+- [x] Mobile-responsive layout with hamburger menu
