@@ -36,7 +36,7 @@ class ShowControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('shows/index')
-            ->has('shows', 3)
+            ->has('shows.data', 3)
         );
     }
 

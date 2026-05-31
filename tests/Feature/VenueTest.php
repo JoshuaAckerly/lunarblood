@@ -20,7 +20,7 @@ class VenueTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('venues/index')
-            ->has('venues', 3)
+            ->has('venues.data', 3)
         );
     }
 
