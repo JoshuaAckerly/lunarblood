@@ -45,7 +45,7 @@
 - [ ] Edge cases: empty cart checkout, duplicate order submission
 
 ## 🤖 Automation
-- [ ] Add Dependabot (`.github/dependabot.yml`) for npm + composer automated dependency PRs
+- [x] Add Dependabot (`.github/dependabot.yml`) for npm + composer automated dependency PRs
 
 ## ✅ Completed
 - [x] Initial project setup with Laravel + React + Inertia
