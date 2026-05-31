@@ -30,7 +30,8 @@ fi
 
 # Pull latest code from Git
 echo "📦 Pulling latest code from Git..."
-git -c pull.rebase=false pull origin main
+git fetch origin main
+git reset --hard origin/main
 
 # Install/Update PHP dependencies (production mode)
 echo "🐘 Installing PHP dependencies..."
