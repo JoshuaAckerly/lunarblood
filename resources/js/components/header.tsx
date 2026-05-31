@@ -32,7 +32,7 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden items-center gap-4 md:flex">
+                <nav className="hidden items-center gap-4 md:flex" aria-label="Main navigation">
                     <a className="nav-link" href="/">
                         Home
                     </a>
@@ -101,15 +101,21 @@ const Header: React.FC = () => {
                 </nav>
 
                 {/* Mobile Menu Button */}
-                <button className="p-2 md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                <button
+                    className="p-2 md:hidden"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={isMenuOpen}
+                    aria-controls="mobile-nav"
+                >
+                    {isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
                 </button>
             </div>
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
                 <div className="mt-4 border-t border-[var(--border)] pb-4 md:hidden">
-                    <nav className="container flex flex-col gap-4 pt-4">
+                    <nav id="mobile-nav" className="container flex flex-col gap-4 pt-4" aria-label="Mobile navigation">
                         <a className="nav-link" href="/" onClick={() => setIsMenuOpen(false)}>
                             Home
                         </a>

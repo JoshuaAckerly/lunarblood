@@ -25,8 +25,14 @@ const Main: React.FC<React.PropsWithChildren> = ({ children }) => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[var(--background)]">
+            <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-[var(--background)] focus:px-4 focus:py-2 focus:text-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+            >
+                Skip to main content
+            </a>
             <Header />
-            <main className="flex-grow py-8">
+            <main id="main-content" className="flex-grow py-8">
                 <div className="container">
                     <ErrorBoundary>{children}</ErrorBoundary>
                 </div>

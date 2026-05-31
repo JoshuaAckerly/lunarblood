@@ -18,7 +18,7 @@ class ShowController extends Controller
      */
     public function index(): Response
     {
-        $shows = Show::with('venue')->orderBy('date', 'desc')->get();
+        $shows = Show::with('venue')->orderBy('date', 'desc')->paginate(15);
 
         return Inertia::render('shows/index', [
             'shows' => $shows,

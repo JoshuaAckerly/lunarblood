@@ -12,7 +12,7 @@ class VenueController extends Controller
 {
     public function index(): Response
     {
-        $venues = Venue::withCount('shows')->get();
+        $venues = Venue::withCount('shows')->paginate(12);
 
         return Inertia::render('venues/index', [
             'venues' => $venues,

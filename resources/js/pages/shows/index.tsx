@@ -1,3 +1,4 @@
+import Pagination, { PaginationLinks, PaginationMeta } from '@/components/Pagination';
 import Seo from '@/components/Seo';
 import { ShowCardSkeleton } from '@/components/Skeleton';
 import StatusBadge from '@/components/StatusBadge';
@@ -26,7 +27,11 @@ interface Show {
 }
 
 interface ShowsIndexProps {
-    shows: Show[];
+    shows: {
+        data: Show[];
+        meta: PaginationMeta;
+        links: PaginationLinks;
+    };
 }
 
 const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
@@ -78,7 +83,7 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                         <ShowCardSkeleton />
                         <ShowCardSkeleton />
                     </div>
-                ) : shows.length === 0 ? (
+                ) : shows.data.length === 0 ? (
                     <div className="card py-12 text-center">
                         <Calendar size={48} className="mx-auto mb-4 text-[var(--muted-foreground)]" />
                         <h3 className="mb-2 text-lg font-medium">No shows yet</h3>
@@ -90,7 +95,7 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                     </div>
                 ) : (
                     <div className="grid gap-6">
-                        {shows.map((show) => (
+                        {shows.data.map((show) => (
                             <div key={show.id} className="card">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
@@ -101,24 +106,24 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
 
                                         <div className="mb-4 grid gap-4 md:grid-cols-3">
                                             <div className="flex items-center gap-2 text-sm">
-                                                <MapPin size={16} className="text-[var(--muted-foreground)]" />
+                                                <MapPin size={16} className="text-[var(--muted-foreground)]" aria-hidden="true" />
                                                 <span>
                                                     {show.venue.city}, {show.venue.state} {show.venue.country}
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm">
-                                                <Calendar size={16} className="text-[var(--muted-foreground)]" />
+                                                <Calendar size={16} className="text-[var(--muted-foreground)]" aria-hidden="true" />
                                                 <span>{formatDate(show.date)}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm">
-                                                <Clock size={16} className="text-[var(--muted-foreground)]" />
+                                                <Clock size={16} className="text-[var(--muted-foreground)]" aria-hidden="true" />
                                                 <span>{formatTime(show.time)}</span>
                                             </div>
                                         </div>
 
                                         {show.price && (
                                             <div className="mb-3 flex items-center gap-2 text-sm">
-                                                <DollarSign size={16} className="text-[var(--muted-foreground)]" />
+                                                <DollarSign size={16} className="text-[var(--muted-foreground)]" aria-hidden="true" />
                                                 <span className="font-medium">${show.price}</span>
                                             </div>
                                         )}
@@ -140,14 +145,15 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                     </div>
 
                                     <div className="ml-4 flex items-center gap-2">
-                                        <Link href={`/shows/${show.id}`} className="btn btn-secondary btn-sm">
-                                            <Eye size={14} />
+                                        <Link href={`/shows/${show.id}`} className="btn btn-secondary btn-sm" aria-label={`View show at ${show.venue.name}`}>
+                                            <Eye size={14} aria-hidden="true" />
                                         </Link>
-                                        <Link href={`/shows/${show.id}/edit`} className="btn btn-secondary btn-sm">
-                                            <Edit size={14} />
+                                        <Link href={`/shows/${show.id}/edit`} className="btn btn-secondary btn-sm" aria-label={`Edit show at ${show.venue.name}`}>
+                                            <Edit size={14} aria-hidden="true" />
                                         </Link>
                                         <button
                                             className="btn btn-secondary btn-sm text-red-600 hover:text-red-700"
+                                            aria-label={`Delete show at ${show.venue.name}`}
                                             onClick={() => {
                                                 if (confirm('Are you sure you want to delete this show?')) {
                                                     router.delete(`/shows/${show.id}`, {
@@ -156,7 +162,7 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                                 }
                                             }}
                                         >
-                                            <Trash2 size={14} />
+                                            <Trash2 size={14} aria-hidden="true" />
                                         </button>
                                     </div>
                                 </div>
@@ -164,6 +170,8 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                         ))}
                     </div>
                 )}
+
+                <Pagination meta={shows.meta} links={shows.links} />
             </div>
         </Main>
     );

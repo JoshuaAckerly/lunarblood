@@ -1,3 +1,4 @@
+import Pagination, { PaginationLinks, PaginationMeta } from '@/components/Pagination';
 import Seo from '@/components/Seo';
 import { VenueCardSkeleton } from '@/components/Skeleton';
 import Main from '@/layouts/main';
@@ -21,7 +22,11 @@ interface Venue {
 }
 
 interface VenuesProps {
-    venues: Venue[];
+    venues: {
+        data: Venue[];
+        meta: PaginationMeta;
+        links: PaginationLinks;
+    };
 }
 
 const Venues: React.FC<VenuesProps> = ({ venues }) => {
@@ -61,7 +66,7 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
             <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {isNavigating
                     ? Array.from({ length: 6 }).map((_, i) => <VenueCardSkeleton key={i} />)
-                    : venues.map((venue) => (
+                    : venues.data.map((venue) => (
                           <div key={venue.id} className="card group transition-shadow hover:shadow-xl">
                               <div className="mb-4 aspect-video overflow-hidden rounded-lg bg-[var(--muted)]">
                                   {venue.image ? (
@@ -73,7 +78,7 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
                                           decoding="async"
                                       />
                                   ) : (
-                                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]">
+                                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]" aria-hidden="true">
                                           <span className="text-[var(--muted-foreground)]">Venue Photo</span>
                                       </div>
                                   )}
@@ -83,7 +88,7 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
 
                               <div className="mb-4 space-y-2">
                                   <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
-                                      <MapPin size={16} />
+                                      <MapPin size={16} aria-hidden="true" />
                                       <span>
                                           {venue.city}, {venue.state} {venue.country}
                                       </span>
@@ -99,13 +104,13 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
                                       <Link href={`/venues/${venue.id}`} className="btn btn-secondary text-sm">
                                           View
                                       </Link>
-                                      <Link href={`/venues/${venue.id}/edit`} className="btn btn-secondary text-sm">
-                                          <Edit size={14} />
+                                      <Link href={`/venues/${venue.id}/edit`} className="btn btn-secondary text-sm" aria-label={`Edit ${venue.name}`}>
+                                          <Edit size={14} aria-hidden="true" />
                                       </Link>
                                   </div>
                                   {venue.website && (
-                                      <a href={venue.website} target="_blank" rel="noopener noreferrer" className="btn btn-secondary text-sm">
-                                          <ExternalLink size={16} />
+                                      <a href={venue.website} target="_blank" rel="noopener noreferrer" className="btn btn-secondary text-sm" aria-label={`${venue.name} website (opens in new tab)`}>
+                                          <ExternalLink size={16} aria-hidden="true" />
                                       </a>
                                   )}
                               </div>
@@ -113,7 +118,9 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
                       ))}
             </section>
 
-            {venues.length === 0 && (
+            <Pagination meta={venues.meta} links={venues.links} />
+
+            {venues.data.length === 0 && (
                 <section className="py-12 text-center">
                     <p className="mb-4 text-[var(--muted-foreground)]">No venues found.</p>
                     <Link href="/venues/create" className="btn btn-primary">
