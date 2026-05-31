@@ -21,7 +21,7 @@
 - [x] Loading states and skeletons (Skeleton components used in dashboard)
 - [x] Responsive mobile layout
 - [x] Error handling pages (404, 500, 403)
-- [ ] Add pagination components (shops/venues/shows currently load all records)
+- [x] Add pagination components (venues paginate(12), shows paginate(15), Pagination.tsx component)
 - [ ] Optimize for accessibility (WCAG compliance -- aria labels, heading hierarchy)
 - [ ] Implement dark/light theme toggle
 - [ ] Implement modal dialogs (confirmations, quick-view)
@@ -30,7 +30,7 @@
 - [x] Set up automated testing pipeline
 - [x] Implement proper error boundaries
 - [x] Comprehensive test coverage (unit + feature)
-- [ ] Add image optimization (lazy loading, width/height on img tags)
+- [x] Add image optimization (all img tags have loading="lazy" decoding="async"; aspect-ratio containers prevent CLS)
 - [ ] Set up caching strategies (query caching for albums/venues/shows)
 - [ ] Implement soft deletes (shows, products)
 - [ ] Bundle size optimization
@@ -38,10 +38,10 @@
 ## 📱 Features
 - [x] Search functionality (search.tsx -- venues, shows, products)
 - [x] Email service integration
-- [ ] Analytics tracking (use-google-analytics.ts exists; configure MEASUREMENT_ID)
+- [x] Analytics tracking (initializeGoogleAnalytics wired in app.tsx via VITE_GA_MEASUREMENT_ID; no-ops silently if unset)
 
 ## 🐛 Known Issues
-- [ ] console.warn in use-google-analytics.ts fires in prod if MEASUREMENT_ID unset -- suppress or configure
+- [x] console.warn in use-google-analytics.ts — now only fires in DEV mode
 - [ ] Edge cases: empty cart checkout, duplicate order submission
 
 ## ✅ Completed

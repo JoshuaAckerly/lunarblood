@@ -151,7 +151,9 @@ export const trackButtonClick = (buttonName: string, category?: string) => {
  */
 export const initializeGoogleAnalytics = (measurementId: string) => {
     if (!measurementId) {
-        console.warn('Google Analytics: Measurement ID not configured');
+        if (import.meta.env.DEV) {
+            console.warn('Google Analytics: Measurement ID not configured');
+        }
         return;
     }
 
