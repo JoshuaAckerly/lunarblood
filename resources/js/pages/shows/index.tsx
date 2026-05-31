@@ -157,10 +157,18 @@ const ShowsIndex: React.FC<ShowsIndexProps> = ({ shows }) => {
                                     </div>
 
                                     <div className="ml-4 flex items-center gap-2">
-                                        <Link href={`/shows/${show.id}`} className="btn btn-secondary btn-sm" aria-label={`View show at ${show.venue.name}`}>
+                                        <Link
+                                            href={`/shows/${show.id}`}
+                                            className="btn btn-secondary btn-sm"
+                                            aria-label={`View show at ${show.venue.name}`}
+                                        >
                                             <Eye size={14} aria-hidden="true" />
                                         </Link>
-                                        <Link href={`/shows/${show.id}/edit`} className="btn btn-secondary btn-sm" aria-label={`Edit show at ${show.venue.name}`}>
+                                        <Link
+                                            href={`/shows/${show.id}/edit`}
+                                            className="btn btn-secondary btn-sm"
+                                            aria-label={`Edit show at ${show.venue.name}`}
+                                        >
                                             <Edit size={14} aria-hidden="true" />
                                         </Link>
                                         <button

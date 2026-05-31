@@ -34,9 +34,7 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ meta, links }) => {
     if (meta.last_page <= 1) return null;
 
-    const pageLinks = meta.links.filter(
-        (link) => !link.label.includes('Previous') && !link.label.includes('Next'),
-    );
+    const pageLinks = meta.links.filter((link) => !link.label.includes('Previous') && !link.label.includes('Next'));
 
     return (
         <nav aria-label="Pagination" className="mt-8 flex items-center justify-between">
@@ -46,11 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({ meta, links }) => {
 
             <div className="flex items-center gap-1">
                 {links.prev ? (
-                    <Link
-                        href={links.prev}
-                        className="btn btn-secondary btn-sm"
-                        aria-label="Previous page"
-                    >
+                    <Link href={links.prev} className="btn btn-secondary btn-sm" aria-label="Previous page">
                         <ChevronLeft size={16} />
                     </Link>
                 ) : (
@@ -78,11 +72,7 @@ const Pagination: React.FC<PaginationProps> = ({ meta, links }) => {
                 )}
 
                 {links.next ? (
-                    <Link
-                        href={links.next}
-                        className="btn btn-secondary btn-sm"
-                        aria-label="Next page"
-                    >
+                    <Link href={links.next} className="btn btn-secondary btn-sm" aria-label="Next page">
                         <ChevronRight size={16} />
                     </Link>
                 ) : (

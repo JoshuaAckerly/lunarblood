@@ -1,7 +1,7 @@
 import NotificationBell from '@/components/NotificationBell';
 import SearchBar from '@/components/SearchBar';
-import { usePage } from '@inertiajs/react';
 import { useAppearance } from '@/hooks/use-appearance';
+import { usePage } from '@inertiajs/react';
 import { ChevronDown, Menu, Moon, Sun, User, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -19,7 +19,9 @@ const Header: React.FC = () => {
         }
     };
 
-    const isDark = appearance === 'dark' || (appearance === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const isDark =
+        appearance === 'dark' ||
+        (appearance === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     const { auth } = usePage().props as { auth?: { user?: { name: string } | null } };
 
     useEffect(() => {
@@ -177,7 +179,10 @@ const Header: React.FC = () => {
                             Search
                         </a>
                         <button
-                            onClick={() => { toggleTheme(); setIsMenuOpen(false); }}
+                            onClick={() => {
+                                toggleTheme();
+                                setIsMenuOpen(false);
+                            }}
                             className="nav-link flex items-center gap-2 text-left"
                             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                         >

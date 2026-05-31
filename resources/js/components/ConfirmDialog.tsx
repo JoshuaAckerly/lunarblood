@@ -51,39 +51,22 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             aria-describedby="confirm-dialog-message"
         >
             {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/60"
-                onClick={onCancel}
-                aria-hidden="true"
-            />
+            <div className="absolute inset-0 bg-black/60" onClick={onCancel} aria-hidden="true" />
 
             {/* Panel */}
             <div className="relative z-10 w-full max-w-md rounded-lg border border-[var(--border)] bg-[var(--background)] p-6 shadow-xl">
-                <h2
-                    id="confirm-dialog-title"
-                    className="mb-2 text-lg font-semibold text-[var(--primary-foreground)]"
-                >
+                <h2 id="confirm-dialog-title" className="mb-2 text-lg font-semibold text-[var(--primary-foreground)]">
                     {title}
                 </h2>
-                <p
-                    id="confirm-dialog-message"
-                    className="mb-6 text-sm text-[var(--muted-foreground)]"
-                >
+                <p id="confirm-dialog-message" className="mb-6 text-sm text-[var(--muted-foreground)]">
                     {message}
                 </p>
 
                 <div className="flex justify-end gap-3">
-                    <button
-                        ref={cancelRef}
-                        onClick={onCancel}
-                        className="btn btn-secondary"
-                    >
+                    <button ref={cancelRef} onClick={onCancel} className="btn btn-secondary">
                         {cancelLabel}
                     </button>
-                    <button
-                        onClick={onConfirm}
-                        className={variant === 'danger' ? 'btn btn-danger' : 'btn btn-primary'}
-                    >
+                    <button onClick={onConfirm} className={variant === 'danger' ? 'btn btn-danger' : 'btn btn-primary'}>
                         {confirmLabel}
                     </button>
                 </div>

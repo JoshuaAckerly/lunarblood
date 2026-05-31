@@ -78,7 +78,10 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
                                           decoding="async"
                                       />
                                   ) : (
-                                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]" aria-hidden="true">
+                                      <div
+                                          className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]"
+                                          aria-hidden="true"
+                                      >
                                           <span className="text-[var(--muted-foreground)]">Venue Photo</span>
                                       </div>
                                   )}
@@ -109,7 +112,13 @@ const Venues: React.FC<VenuesProps> = ({ venues }) => {
                                       </Link>
                                   </div>
                                   {venue.website && (
-                                      <a href={venue.website} target="_blank" rel="noopener noreferrer" className="btn btn-secondary text-sm" aria-label={`${venue.name} website (opens in new tab)`}>
+                                      <a
+                                          href={venue.website}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="btn btn-secondary text-sm"
+                                          aria-label={`${venue.name} website (opens in new tab)`}
+                                      >
                                           <ExternalLink size={16} aria-hidden="true" />
                                       </a>
                                   )}
