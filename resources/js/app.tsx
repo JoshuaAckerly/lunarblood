@@ -12,7 +12,7 @@ const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undef
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
+    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob<any>('./pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
 

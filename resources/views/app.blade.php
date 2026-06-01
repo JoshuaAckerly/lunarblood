@@ -33,7 +33,7 @@
             }
         </style>
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title data-inertia>{{ config('app.name', 'Laravel') }}</title>
 
         @if(config('services.google_analytics.tracking_id'))
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.tracking_id') }}" nonce="{{ Vite::cspNonce() }}"></script>
