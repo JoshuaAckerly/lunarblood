@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateShowRequest;
 use App\Models\Show;
 use App\Models\Venue;
 use Illuminate\Http\JsonResponse;
@@ -147,20 +148,9 @@ class ShowController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Show $show): RedirectResponse
+    public function update(UpdateShowRequest $request, Show $show): RedirectResponse
     {
-        /** @var array<string, mixed> $validated */
-        $validated = $request->validate([
-            'venue_id' => 'required|exists:venues,id',
-            'date' => 'required|date|after:today',
-            'time' => 'required|date_format:H:i',
-            'status' => 'required|in:coming-soon,on-sale,sold-out,cancelled',
-            'ticket_url' => 'nullable|url',
-            'price' => 'nullable|numeric|min:0',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        $show->update($validated);
+        $show->update($request->validated());
 
         return redirect()->route('shows.show', $show)->with('success', 'Show updated successfully!');
     }

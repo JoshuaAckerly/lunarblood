@@ -56,7 +56,11 @@ export default defineConfig(({ mode }) => {
                 'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
                 '@': resolve(__dirname, 'resources/js'),
                 '@/images': resolve(__dirname, 'resources/images'),
+                '@gj/env': resolve(__dirname, '../packages/env/src/index.ts'),
+                '@gj/utils': resolve(__dirname, '../packages/utils/src/index.ts'),
+                '@gj/hooks': resolve(__dirname, '../packages/hooks/src/index.ts'),
             },
+            dedupe: ['react', 'react-dom'],
         },
         ssr: {
             noExternal: ['react', 'react-dom', '@inertiajs/react', '@inertiajs/core'],
