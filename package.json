@@ -2,6 +2,9 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "test": "vitest run --passWithNoTests",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",
