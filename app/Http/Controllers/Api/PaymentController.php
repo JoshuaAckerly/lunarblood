@@ -12,7 +12,7 @@ class PaymentController extends Controller
 {
     public function process(Request $request): JsonResponse
     {
-        /** @var array<string, mixed> $validated */
+        /** @var array{email: string, firstName: string, lastName: string, address: string, city: string, state: string, zip: string, cardNumber: string, expiry: string, cvv: string} $validated */
         $validated = $request->validate([
             'email' => 'required|email',
             'firstName' => 'required|string|max:255',

@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { type ComponentType } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { type RouteName, route } from 'ziggy-js';
 
@@ -12,7 +13,7 @@ createServer(
             page,
             render: ReactDOMServer.renderToString,
             title: (title) => (title ? `${title} - ${appName}` : appName),
-            resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob<any>('./pages/**/*.tsx')),
+            resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob<{ default: ComponentType }>('./pages/**/*.tsx')),
             setup: ({ App, props }) => {
                 /* eslint-disable */
                 // @ts-expect-error

@@ -12,7 +12,7 @@ class ContactController extends Controller
 {
     public function send(Request $request): JsonResponse
     {
-        /** @var array<string, mixed> $validated */
+        /** @var array{name: string, email: string, message: string} $validated */
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',

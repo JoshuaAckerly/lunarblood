@@ -2,6 +2,7 @@ import '../css/app.css';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToastProvider } from './components/Toast';
 import { initializeTheme } from './hooks/use-appearance';
@@ -12,7 +13,7 @@ const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undef
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob<any>('./pages/**/*.tsx')),
+    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob<{ default: ComponentType }>('./pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
 
