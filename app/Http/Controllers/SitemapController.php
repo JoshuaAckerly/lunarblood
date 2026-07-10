@@ -22,6 +22,9 @@ class SitemapController extends Controller
             ['loc' => $baseUrl.'/tour', 'priority' => '0.9', 'changefreq' => 'daily'],
             ['loc' => $baseUrl.'/venues', 'priority' => '0.8', 'changefreq' => 'weekly'],
             ['loc' => $baseUrl.'/shop', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl.'/privacy', 'priority' => '0.3', 'changefreq' => 'yearly'],
+            ['loc' => $baseUrl.'/terms', 'priority' => '0.3', 'changefreq' => 'yearly'],
+            ['loc' => $baseUrl.'/cookies', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ];
 
         // Dynamic content

@@ -5,8 +5,8 @@ Band website with venue and show management, a listen page, shop with products, 
 
 ## Tech Stack
 - **Backend**: Laravel 12, PHP 8.2+, Sanctum (session), Spatie Sitemap
-- **Frontend**: React 19, TypeScript, Inertia.js 2, Tailwind CSS 4, **Vite 7** (no Radix/Headless UI)
-- **Testing**: PHPUnit 11 (`php artisan test`)
+- **Frontend**: React 19, TypeScript, Inertia.js 3, Tailwind CSS 4, **Vite 7** (no Radix/Headless UI)
+- **Testing**: PHPUnit 11 (`php artisan test`), Vitest + React Testing Library
 - **Storage**: MySQL (prod), SQLite (tests), optional Redis/S3
 
 ## Architecture
@@ -16,7 +16,9 @@ Band website with venue and show management, a listen page, shop with products, 
 - `VenueController` — full venue CRUD (no auth required for public routes)
 - `DashboardController` — admin dashboard
 - `SitemapController` — Spatie Sitemap generation
-- `Api/` — API endpoints
+- `SearchController` — search functionality (`GET /search`)
+- `Api/ContactController` — contact form submissions (`POST /api/contact`, throttle 3/min)
+- `Api/PaymentController` — payment processing (`POST /api/process-payment`, throttle 5/min)
 - `Auth/` — Breeze auth
 
 ### Models (`app/Models/`)
@@ -64,6 +66,7 @@ GET/PUT/DELETE /shows/{show} → show detail / update / destroy
 ## Build & Test
 ```bash
 php artisan test
+npm run test            # Vitest
 npm run build:ssr
 npm run types
 npm run lint
