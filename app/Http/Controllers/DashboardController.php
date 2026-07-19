@@ -9,6 +9,7 @@ use App\Services\SearchService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -88,70 +89,78 @@ class DashboardController extends Controller
         ]);
     }
 
+    public static function clearCache(): void
+    {
+        Cache::forget('dashboard.data');
+    }
+
     /** @return array<string, mixed> */
     private function getDashboardData(): array
     {
-        $upcomingShowsQuery = Show::query()
-            ->with(['venue:id,name,city,state'])
-            ->whereDate('date', '>=', now()->toDateString())
-            ->orderBy('date')
-            ->orderBy('time');
+        /** @var array<string, mixed> */
+        return Cache::remember('dashboard.data', 300, function (): array {
+            $upcomingShowsQuery = Show::query()
+                ->with(['venue:id,name,city,state'])
+                ->whereDate('date', '>=', now()->toDateString())
+                ->orderBy('date')
+                ->orderBy('time');
 
-        $lowStockProductsQuery = Product::query()
-            ->active()
-            ->where('stock', '<=', 5)
-            ->orderBy('stock')
-            ->orderBy('name');
+            $lowStockProductsQuery = Product::query()
+                ->active()
+                ->where('stock', '<=', 5)
+                ->orderBy('stock')
+                ->orderBy('name');
 
-        $upcomingShows = $upcomingShowsQuery
-            ->take(5)
-            ->get()
-            ->map(function (Show $show): array {
-                /** @var Carbon|null $showDate */
-                $showDate = $show->date;
+            $upcomingShows = $upcomingShowsQuery
+                ->take(5)
+                ->get()
+                ->map(function (Show $show): array {
+                    /** @var Carbon|null $showDate */
+                    $showDate = $show->date;
 
-                return [
-                    'id' => $show->id,
-                    'date' => $showDate?->format('Y-m-d'),
-                    'time' => $show->time,
-                    'status' => $show->status,
-                    'price' => $show->price,
-                    'venue' => [
-                        'name' => $show->venue?->name,
-                        'city' => $show->venue?->city,
-                        'state' => $show->venue?->state,
-                    ],
-                ];
-            })
-            ->values()
-            ->all();
+                    return [
+                        'id' => $show->id,
+                        'date' => $showDate?->format('Y-m-d'),
+                        'time' => $show->time,
+                        'status' => $show->status,
+                        'price' => $show->price,
+                        'venue' => [
+                            'name' => $show->venue?->name,
+                            'city' => $show->venue?->city,
+                            'state' => $show->venue?->state,
+                        ],
+                    ];
+                })
+                ->values()
+                ->all();
 
-        $lowStockProducts = $lowStockProductsQuery
-            ->take(5)
-            ->get(['id', 'name', 'stock', 'category'])
-            ->map(function (Product $product): array {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'stock' => $product->stock,
-                    'category' => $product->category,
-                ];
-            })
-            ->values()
-            ->all();
+            $lowStockProducts = $lowStockProductsQuery
+                ->take(5)
+                ->get(['id', 'name', 'stock', 'category'])
+                ->map(function (Product $product): array {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'stock' => $product->stock,
+                        'category' => $product->category,
+                    ];
+                })
+                ->values()
+                ->all();
 
-        return [
-            'stats' => [
-                'venues' => Venue::query()->count(),
-                'shows_total' => Show::query()->count(),
-                'shows_upcoming' => (clone $upcomingShowsQuery)->count(),
-                'products_active' => Product::query()->active()->count(),
-                'products_low_stock' => (clone $lowStockProductsQuery)->count(),
-            ],
-            'upcoming_shows' => $upcomingShows,
-            'low_stock_products' => $lowStockProducts,
-            'generated_at' => now()->toIso8601String(),
-        ];
+            return [
+                'stats' => [
+                    'venues' => Venue::query()->count(),
+                    'shows_total' => Show::query()->count(),
+                    'shows_upcoming' => (clone $upcomingShowsQuery)->count(),
+                    'products_active' => Product::query()->active()->count(),
+                    'products_low_stock' => (clone $lowStockProductsQuery)->count(),
+                ],
+                'upcoming_shows' => $upcomingShows,
+                'low_stock_products' => $lowStockProducts,
+                'generated_at' => now()->toIso8601String(),
+            ];
+        });
     }
 
     /** @return array<string, mixed> */

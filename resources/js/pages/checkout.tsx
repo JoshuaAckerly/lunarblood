@@ -3,7 +3,7 @@ import { useToast } from '@/components/Toast';
 import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
 import Main from '@/layouts/main';
 import { CreditCard, Lock } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 interface CheckoutProps {
     orderData: {
@@ -31,6 +31,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const idempotencyKey = useRef(crypto.randomUUID());
     const { addToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -52,6 +53,7 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 body: JSON.stringify({
                     ...formData,
                     orderData,
+                    idempotency_key: idempotencyKey.current,
                 }),
             });
 

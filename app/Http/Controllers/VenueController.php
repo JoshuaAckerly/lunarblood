@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\DashboardController;
 use App\Models\Venue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class VenueController extends Controller
         ]);
 
         Venue::create($validated);
+        DashboardController::clearCache();
 
         return redirect()->route('venues.index')->with('success', 'Venue created successfully.');
     }
@@ -78,6 +80,7 @@ class VenueController extends Controller
         ]);
 
         $venue->update($validated);
+        DashboardController::clearCache();
 
         return redirect()->route('venues.index')->with('success', 'Venue updated successfully.');
     }
@@ -85,6 +88,7 @@ class VenueController extends Controller
     public function destroy(Venue $venue): RedirectResponse
     {
         $venue->delete();
+        DashboardController::clearCache();
 
         return redirect()->route('venues.index')->with('success', 'Venue deleted successfully.');
     }

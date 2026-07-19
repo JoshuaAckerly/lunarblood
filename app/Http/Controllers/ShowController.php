@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Requests\UpdateShowRequest;
 use App\Models\Show;
 use App\Models\Venue;
@@ -112,6 +113,7 @@ class ShowController extends Controller
             $createData = $draftData;
             Show::create($createData);
             Session::forget('show_draft');
+            DashboardController::clearCache();
 
             return redirect()->route('shows.index')->with('success', 'Show created successfully!');
         }
@@ -151,6 +153,7 @@ class ShowController extends Controller
     public function update(UpdateShowRequest $request, Show $show): RedirectResponse
     {
         $show->update($request->validated());
+        DashboardController::clearCache();
 
         return redirect()->route('shows.show', $show)->with('success', 'Show updated successfully!');
     }
@@ -161,6 +164,7 @@ class ShowController extends Controller
     public function destroy(Show $show): RedirectResponse
     {
         $show->delete();
+        DashboardController::clearCache();
 
         return redirect()->route('shows.index')->with('success', 'Show deleted successfully!');
     }
