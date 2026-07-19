@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Requests\UpdateShowRequest;
 use App\Models\Show;
 use App\Models\Venue;

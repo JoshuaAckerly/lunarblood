@@ -29,13 +29,14 @@ class PaymentController extends Controller
         ]);
 
         $idempotencyKey = isset($validated['idempotency_key']) && is_string($validated['idempotency_key'])
-            ? 'payment.idem.' . $validated['idempotency_key']
+            ? 'payment.idem.'.$validated['idempotency_key']
             : null;
 
         if ($idempotencyKey !== null) {
             if (Cache::has($idempotencyKey)) {
                 /** @var array{order_id: string} $cached */
                 $cached = Cache::get($idempotencyKey);
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Payment already processed',
