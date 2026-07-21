@@ -30,7 +30,11 @@ export default defineConfig(({ mode }) => {
             host: '0.0.0.0',
             origin: 'http://lunarblood.graveyardjokes.local:8083',
             cors: {
-                origin: 'http://lunarblood.graveyardjokes.local',
+                origin: [
+                    'http://lunarblood.graveyardjokes.local',
+                    'http://lunarblood.graveyardjokes.local:8002',
+                    'http://localhost:8002',
+                ],
                 credentials: true
             },
             allowedHosts: ['lunarblood.graveyardjokes.local'],
