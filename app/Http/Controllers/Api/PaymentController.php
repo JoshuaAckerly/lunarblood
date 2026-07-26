@@ -13,7 +13,7 @@ class PaymentController extends Controller
 {
     public function process(Request $request): JsonResponse
     {
-        /** @var array{email: string, firstName: string, lastName: string, address: string, city: string, state: string, zip: string, cardNumber: string, expiry: string, cvv: string, idempotency_key?: string} $validated */
+        /** @var array{email: string, firstName: string, lastName: string, address: string, city: string, state: string, zip: string, cardNumber: string, expiry: string, cvv: string, idempotency_key: string, orderData: array{name: string, total: string|int|float}} $validated */
         $validated = $request->validate([
             'email' => 'required|email',
             'firstName' => 'required|string|max:255',
@@ -25,25 +25,16 @@ class PaymentController extends Controller
             'cardNumber' => 'required|string|min:12|max:25',
             'expiry' => ['required', 'regex:/^(0[1-9]|1[0-2])\/[0-9]{2}$/'],
             'cvv' => ['required', 'regex:/^[0-9]{3,4}$/'],
-            'idempotency_key' => 'nullable|string|max:64',
+            'idempotency_key' => 'required|string|size:40',
+            'orderData' => 'required|array',
+            'orderData.productId' => 'required|string|max:50',
+            'orderData.name' => 'required|string|max:255',
+            'orderData.price' => 'required|numeric|min:0.01',
+            'orderData.quantity' => 'required|integer|min:1|max:99',
+            'orderData.total' => 'required|numeric|min:0.01',
         ]);
 
-        $idempotencyKey = isset($validated['idempotency_key']) && is_string($validated['idempotency_key'])
-            ? 'payment.idem.'.$validated['idempotency_key']
-            : null;
-
-        if ($idempotencyKey !== null) {
-            if (Cache::has($idempotencyKey)) {
-                /** @var array{order_id: string} $cached */
-                $cached = Cache::get($idempotencyKey);
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Payment already processed',
-                    'order_id' => $cached['order_id'],
-                ]);
-            }
-        }
+        $idempotencyKey = 'payment.idem.'.$validated['idempotency_key'];
 
         $email = strtolower(trim((string) $validated['email']));
         $firstName = trim(strip_tags((string) $validated['firstName']));
@@ -63,10 +54,17 @@ class PaymentController extends Controller
             ], 422);
         }
 
+        if (! Cache::add($idempotencyKey, true, now()->addMinutes(15))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment request already processed',
+            ], 409);
+        }
+
         $orderId = 'LB-'.strtoupper(substr(md5($email.now()->timestamp), 0, 9));
 
-        $productName = $request->input('orderData.name', 'Your Order');
-        $total = $request->input('orderData.total', '0.00');
+        $productName = $validated['orderData']['name'];
+        $total = (string) $validated['orderData']['total'];
 
         Mail::to($email)->send(new OrderConfirmationMail(
             customerEmail: $email,
@@ -75,10 +73,6 @@ class PaymentController extends Controller
             productName: is_string($productName) ? $productName : 'Your Order',
             total: is_string($total) ? $total : '0.00',
         ));
-
-        if ($idempotencyKey !== null) {
-            Cache::put($idempotencyKey, ['order_id' => $orderId], 60);
-        }
 
         return response()->json([
             'success' => true,

@@ -3,9 +3,10 @@ import { useToast } from '@/components/Toast';
 import { trackFormSubmission, trackPurchase } from '@/hooks/use-google-analytics';
 import Main from '@/layouts/main';
 import { CreditCard, Lock } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 interface CheckoutProps {
+    idempotencyKey: string;
     orderData: {
         productId: string;
         name: string;
@@ -16,7 +17,7 @@ interface CheckoutProps {
     };
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
+const Checkout: React.FC<CheckoutProps> = ({ idempotencyKey, orderData }) => {
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -31,7 +32,6 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
-    const idempotencyKey = useRef(crypto.randomUUID());
     const { addToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -52,8 +52,8 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 },
                 body: JSON.stringify({
                     ...formData,
+                    idempotency_key: idempotencyKey,
                     orderData,
-                    idempotency_key: idempotencyKey.current,
                 }),
             });
 
@@ -77,6 +77,10 @@ const Checkout: React.FC<CheckoutProps> = ({ orderData }) => {
                 }, 1000);
             } else if (response.status === 429) {
                 addToast('Too many payment attempts. Please wait a moment and try again.', 'error');
+                setIsProcessing(false);
+                return;
+            } else if (response.status === 409) {
+                addToast('This payment request was already submitted.', 'error');
                 setIsProcessing(false);
                 return;
             } else {

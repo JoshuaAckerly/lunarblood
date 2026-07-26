@@ -24,8 +24,12 @@ class MailTest extends TestCase
         'cardNumber' => '4242424242424242',
         'expiry' => '12/25',
         'cvv' => '123',
+        'idempotency_key' => 'defghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ',
         'orderData' => [
+            'productId' => '1',
             'name' => 'Lunar Blood T-Shirt',
+            'price' => '25.00',
+            'quantity' => '1',
             'total' => '25.00',
         ],
     ];

@@ -7,6 +7,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VenueController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use League\CommonMark\CommonMarkConverter;
 
@@ -67,16 +68,23 @@ Route::get('/shop/{id}', function (string $id) {
 })->whereNumber('id')->name('product.show');
 
 Route::get('/checkout', function () {
+    if (! request()->filled(['productId', 'name', 'price', 'quantity', 'total'])) {
+        return redirect()->route('shop');
+    }
+
     $orderData = [
-        'productId' => request('productId', '1'),
-        'name' => request('name', 'Lunar Blood T-Shirt'),
-        'price' => request('price', '25.00'),
-        'quantity' => request('quantity', '1'),
+        'productId' => request('productId'),
+        'name' => request('name'),
+        'price' => request('price'),
+        'quantity' => request('quantity'),
         'size' => request('size', ''),
-        'total' => request('total', '25.00'),
+        'total' => request('total'),
     ];
 
-    return Inertia::render('checkout', ['orderData' => $orderData]);
+    return Inertia::render('checkout', [
+        'idempotencyKey' => Str::random(40),
+        'orderData' => $orderData,
+    ]);
 })->name('checkout');
 
 Route::get('/order-success', function () {

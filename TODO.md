@@ -42,7 +42,7 @@
 
 ## 🐛 Known Issues
 - [x] console.warn in use-google-analytics.ts — now only fires in DEV mode
-- [ ] Edge cases: empty cart checkout, duplicate order submission
+- [x] Edge cases: empty cart checkout, duplicate order submission
 
 ## 🤖 Automation
 - [x] Add Dependabot (`.github/dependabot.yml`) for npm + composer automated dependency PRs
