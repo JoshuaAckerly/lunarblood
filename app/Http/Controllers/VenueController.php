@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Venue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -12,7 +13,7 @@ class VenueController extends Controller
 {
     public function index(): Response
     {
-        $venues = Venue::withCount('shows')->paginate(12);
+        $venues = Cache::remember('venues.index', 600, fn () => Venue::withCount('shows')->paginate(12));
 
         return Inertia::render('venues/index', [
             'venues' => $venues,
@@ -42,6 +43,7 @@ class VenueController extends Controller
 
         Venue::create($validated);
         DashboardController::clearCache();
+        Cache::forget('venues.index');
 
         return redirect()->route('venues.index')->with('success', 'Venue created successfully.');
     }
@@ -80,6 +82,7 @@ class VenueController extends Controller
 
         $venue->update($validated);
         DashboardController::clearCache();
+        Cache::forget('venues.index');
 
         return redirect()->route('venues.index')->with('success', 'Venue updated successfully.');
     }
@@ -88,6 +91,7 @@ class VenueController extends Controller
     {
         $venue->delete();
         DashboardController::clearCache();
+        Cache::forget('venues.index');
 
         return redirect()->route('venues.index')->with('success', 'Venue deleted successfully.');
     }

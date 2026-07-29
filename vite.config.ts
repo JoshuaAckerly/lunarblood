@@ -69,6 +69,17 @@ export default defineConfig(({ mode }) => {
         ssr: {
             noExternal: ['react', 'react-dom', '@inertiajs/react', '@inertiajs/core'],
         },
+        build: {
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        vendor: ['react', 'react-dom'],
+                        inertia: ['@inertiajs/react', '@inertiajs/core'],
+                        sentry: ['@sentry/react'],
+                    },
+                },
+            },
+        },
         test: {
             environment: 'jsdom',
             globals: true,

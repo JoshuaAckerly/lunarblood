@@ -8,6 +8,7 @@ use App\Models\Venue;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +20,7 @@ class ShowController extends Controller
      */
     public function index(): Response
     {
-        $shows = Show::with('venue')->orderBy('date', 'desc')->paginate(15);
+        $shows = Cache::remember('shows.index', 300, fn () => Show::with('venue')->orderBy('date', 'desc')->paginate(15));
 
         return Inertia::render('shows/index', [
             'shows' => $shows,
@@ -113,6 +114,7 @@ class ShowController extends Controller
             Show::create($createData);
             Session::forget('show_draft');
             DashboardController::clearCache();
+            Cache::forget('shows.index');
 
             return redirect()->route('shows.index')->with('success', 'Show created successfully!');
         }
@@ -153,6 +155,7 @@ class ShowController extends Controller
     {
         $show->update($request->validated());
         DashboardController::clearCache();
+        Cache::forget('shows.index');
 
         return redirect()->route('shows.show', $show)->with('success', 'Show updated successfully!');
     }
@@ -164,6 +167,7 @@ class ShowController extends Controller
     {
         $show->delete();
         DashboardController::clearCache();
+        Cache::forget('shows.index');
 
         return redirect()->route('shows.index')->with('success', 'Show deleted successfully!');
     }

@@ -13,7 +13,7 @@
 - [x] Set up CI/CD pipeline (GitHub Actions CI + CD via SSH)
 - [x] FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 (Node 24 migration)
 - [x] deploy-production.sh: git fetch + reset --hard (divergent branch fix)
-- [ ] Add monitoring and logging (error tracking e.g. Sentry)
+- [x] Add monitoring and logging (Sentry — install `sentry/sentry-laravel` + `@sentry/react`; set `SENTRY_LARAVEL_DSN` + `VITE_SENTRY_DSN` in env)
 
 ## 🎨 UI/UX
 - [x] Build reusable form components (Input, Select, Textarea, FormField)
@@ -31,9 +31,9 @@
 - [x] Implement proper error boundaries
 - [x] Comprehensive test coverage (unit + feature)
 - [x] Add image optimization (all img tags have loading="lazy" decoding="async"; aspect-ratio containers prevent CLS)
-- [ ] Set up caching strategies (query caching for albums/venues/shows)
-- [ ] Implement soft deletes (shows, products)
-- [ ] Bundle size optimization
+- [x] Set up caching strategies (query caching for albums/venues/shows)
+- [x] Implement soft deletes (shows, products)
+- [x] Bundle size optimization
 
 ## 📱 Features
 - [x] Search functionality (search.tsx -- venues, shows, products)
