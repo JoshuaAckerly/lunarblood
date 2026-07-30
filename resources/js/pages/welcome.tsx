@@ -1,4 +1,3 @@
-import AudioPlayer from '@/components/AudioPlayer';
 import Main from '@/layouts/main';
 import React from 'react';
 import { getProjectUrl } from '../env';
@@ -45,9 +44,25 @@ const Welcome: React.FC = () => {
 
                 <article className="card">
                     <h2 className="section-title !mb-0">Featured Music</h2>
-                    <div className="mt-4 space-y-4">
-                        <AudioPlayer src={`#`} />
-                        <AudioPlayer src={`#`} />
+                    <div className="mt-4 space-y-3">
+                        <div className="flex items-center gap-3 rounded-lg bg-[var(--accent)] p-3 opacity-60">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--card)]">
+                                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-white">Blood Moon Rising</p>
+                                <p className="text-xs text-white/60">Coming soon</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 rounded-lg bg-[var(--accent)] p-3 opacity-60">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--card)]">
+                                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-white">Void Waltz</p>
+                                <p className="text-xs text-white/60">Coming soon</p>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
@@ -55,10 +70,10 @@ const Welcome: React.FC = () => {
                     <h2 className="section-title !mb-0">Connect</h2>
                     <p className="mt-3 text-sm">Follow us on socials for drops, tour announcements, and exclusive merch.</p>
                     <div className="mt-4 flex gap-2">
-                        <a className="btn btn-secondary" href="#">
+                        <a className="btn btn-secondary" href="https://www.instagram.com/lunarblood" target="_blank" rel="noopener noreferrer">
                             Instagram
                         </a>
-                        <a className="btn btn-secondary" href="#">
+                        <a className="btn btn-secondary" href="https://lunarblood.bandcamp.com" target="_blank" rel="noopener noreferrer">
                             Bandcamp
                         </a>
                     </div>
@@ -70,10 +85,10 @@ const Welcome: React.FC = () => {
                 <div className="space-y-4">
                     <div className="glass rounded-lg p-4">
                         <div className="flex flex-col gap-2 sm:grid sm:grid-cols-12 sm:items-center sm:gap-4">
-                            <div className="text-sm font-medium sm:col-span-3">Mar 15</div>
+                            <div className="text-sm font-medium sm:col-span-3">Sep 20, 2026</div>
                             <div className="text-sm sm:col-span-4 sm:text-base">Seattle, WA</div>
                             <div className="text-sm text-[var(--muted-foreground)] sm:col-span-3 sm:text-base sm:text-[var(--foreground)]">
-                                The Underground
+                                The Neptune Theatre
                             </div>
                             <div className="sm:col-span-2 sm:text-right">
                                 <a href="/tour" className="btn btn-primary w-full text-sm sm:w-auto">
@@ -84,7 +99,7 @@ const Welcome: React.FC = () => {
                     </div>
                     <div className="glass rounded-lg p-4">
                         <div className="flex flex-col gap-2 sm:grid sm:grid-cols-12 sm:items-center sm:gap-4">
-                            <div className="text-sm font-medium sm:col-span-3">Apr 2</div>
+                            <div className="text-sm font-medium sm:col-span-3">Oct 4, 2026</div>
                             <div className="text-sm sm:col-span-4 sm:text-base">Portland, OR</div>
                             <div className="text-sm text-[var(--muted-foreground)] sm:col-span-3 sm:text-base sm:text-[var(--foreground)]">
                                 Dark Moon Club

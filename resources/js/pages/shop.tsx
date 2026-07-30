@@ -92,9 +92,18 @@ const Shop: React.FC = () => {
                 {products.map((product) => (
                     <div key={product.id} className="card group transition-shadow hover:shadow-xl">
                         <div className="mb-4 aspect-square overflow-hidden rounded-lg bg-[var(--muted)]">
-                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]">
-                                <span className="text-[var(--muted-foreground)]">Product Image</span>
-                            </div>
+                            {product.image ? (
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                />
+                            ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--muted)]">
+                                    <svg className="h-12 w-12 text-[var(--muted-foreground)]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                                </div>
+                            )}
                         </div>
 
                         <div className="mb-2">
