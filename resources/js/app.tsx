@@ -1,5 +1,7 @@
 import '../css/app.css';
 
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as Sentry from '@sentry/react';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -9,6 +11,14 @@ import { initializeTheme } from './hooks/use-appearance';
 import { initializeGoogleAnalytics } from './hooks/use-google-analytics';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
 const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
 

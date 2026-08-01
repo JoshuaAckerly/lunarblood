@@ -1,13 +1,45 @@
+import { useGSAP } from '@gsap/react';
 import Main from '@/layouts/main';
-import React from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
 import { getProjectUrl } from '../env';
 
 const cdn = import.meta.env.VITE_ASSET_URL || 'https://d3fjkusrpksks7.cloudfront.net/lunarblood';
 
 const Welcome: React.FC = () => {
+    const pageRef = useRef<HTMLDivElement>(null);
+    const heroBgRef = useRef<HTMLElement>(null);
+
+    useGSAP(() => {
+        // Hero parallax
+        if (heroBgRef.current) {
+            gsap.to(heroBgRef.current, {
+                backgroundPositionY: '30%',
+                ease: 'none',
+                scrollTrigger: { trigger: heroBgRef.current, start: 'top top', end: 'bottom top', scrub: true },
+            });
+        }
+        // Scroll-triggered stagger reveals
+        gsap.utils.toArray<HTMLElement>('.lb-reveal').forEach((el) => {
+            gsap.fromTo(el,
+                { opacity: 0, y: 45 },
+                { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out',
+                  scrollTrigger: { trigger: el, start: 'top 85%', once: true } }
+            );
+        });
+        // Tour date stagger
+        gsap.fromTo('.lb-tour-item',
+            { opacity: 0, x: -30 },
+            { opacity: 1, x: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out',
+              scrollTrigger: { trigger: '.lb-tour-item', start: 'top 85%', once: true } }
+        );
+    }, { scope: pageRef });
     return (
         <Main>
+            <div ref={pageRef}>
             <section
+                ref={heroBgRef as React.RefObject<HTMLElement>}
                 className="hero mb-12 overflow-hidden rounded-lg"
                 style={{
                     backgroundImage: `url(${cdn}/images/LunarBlood_Landing.webp)`,
@@ -34,8 +66,7 @@ const Welcome: React.FC = () => {
             </section>
 
             <section className="mb-12 grid gap-6 md:grid-cols-3">
-                <article className="card">
-                    <h2 className="section-title !mb-0">Band Bio</h2>
+                <article className="lb-reveal card">
                     <p className="mt-3 text-sm text-[var(--card-foreground)]/90">
                         Lunar Blood is a band that embodies darkness and moodiness—haunting melodies, heavy riffs, and immersive atmospheres that pull
                         listeners into another world.
@@ -83,7 +114,7 @@ const Welcome: React.FC = () => {
             <section className="mb-12">
                 <h2 className="section-title !mb-4">Upcoming Shows</h2>
                 <div className="space-y-4">
-                    <div className="glass rounded-lg p-4">
+                    <div className="lb-tour-item glass rounded-lg p-4">
                         <div className="flex flex-col gap-2 sm:grid sm:grid-cols-12 sm:items-center sm:gap-4">
                             <div className="text-sm font-medium sm:col-span-3">Sep 20, 2026</div>
                             <div className="text-sm sm:col-span-4 sm:text-base">Seattle, WA</div>
@@ -97,7 +128,7 @@ const Welcome: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="glass rounded-lg p-4">
+                    <div className="lb-tour-item glass rounded-lg p-4">
                         <div className="flex flex-col gap-2 sm:grid sm:grid-cols-12 sm:items-center sm:gap-4">
                             <div className="text-sm font-medium sm:col-span-3">Oct 4, 2026</div>
                             <div className="text-sm sm:col-span-4 sm:text-base">Portland, OR</div>
@@ -118,6 +149,7 @@ const Welcome: React.FC = () => {
                     </a>
                 </div>
             </section>
+            </div>
         </Main>
     );
 };
