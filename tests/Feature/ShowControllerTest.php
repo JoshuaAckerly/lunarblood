@@ -214,7 +214,7 @@ class ShowControllerTest extends TestCase
         $response->assertRedirect('/shows');
         $response->assertSessionHas('success');
 
-        $this->assertDatabaseMissing('shows', ['id' => $show->id]);
+        $this->assertSoftDeleted('shows', ['id' => $show->id]);
     }
 
     public function test_unauthenticated_user_cannot_access_shows(): void

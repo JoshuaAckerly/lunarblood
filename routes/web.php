@@ -22,12 +22,15 @@ Route::get('/listen', function () {
 })->name('listen');
 
 Route::get('/venues', [VenueController::class, 'index'])->name('venues.index');
-Route::get('/venues/create', [VenueController::class, 'create'])->name('venues.create');
-Route::post('/venues', [VenueController::class, 'store'])->name('venues.store');
 Route::get('/venues/{venue}', [VenueController::class, 'show'])->name('venues.show');
-Route::get('/venues/{venue}/edit', [VenueController::class, 'edit'])->name('venues.edit');
-Route::put('/venues/{venue}', [VenueController::class, 'update'])->name('venues.update');
-Route::delete('/venues/{venue}', [VenueController::class, 'destroy'])->name('venues.destroy');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/venues/create', [VenueController::class, 'create'])->name('venues.create');
+    Route::post('/venues', [VenueController::class, 'store'])->name('venues.store');
+    Route::get('/venues/{venue}/edit', [VenueController::class, 'edit'])->name('venues.edit');
+    Route::put('/venues/{venue}', [VenueController::class, 'update'])->name('venues.update');
+    Route::delete('/venues/{venue}', [VenueController::class, 'destroy'])->name('venues.destroy');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/shows', [ShowController::class, 'index'])->name('shows.index');
@@ -68,17 +71,22 @@ Route::get('/shop/{id}', function (string $id) {
 })->whereNumber('id')->name('product.show');
 
 Route::get('/checkout', function () {
-    if (! request()->filled(['productId', 'name', 'price', 'quantity', 'total'])) {
-        return redirect()->route('shop');
-    }
+    $validated = request()->validate([
+        'productId' => 'required|string|max:50',
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric|min:0.01',
+        'quantity' => 'required|integer|min:1|max:99',
+        'total' => 'required|numeric|min:0.01',
+        'size' => 'nullable|string|max:50',
+    ]);
 
     $orderData = [
-        'productId' => request('productId'),
-        'name' => request('name'),
-        'price' => request('price'),
-        'quantity' => request('quantity'),
-        'size' => request('size', ''),
-        'total' => request('total'),
+        'productId' => $validated['productId'],
+        'name' => $validated['name'],
+        'price' => (float) $validated['price'],
+        'quantity' => (int) $validated['quantity'],
+        'size' => $validated['size'] ?? '',
+        'total' => (float) $validated['total'],
     ];
 
     return Inertia::render('checkout', [

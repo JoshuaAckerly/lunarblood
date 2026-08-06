@@ -113,7 +113,7 @@ class ShowTest extends TestCase
         $response = $this->actingAs($this->user)->delete("/shows/{$show->id}");
 
         $response->assertRedirect('/shows');
-        $this->assertDatabaseMissing('shows', ['id' => $show->id]);
+        $this->assertSoftDeleted('shows', ['id' => $show->id]);
     }
 
     public function test_show_validation_requires_fields(): void

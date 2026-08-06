@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
@@ -26,6 +27,8 @@ class VenueTest extends TestCase
 
     public function test_venue_creation(): void
     {
+        $user = User::factory()->create();
+
         $venueData = [
             'name' => 'Test Venue',
             'city' => 'Test City',
@@ -38,7 +41,7 @@ class VenueTest extends TestCase
             'description' => 'A test venue for testing purposes',
         ];
 
-        $response = $this->post('/venues', $venueData);
+        $response = $this->actingAs($user)->post('/venues', $venueData);
 
         $response->assertRedirect('/venues');
         $this->assertDatabaseHas('venues', $venueData);
@@ -61,6 +64,7 @@ class VenueTest extends TestCase
 
     public function test_venue_update(): void
     {
+        $user = User::factory()->create();
         /** @var Venue $venue */
         $venue = Venue::factory()->create();
         $updatedData = [
@@ -71,7 +75,7 @@ class VenueTest extends TestCase
             'address' => $venue->address,
         ];
 
-        $response = $this->put("/venues/{$venue->id}", $updatedData);
+        $response = $this->actingAs($user)->put("/venues/{$venue->id}", $updatedData);
 
         $response->assertRedirect('/venues');
         $this->assertDatabaseHas('venues', ['id' => $venue->id, 'name' => 'Updated Venue Name']);
@@ -79,10 +83,11 @@ class VenueTest extends TestCase
 
     public function test_venue_deletion(): void
     {
+        $user = User::factory()->create();
         /** @var Venue $venue */
         $venue = Venue::factory()->create();
 
-        $response = $this->delete("/venues/{$venue->id}");
+        $response = $this->actingAs($user)->delete("/venues/{$venue->id}");
 
         $response->assertRedirect('/venues');
         $this->assertDatabaseMissing('venues', ['id' => $venue->id]);
@@ -90,6 +95,7 @@ class VenueTest extends TestCase
 
     public function test_venue_validation_errors(): void
     {
+        $user = User::factory()->create();
         $invalidData = [
             'name' => '',
             'city' => '',
@@ -97,7 +103,7 @@ class VenueTest extends TestCase
             'address' => '',
         ];
 
-        $response = $this->post('/venues', $invalidData);
+        $response = $this->actingAs($user)->post('/venues', $invalidData);
 
         $response->assertSessionHasErrors(['name', 'city', 'country', 'address']);
     }
