@@ -29,5 +29,5 @@ createServer(
                 return <App {...props} />;
             },
         }),
-    13715, // lunarblood SSR port
+    { port: 13715, host: '127.0.0.1' }, // lunarblood SSR port
 );
