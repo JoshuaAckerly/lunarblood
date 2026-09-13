@@ -28,16 +28,17 @@ export default defineConfig(({ mode, isSsrBuild }) => {
         server = {
             port: 8083,
             host: '0.0.0.0',
-            origin: 'http://lunarblood.graveyardjokes.local:8083',
+            origin: env.VITE_ORIGIN || 'http://lunarblood.graveyardjokes.test:8083',
             cors: {
                 origin: [
-                    'http://lunarblood.graveyardjokes.local',
-                    'http://lunarblood.graveyardjokes.local:8002',
+                    'http://lunarblood.graveyardjokes.test',
+                    'http://lunarblood.graveyardjokes.test:8002',
                     'http://localhost:8002',
+                    'http://10.0.1.20:8002',
                 ],
                 credentials: true
             },
-            allowedHosts: ['lunarblood.graveyardjokes.local'],
+            allowedHosts: ['lunarblood.graveyardjokes.test', '10.0.1.20'],
         };
     }
 
